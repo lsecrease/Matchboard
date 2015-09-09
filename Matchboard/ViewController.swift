@@ -37,6 +37,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var refreshControl: UIRefreshControl!
     
+    
+    //Search stuff
+    var is_Searching:Bool! = false
+    var searchingAdArray:NSMutableArray!
+    
     let transitionManager = TransitionManager()
     
     //MARK: - Change Status Bar to White
@@ -49,6 +54,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //PFUser.currentUser()
         println("\(PFUser.currentUser()?.username)")
         //PFUser.logOut()
+        
+        searchBox.delegate = self
+        
         
         
         //Pull to Refresh
@@ -87,11 +95,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
 
         
-       
-        
-        
-        
-        
 //        session.saveInBackgroundWithBlock {
 //            (success: Bool, error: NSError?) -> Void in
 //            if (success) {
@@ -103,14 +106,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 //            }
        //}
         
-            
-        
-      
-       
-        
-       
-        
-        
+ 
+
        //Segment Control Appearance
         
         mySegmentedControl.setDividerImage(UIImage(named: "SegCtrl-noneselected"), forLeftSegmentState: UIControlState.Normal, rightSegmentState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
@@ -126,21 +123,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchBox.backgroundColor = UIColor.clearColor()
         
         searchBox.setImage(UIImage(named: "SearchIcon"), forSearchBarIcon: UISearchBarIcon.Search, state: UIControlState.Normal)
-        
-        
-        
-        //SAMPLE ARRAY MATERIAL
-//        let ad1 = AdModel(profileImage: UIImage(named: "chris"), name: "Jesse", ad: "Looking for another gamer!", distance: "10 miles", category: "Gaming", fave: false)
-//        let ad2 = AdModel(profileImage: UIImage(named: "paul"), name: "Paul", ad: "Need a donor for church clothes.", distance: "12 miles", category: "Community", fave: false)
-//        let ad3 = AdModel(profileImage: UIImage(named: "Dallas"), name: "Dallas", ad: "Looking for more hackers.", distance: "15 miles", category: "Computer", fave: false)
-//       adArray = [ad1, ad2, ad3, AdModel(profileImage: UIImage(named: "Profile.png"), name: "Lawrence", ad: "Testing", distance: "10 mile", category: "Paid Service", fave: false)]
-//               println("\(adArray.count)")
-        
-        
-      
-        
-        
-    
+  
      
     }
     
@@ -152,10 +135,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         } else if (PFUser.currentUser() != nil) {
             self.storyboard?.instantiateViewControllerWithIdentifier("ViewController")
         }
-        
-        
-        
-        
     
     //Loading Indicator
         if isFirstTime {
@@ -171,7 +150,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 //        }
     }
     
-    
+   
     
     //Passing Data - PrepareForSegue
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -254,10 +233,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         //let thisAd: AnyObject = adArray[indexPath.row]
+        var cell:AdTableViewCell! = tableView.dequeueReusableCellWithIdentifier("AdCell") as! AdTableViewCell
         
-         if indexPath == 0 {
+         if indexPath==0 {
             currentUser()
-            var cell: AdTableViewCell = tableView.dequeueReusableCellWithIdentifier("AdCell") as! AdTableViewCell
+            
             cell.backgroundColor = UIColor.clearColor()
             
             var adClass = PFObject(className: "Ad")
@@ -286,10 +266,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         } else {
         
-        var cell: AdTableViewCell = tableView.dequeueReusableCellWithIdentifier("AdCell") as! AdTableViewCell
         cell.backgroundColor = UIColor.clearColor()
-        
-
         
         var adClass = PFObject(className: "Ad")
         adClass = adArray[indexPath.row] as! PFObject
@@ -389,6 +366,29 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
 
     }
+    
+    
+    //Search Function Delegate
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String){
+        if searchBar.text.isEmpty{
+            is_Searching = false
+            tableView.reloadData()
+        } else {
+            println(" search text %@ ",searchBar.text as NSString)
+            is_Searching = true
+            searchingAdArray.removeAllObjects()
+            for var index = 0; index < self.adArray.count; index++
+           {
+//                var currentString = adArray.objectAtIndex(index) as! String
+//                if currentString.lowercaseString.rangeOfString(searchText.lowercaseString)  != nil {
+//                    searchingAdArray.addObject(currentString)
+//                    
+//                }
+           }
+           tableView.reloadData()
+        }
+    }
+
     
    
     

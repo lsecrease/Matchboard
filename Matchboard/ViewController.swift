@@ -14,7 +14,7 @@ import Parse
 
 
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AdTableViewCellDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, AdTableViewCellDelegate {
 
 
     

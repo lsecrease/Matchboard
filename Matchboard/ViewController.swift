@@ -29,6 +29,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var isFirstTime = true
     
     var adArray = NSMutableArray()
+    var myAdArray = NSMutableArray()
     
     var lookingForTitle = "lookingFor"
     var distanceTitle = "distance"
@@ -66,34 +67,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.addSubview(refreshControl)
         refreshControl?.addTarget(self, action: "refreshAds", forControlEvents: UIControlEvents.ValueChanged)
         
-        
-        adArray.removeAllObjects()
-        //var innerQuery = PFQuery(className: "User")
-        //innerQuery.whereKeyExists("name")
-        let query = PFQuery(className: "Ad")
-        //query.whereKey(CLASSIF_CATEGORY, equalTo: categoryStr)
-        //query.whereKey("createdBy", matchesQuery: innerQuery)
-        query.orderByAscending("updatedAt")
-        query.limit = 30
-        query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
-            if error == nil {
-                if let objects = objects as? [PFObject] {
-                    for object in objects {
-                        self.adArray.addObject(object)
-                    } }
-                // Go to Browse Ads VC
-                print("\(self.adArray.count)")
-                self.tableView.reloadData()
-                
-            } else {
-                let alert = UIAlertView(title: "Matchboard",
-                    message: "Something went wrong, try again later or check your internet connection",
-                    delegate: self,
-                    cancelButtonTitle: "OK" )
-                alert.show()
-            }
-        }
-
+        refreshAds()
         
 //        session.saveInBackgroundWithBlock {
 //            (success: Bool, error: NSError?) -> Void in
@@ -157,11 +131,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if segue.identifier == "showProfile" {
             var adClass = PFObject(className: "Ad")
             let adVC: AdProfileViewController = segue.destinationViewController as! AdProfileViewController
-            let indexPath = self.tableView.indexPathForSelectedRow
-            adClass = adArray[indexPath!.row] as! PFObject
-            adVC.adProfileModel = adClass.objectId!
-            adVC.mainVC = self
-            adVC.transitioningDelegate = transitionManager
+
+            if let indexPath = self.tableView.indexPathForSelectedRow
+            {
+                if indexPath.section == 0
+                {
+                    adClass = myAdArray[indexPath.row] as! PFObject
+                } else {
+                    adClass = adArray[indexPath.row] as! PFObject
+                }
+                
+                
+                adVC.adProfileModel = adClass.objectId!
+                adVC.mainVC = self
+                adVC.transitioningDelegate = transitionManager
+            }
         }
     }
 
@@ -218,91 +202,108 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //UITableViewDataSource
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        
+        print(myAdArray.count)
+        print(adArray.count)
+        
+        return myAdArray.count > 0 ? 2 : 1
     }
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //return 4
         
-             return self.adArray.count
+        if section == 0
+        {
+            return myAdArray.count
+        }
         
+        return adArray.count
     }
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         //let thisAd: AnyObject = adArray[indexPath.row]
-        let cell:AdTableViewCell! = tableView.dequeueReusableCellWithIdentifier("AdCell") as! AdTableViewCell
+        if let cell = tableView.dequeueReusableCellWithIdentifier("AdCell") as? AdTableViewCell
+        {
         
-         if indexPath==0 {
-            currentUser()
-            
-            cell.backgroundColor = UIColor.clearColor()
-            
-            var adClass = PFObject(className: "Ad")
-            adClass = adArray[indexPath.row] as! PFObject
-            var user = PFObject(className: "User")
+            if indexPath==0 {
+                currentUser()
+                
+                cell.backgroundColor = UIColor.clearColor()
+                
+                var adClass = PFObject(className: "Ad")
+                adClass = adArray[indexPath.row] as! PFObject
+                var user = PFObject(className: "User")
+                
+                cell.questionLabel.text = "What are you looking for?"
+                cell.adLabel.text = "\(adClass[lookingForTitle]!)"
+                cell.nameLabel.text = "\(adClass[creatorTitle]!)"
+                cell.distanceLabel.text = "10 miles"
+                cell.categoryLabel.setTitle("Paid Service", forState: UIControlState.Normal)
+                
+                
+                // Get image
+                let imageFile = adClass["profileImage"] as? PFFile
+                imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
+                    if error == nil {
+                        if let imageData = imageData {
+                            cell.profileImageView.image = UIImage(data:imageData)
+                        } } }
+                
+                
+                cell.delegate = self
+                
+                return cell
+                
+            } else {
+                
 
-            cell.questionLabel.text = "What are you looking for?"
-            cell.adLabel.text = "\(adClass[lookingForTitle]!)"
-            cell.nameLabel.text = "\(adClass[creatorTitle]!)"
-            cell.distanceLabel.text = "10 miles"
-            cell.categoryLabel.setTitle("Paid Service", forState: UIControlState.Normal)
-            
-            
-            // Get image
-            let imageFile = adClass["profileImage"] as? PFFile
-            imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
-                if error == nil {
-                    if let imageData = imageData {
-                        cell.profileImageView.image = UIImage(data:imageData)
-                    } } }
-            
-            
-            cell.delegate = self
-            
-            return cell
-
-        } else {
-        
-        cell.backgroundColor = UIColor.clearColor()
-        
-        var adClass = PFObject(className: "Ad")
-        adClass = adArray[indexPath.row] as! PFObject
-        var user = PFObject(className: "User")
-        
-        cell.questionLabel.text = "What are you looking for?"
-        cell.adLabel.text = "\(adClass[lookingForTitle]!)"
-        //cell.distanceLabel.text = ("\(adClass[distanceTitle]!)")
-        
-        
-        //cell.profileImageView.image = thisAd.image
-        cell.nameLabel.text = "\(adClass[creatorTitle]!)"
-        //cell.categoryLabel.setTitle(thisAd.category, forState: UIControlState.Normal)
-        
-        
-        //cell.profileImageView.image = UIImage(named: "profile1")
-        //cell.nameLabel.text = "Lawrence"
-        //cell.questionLabel.text = "What are you looking for?"
-        //cell.adLabel.text = "Looking for help moving next week!"
-        cell.distanceLabel.text = "10 miles"
-       cell.categoryLabel.setTitle("Paid Service", forState: UIControlState.Normal)
-        
-        
-        // Get image
-        let imageFile = adClass["profileImage"] as? PFFile
-        imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
-            if error == nil {
-                if let imageData = imageData {
-                    cell.profileImageView.image = UIImage(data:imageData)
-                } } }
-        
-     
-        cell.delegate = self
-        
-        return cell
+                
+                cell.backgroundColor = UIColor.clearColor()
+                
+                var adClass = PFObject(className: "Ad")
+                if (indexPath.section == 0)
+                {
+                    adClass = myAdArray[indexPath.row] as! PFObject
+                } else {
+                    adClass = adArray[indexPath.row] as! PFObject
+                }
+                
+                cell.questionLabel.text = "What are you looking for?"
+                cell.adLabel.text = "\(adClass[lookingForTitle]!)"
+                //cell.distanceLabel.text = ("\(adClass[distanceTitle]!)")
+                
+                
+                //cell.profileImageView.image = thisAd.image
+                cell.nameLabel.text = "\(adClass[creatorTitle]!)"
+                //cell.categoryLabel.setTitle(thisAd.category, forState: UIControlState.Normal)
+                
+                
+                //cell.profileImageView.image = UIImage(named: "profile1")
+                //cell.nameLabel.text = "Lawrence"
+                //cell.questionLabel.text = "What are you looking for?"
+                //cell.adLabel.text = "Looking for help moving next week!"
+                cell.distanceLabel.text = "10 miles"
+                cell.categoryLabel.setTitle("Paid Service", forState: UIControlState.Normal)
+                
+                
+                // Get image
+                let imageFile = adClass["profileImage"] as? PFFile
+                imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
+                    if error == nil {
+                        if let imageData = imageData {
+                            cell.profileImageView.image = UIImage(data:imageData)
+                        } } }
+                
+                
+                cell.delegate = self
+                
+                return cell
+            }
         }
+        
+        return UITableViewCell()
     }
         
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -345,10 +346,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         query.orderByAscending("updatedAt")
         query.limit = 30
         query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
+            
+            let myId = PFUser.currentUser()?.objectId
+            
             if error == nil {
                 if let objects = objects as? [PFObject] {
                     for object in objects {
-                        self.adArray.addObject(object)
+                        
+                        if let user = object["username"] as? PFUser
+                        {
+                            if user.objectId == myId
+                            {
+                                self.myAdArray.addObject(object)
+                            } else {
+                        
+                                self.adArray.addObject(object)
+                            }
+                        }
                     } }
                 // Go to Browse Ads VC
                 print("\(self.adArray.count)")

@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication,
         openURL url: NSURL,
         sourceApplication: String?,
-        annotation: AnyObject?) -> Bool {
+        annotation: AnyObject) -> Bool {
             return FBSDKApplicationDelegate.sharedInstance().application(application,
                 openURL: url,
                 sourceApplication: sourceApplication,
@@ -64,12 +64,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Mark - Push Notification methods
     
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        var installation = PFInstallation.currentInstallation()
+        let installation = PFInstallation.currentInstallation()
         installation.setDeviceTokenFromData(deviceToken)
         installation.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
             if error != nil {
-                println("didRegisterForRemoteNotificationsWithDeviceToken")
-                println(error)
+                print("didRegisterForRemoteNotificationsWithDeviceToken")
+                print(error)
             }
         }
     }

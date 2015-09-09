@@ -22,7 +22,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         if PFUser.currentUser() != nil {
             queryFavAds()
         } else {
-            var alert = UIAlertView(title: "Matchboard",
+            let alert = UIAlertView(title: "Matchboard",
                 message: "You must login/signup into your Account to add Favorites",
                 delegate: nil,
                 cancelButtonTitle: "OK" )
@@ -63,7 +63,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         var favClass = PFObject(className: "Favorites")
         favClass = favoritesArray[indexPath.row] as! PFObject
         // Get Ads as a Pointer
-        var adPointer = favClass["adPointer"] as! PFObject
+        let adPointer = favClass["adPointer"] as! PFObject
         
         cell.userNameLabel.text = "\(adPointer[usernameTitle]!)"
         cell.lookingForLabel.text = "\(adPointer[lookingForTitle]!)"
@@ -83,7 +83,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        var imageView = UIImageView(frame: CGRectMake(0, 0, cell.frame.width, cell.frame.height))
+        let imageView = UIImageView(frame: CGRectMake(0, 0, cell.frame.width, cell.frame.height))
         let image = UIImage(named: "BkgrdBlur")
         imageView.image = image
         
@@ -103,7 +103,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         var favClass = PFObject(className: "Favorites")
         favClass = favoritesArray[indexPath.row] as! PFObject
         // Get favorite Ads as a Pointer
-        var adPointer = favClass["adPointer"] as! PFObject
+        let adPointer = favClass["adPointer"] as! PFObject
         
         let showAdVC = self.storyboard?.instantiateViewControllerWithIdentifier("showProfile") as! AdProfileViewController
         // Pass the Ad ID to the Controller
@@ -119,7 +119,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     func queryFavAds()  {
         favoritesArray.removeAllObjects()
         
-        var query = PFQuery(className: "Favorites")
+        let query = PFQuery(className: "Favorites")
         query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         query.includeKey("adPointer")
         query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
@@ -132,7 +132,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                 self.faveTableView.reloadData()
                 
             } else {
-                var alert = UIAlertView(title: "Matchboard",
+                let alert = UIAlertView(title: "Matchboard",
                     message: "Something went wrong, try again later or check your internet connection",
                     delegate: self,
                     cancelButtonTitle: "OK" )

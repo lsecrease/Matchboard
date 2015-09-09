@@ -82,7 +82,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     
     //What goes in each Table View Cell  DONE
      func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: CategoryTableViewCell = tableView.dequeueReusableCellWithIdentifier("Category") as! CategoryTableViewCell
+        let cell: CategoryTableViewCell = tableView.dequeueReusableCellWithIdentifier("Category") as! CategoryTableViewCell
         
         let categoryHeader = categoryHeaders[indexPath.section]
         let category = categoryHeader.category[indexPath.row]
@@ -114,9 +114,9 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         let categoryHeader = categoryHeaders[indexPath.section]
         let category = categoryHeader.category[indexPath.row]
         //cell.checkbox.isChecked = true
-        println("\(category.title) Selected")
+        print("\(category.title) Selected")
         categoryArray.append(category.title)
-        println(categoryArray)
+        print(categoryArray)
     }
     
     
@@ -128,7 +128,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     
     //Display of the cells DONE
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        var backView = UIImageView(frame: CGRectMake(0, 0, cell.frame.width, cell.frame.height))
+        let backView = UIImageView(frame: CGRectMake(0, 0, cell.frame.width, cell.frame.height))
         backView.backgroundColor = UIColor.clearColor()
         cell.backgroundView = backView
     }
@@ -148,15 +148,15 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func categoryTableViewCellDidTouchCheckbox(cell: CategoryTableViewCell, sender: AnyObject) {
         // TODO: Implement Checkbox
-       var cell: CategoryTableViewCell = tableView.dequeueReusableCellWithIdentifier("Category") as! CategoryTableViewCell
+       let cell: CategoryTableViewCell = tableView.dequeueReusableCellWithIdentifier("Category") as! CategoryTableViewCell
         var catArray: [String] = []
         
         if cell.checkbox.isChecked == false {
             catArray.append(cell.categoryLabel.text!)
         }
        
-        println("\(cell.categoryArray)")
-        println("Delegate implemented")
+        print("\(cell.categoryArray)")
+        print("Delegate implemented")
         
         
         

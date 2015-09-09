@@ -26,7 +26,7 @@ class AdTableViewCell: UITableViewCell {
     
     @IBAction func categoryButtonPressed(sender: AnyObject) {
         
-        println("Category Button Pressed")
+        print("Category Button Pressed")
         
         delegate?.adTableViewCellDidTouchCategory(self, sender: sender)
     }

@@ -25,7 +25,7 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
     var phoneNumber: String
     
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         phoneNumber = ""
         
         super.init(coder: aDecoder)
@@ -45,7 +45,7 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     func step2() {
-        phoneNumber = phoneNumberTextField.text
+        phoneNumber = phoneNumberTextField.text!
         phoneNumberTextField.text = ""
         phoneNumberTextField.placeholder = "1234"
         navigationLabel.text = "Registration Verification"
@@ -84,21 +84,21 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
         
         
         if phoneNumber == "" {
-            if count(phoneNumberTextField.text) != 10 {
+            if phoneNumberTextField.text!.characters.count != 10 {
                 showAlert("Phone Login", message: "You must enter a 10-digit US phone number including area code.")
                 return step1()
             }
             ProgressHUD.show("Signing in...", interaction: false)
             self.editing = false
-            let params = ["phoneNumber" : phoneNumberTextField.text]
+            let params = ["phoneNumber" : phoneNumberTextField.text!]
             PFCloud.callFunctionInBackground("sendCode", withParameters: params) {
                 (response: AnyObject?, error: NSError?) -> Void in
                 self.editing = true
                 if let error = error {
                     var description = error.description
-                    if count(description) == 0 {
+                    if description.characters.count == 0 {
                         description = "There was a problem with the service.\nTry again later."
-                    } else if let message = error.userInfo?["error"] as? String {
+                    } else if let message = error.userInfo["error"] as? String {
                         description = message
                     }
                     self.showAlert("Login Error", message: description)
@@ -109,8 +109,8 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
             }
         } else  {
             if let text = phoneNumberTextField?.text {
-                if let code = text.toInt() {
-                if count(text) == 4 {
+                if let code = Int(text) {
+                if text.characters.count == 4 {
                     return doLogin(phoneNumber, code: code)
                 }
             }
@@ -173,34 +173,34 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
      //*********************Save Photo***********************//
     func savePhoto() {
         
-                var user = PFUser.currentUser()!
-               let profilePic = self.imageView.image
-               let imageData = UIImagePNGRepresentation(profilePic)
+                let user = PFUser.currentUser()!
+               let profilePic = self.imageView.image!
+               let imageData = UIImagePNGRepresentation(profilePic)!
                 let profileImage = PFFile(name: "image.png", data: imageData)
-                 println("\(profileImage.name)")
+                 print("\(profileImage.name)")
                 user["profileImage"] = profileImage
         
                 user.saveInBackgroundWithBlock({ (success, error) -> Void in
                     if success == false{
                         self.displayAlert("Could not Save User Image", error: "Please try again later")
                     } else {
-                        println("ProfileImage has been saved successfully!")
+                        print("ProfileImage has been saved successfully!")
                     }
                 })
         
     }
     
     func saveData() {
-        var user = PFUser.currentUser()!
+        let user = PFUser.currentUser()!
         let name = self.displayNameTextField.text
-        println("\(name)")
+        print("\(name)")
         user["name"] = name
         
         user.saveInBackgroundWithBlock({ (success, error) -> Void in
             if success == false{
                 self.displayAlert("Could not Save name", error: "Please try again later")
             } else {
-                println("Display Name has been saved successfully!")
+                print("Display Name has been saved successfully!")
             }
         })
     }
@@ -212,14 +212,14 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     //**********************Dismisses Keyboard when View Touched*********//
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         view.endEditing(true)
     }
     
     // **************** FUNCTION: Send Error Alert ****************************
     func displayAlert(title: String, error: String) {
         // add alert
-        var alert = UIAlertController(title: title, message: error, preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: title, message: error, preferredStyle: UIAlertControllerStyle.Alert)
         // add action to alert
         alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { action in
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -230,7 +230,7 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
 
     
     //***********************UIImagePickerController Delegates***********//
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             imageView.contentMode = .ScaleAspectFit
             imageView.image = pickedImage

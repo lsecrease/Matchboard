@@ -54,9 +54,9 @@ class AdProfileViewController: UIViewController {
 
     
     func querySingleAd() {
-        println("SINGLE AD ID: \(adProfileModel)")
+        print("SINGLE AD ID: \(adProfileModel)")
         
-        var query = PFQuery(className: "Ad")
+        let query = PFQuery(className: "Ad")
         query.whereKey("objectId", equalTo: adProfileModel)
         query.includeKey("username")
         query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
@@ -71,7 +71,7 @@ class AdProfileViewController: UIViewController {
                
                 
             } else {
-                var alert = UIAlertView(title: "Matchboard",
+                let alert = UIAlertView(title: "Matchboard",
                     message: "Something went wrong, try again later or check your internet connection",
                     delegate: nil,
                     cancelButtonTitle: "OK" )
@@ -118,18 +118,18 @@ class AdProfileViewController: UIViewController {
     
     
     @IBAction func messageButtonTapped(sender: AnyObject) {
-        println("Message button Tapped")
+        print("Message button Tapped")
     }
     
     @IBAction func favoriteButtonTapped(sender: AnyObject) {
-        println("Fave Button Tapped")
-        var button = sender as! UIButton
+        print("Fave Button Tapped")
+        let button = sender as! UIButton
         
         
         if PFUser.currentUser() != nil {
             var adClass = PFObject(className: "Ad")
             adClass = singleAdArray[button.tag] as! PFObject
-            var favClass = PFObject(className: "Favorites")
+            let favClass = PFObject(className: "Favorites")
             
             // ADD THIS AD TO FAVORITES
             favClass["username"] = PFUser.currentUser()?.username!
@@ -138,16 +138,16 @@ class AdProfileViewController: UIViewController {
             // Saving block
             favClass.saveInBackgroundWithBlock { (success, error) -> Void in
                 if error == nil {
-                    println("Fave Added Successfully")
+                    print("Fave Added Successfully")
                     self.faveIcon.image = UIImage(named: "goldheart")
                     self.faveButton.setTitle("Favorited", forState: .Normal)
-                    var alert = UIAlertView(title: "Matchboard",
+                    let alert = UIAlertView(title: "Matchboard",
                         message: "\(self.profileFirstName.text!) has been added to your Favorites List!",
                         delegate: nil,
                         cancelButtonTitle: "OK" )
                     alert.show()
                 } else {
-                    var alert = UIAlertView(title: "Matchboard",
+                    let alert = UIAlertView(title: "Matchboard",
                         message: "Something went wrong, try again later, or check your internet connection",
                         delegate: nil,
                         cancelButtonTitle: "OK" )
@@ -158,7 +158,7 @@ class AdProfileViewController: UIViewController {
             
             
         } else {
-            var alert = UIAlertView(title: "Matchboard",
+            let alert = UIAlertView(title: "Matchboard",
                 message: "You have to login/signup to favorite ads!",
                 delegate: nil,
                 cancelButtonTitle: "OK")
@@ -174,7 +174,7 @@ class AdProfileViewController: UIViewController {
     
     @IBAction func blockThisUserButtonTapped(sender: AnyObject) {
         //Action Alert Asking if they are sure they want to block the user
-        println("Block this User Tapped")
+        print("Block this User Tapped")
     }
     
 

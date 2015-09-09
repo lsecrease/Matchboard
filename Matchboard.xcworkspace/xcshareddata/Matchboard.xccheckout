@@ -12,22 +12,34 @@
 	<dict>
 		<key>5BF362D997955E9355511E9F3590BF86FE28C6A7</key>
 		<string>https://github.com/lsecrease/Matchboard.git</string>
+		<key>E5061B397D950CF29668B478231DED0B3BD9FF6F</key>
+		<string>github.com:lsecrease/Matchboard.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Matchboard.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>5BF362D997955E9355511E9F3590BF86FE28C6A7</key>
+		<string>../../Matchboard</string>
+		<key>E5061B397D950CF29668B478231DED0B3BD9FF6F</key>
 		<string>..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/lsecrease/Matchboard.git</string>
+	<string>github.com:lsecrease/Matchboard.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>5BF362D997955E9355511E9F3590BF86FE28C6A7</string>
+	<string>E5061B397D950CF29668B478231DED0B3BD9FF6F</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E5061B397D950CF29668B478231DED0B3BD9FF6F</string>
+			<key>IDESourceControlWCCName</key>
+			<string>code</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

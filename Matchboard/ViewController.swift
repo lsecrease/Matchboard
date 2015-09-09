@@ -52,7 +52,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         //PFUser.currentUser()
-        println("\(PFUser.currentUser()?.username)")
+        print("\(PFUser.currentUser()?.username)")
         //PFUser.logOut()
         
         searchBox.delegate = self
@@ -70,7 +70,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         adArray.removeAllObjects()
         //var innerQuery = PFQuery(className: "User")
         //innerQuery.whereKeyExists("name")
-        var query = PFQuery(className: "Ad")
+        let query = PFQuery(className: "Ad")
         //query.whereKey(CLASSIF_CATEGORY, equalTo: categoryStr)
         //query.whereKey("createdBy", matchesQuery: innerQuery)
         query.orderByAscending("updatedAt")
@@ -82,11 +82,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         self.adArray.addObject(object)
                     } }
                 // Go to Browse Ads VC
-                println("\(self.adArray.count)")
+                print("\(self.adArray.count)")
                 self.tableView.reloadData()
                 
             } else {
-                var alert = UIAlertView(title: "Matchboard",
+                let alert = UIAlertView(title: "Matchboard",
                     message: "Something went wrong, try again later or check your internet connection",
                     delegate: self,
                     cancelButtonTitle: "OK" )
@@ -115,7 +115,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         mySegmentedControl.setDividerImage(UIImage(named: "SegCtrl-noneselected"), forLeftSegmentState: UIControlState.Normal, rightSegmentState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
         mySegmentedControl.setBackgroundImage(UIImage(named: "SegCtrl-selected"), forState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
         mySegmentedControl.setBackgroundImage(UIImage(named: "SegCtrl-normal"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
-        var attr = NSDictionary(object: UIFont(name: "Avenir Next", size: 12.0)!, forKey: NSFontAttributeName)
+        let attr = NSDictionary(object: UIFont(name: "Avenir Next", size: 12.0)!, forKey: NSFontAttributeName)
         mySegmentedControl.setTitleTextAttributes(attr as [NSObject : AnyObject], forState: .Normal)
         
         
@@ -157,7 +157,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if segue.identifier == "showProfile" {
             var adClass = PFObject(className: "Ad")
             let adVC: AdProfileViewController = segue.destinationViewController as! AdProfileViewController
-            let indexPath = self.tableView.indexPathForSelectedRow()
+            let indexPath = self.tableView.indexPathForSelectedRow
             adClass = adArray[indexPath!.row] as! PFObject
             adVC.adProfileModel = adClass.objectId!
             adVC.mainVC = self
@@ -170,7 +170,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBAction func mySegmentedControlAction(sender: AnyObject) {
         if(mySegmentedControl.selectedSegmentIndex == 0)
         {
-            println("Fave Segment Selected");
+            print("Fave Segment Selected");
             favoritesView.hidden = false
             messagesView.hidden = true
             categoriesView.hidden = true
@@ -178,7 +178,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         else if(mySegmentedControl.selectedSegmentIndex == 1)
         {
-            println("Messages Segment Selected");
+            print("Messages Segment Selected");
             messagesView.hidden = false
             favoritesView.hidden = true
             categoriesView.hidden = true
@@ -186,7 +186,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         else if(mySegmentedControl.selectedSegmentIndex == 2)
         {
-            println("Home Segment Selected");
+            print("Home Segment Selected");
             favoritesView.hidden = true
             messagesView.hidden = true
             categoriesView.hidden = true
@@ -195,7 +195,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         else if(mySegmentedControl.selectedSegmentIndex == 3)
         {
-            println("Categories Segment Selected")
+            print("Categories Segment Selected")
             categoriesView.hidden = false
             favoritesView.hidden = true
             messagesView.hidden = true
@@ -203,7 +203,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         else if(mySegmentedControl.selectedSegmentIndex == 4)
         {
-            println("Settings Segment Selected")
+            print("Settings Segment Selected")
             settingsView.hidden = false
             favoritesView.hidden = true
             messagesView.hidden = true
@@ -233,7 +233,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         //let thisAd: AnyObject = adArray[indexPath.row]
-        var cell:AdTableViewCell! = tableView.dequeueReusableCellWithIdentifier("AdCell") as! AdTableViewCell
+        let cell:AdTableViewCell! = tableView.dequeueReusableCellWithIdentifier("AdCell") as! AdTableViewCell
         
          if indexPath==0 {
             currentUser()
@@ -306,7 +306,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
         
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        var imageView = UIImageView(frame: CGRectMake(0, 0, cell.frame.width, cell.frame.height))
+        let imageView = UIImageView(frame: CGRectMake(0, 0, cell.frame.width, cell.frame.height))
         let image = UIImage(named: "BkgrdBlur")
         imageView.image = image
         
@@ -339,7 +339,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         adArray.removeAllObjects()
         //var innerQuery = PFQuery(className: "User")
         //innerQuery.whereKeyExists("name")
-        var query = PFQuery(className: "Ad")
+        let query = PFQuery(className: "Ad")
         //query.whereKey(CLASSIF_CATEGORY, equalTo: categoryStr)
         //query.whereKey("createdBy", matchesQuery: innerQuery)
         query.orderByAscending("updatedAt")
@@ -351,12 +351,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         self.adArray.addObject(object)
                     } }
                 // Go to Browse Ads VC
-                println("\(self.adArray.count)")
+                print("\(self.adArray.count)")
                 self.tableView.reloadData()
                 self.refreshControl?.endRefreshing()
                 
             } else {
-                var alert = UIAlertView(title: "Matchboard",
+                let alert = UIAlertView(title: "Matchboard",
                     message: "Something went wrong, try again later or check your internet connection",
                     delegate: self,
                     cancelButtonTitle: "OK" )
@@ -370,11 +370,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     //Search Function Delegate
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String){
-        if searchBar.text.isEmpty{
+        if searchBar.text!.isEmpty{
             is_Searching = false
             tableView.reloadData()
         } else {
-            println(" search text %@ ",searchBar.text as NSString)
+            print(" search text %@ ",searchBar.text)
             is_Searching = true
             searchingAdArray.removeAllObjects()
             for var index = 0; index < self.adArray.count; index++
@@ -395,7 +395,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func currentUser() {
         adArray.removeAllObjects()
-        var query = PFQuery(className: "Ad")
+        let query = PFQuery(className: "Ad")
         query.whereKey("username", equalTo: PFUser.currentUser()!)
         //query.orderByDescending(CLASSIF_UPDATED_AT)
         query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
@@ -408,7 +408,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 self.tableView.reloadData()
                 
             } else {
-                var alert = UIAlertView(title: "Matchboard",
+                let alert = UIAlertView(title: "Matchboard",
                     message: "Something went wrong, try again later or check your internet connection",
                     delegate: nil,
                     cancelButtonTitle: "OK" )

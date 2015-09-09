@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "E5061B397D950CF29668B478231DED0B3BD9FF6F",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "5BF362D997955E9355511E9F3590BF86FE28C6A7" : 0,
+    "E5061B397D950CF29668B478231DED0B3BD9FF6F" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "625BB287-E137-482A-BE93-917B15DB0F24",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "5BF362D997955E9355511E9F3590BF86FE28C6A7" : "Matchboard",
+    "E5061B397D950CF29668B478231DED0B3BD9FF6F" : "code"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Matchboard",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Matchboard.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/lsecrease\/Matchboard.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5BF362D997955E9355511E9F3590BF86FE28C6A7"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:lsecrease\/Matchboard.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E5061B397D950CF29668B478231DED0B3BD9FF6F"
+    }
+  ]
+}

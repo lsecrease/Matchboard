@@ -30,14 +30,14 @@ class CategoryTableViewCell: UITableViewCell {
         
 
         if self.checkbox.isChecked == false {
-            println("Checkbox checked")
-            println("\(categoryLabel.text!)")
+            print("Checkbox checked")
+            print("\(categoryLabel.text!)")
             //categoryArray.append("\(categoryLabel.text!)")
             //println(categoryArray)
             //delegate?.categoryTableViewCellDidTouchCheckbox(self, sender: sender)
         } else {
-            println("Checkbox unchecked")
-            println("\(categoryLabel.text!)")
+            print("Checkbox unchecked")
+            print("\(categoryLabel.text!)")
             //var categoryChosen = "\(categoryLabel.text!)"
             //let filter = categoryArray.filter() { $0 != categoryChosen }
             //categoryArray = filter

@@ -43,10 +43,10 @@ class WelcomeViewController: UIViewController, UITextViewDelegate, UIAlertViewDe
     
 
     @IBAction func nextButtonTapped(sender: AnyObject) {
-        println("Next Button Tapped")
+        print("Next Button Tapped")
         
-        var lookingFor = PFObject(className:"Ad")
-        var user = PFUser.currentUser()!
+        let lookingFor = PFObject(className:"Ad")
+        let user = PFUser.currentUser()!
         lookingFor["lookingFor"] = adTextView.text
         lookingFor["username"] = PFUser.currentUser()
         lookingFor["createdBy"] = PFUser.currentUser()!.username
@@ -55,10 +55,10 @@ class WelcomeViewController: UIViewController, UITextViewDelegate, UIAlertViewDe
         lookingFor.saveInBackgroundWithBlock {
             (success: Bool, error: NSError?) -> Void in
             if (success) {
-                println("Looking For has been saved!")
+                print("Looking For has been saved!")
                 self.performSegueWithIdentifier("adSegue", sender: self)
             } else {
-                println("There was a problem saving")
+                print("There was a problem saving")
                 self.displayAlert("Could not Save Looking For", error: "Please try again later")
             }
         }
@@ -76,14 +76,14 @@ class WelcomeViewController: UIViewController, UITextViewDelegate, UIAlertViewDe
     }
    
     @IBAction func skipButtonTapped(sender: AnyObject) {
-        println("Skip Button Tapped")
+        print("Skip Button Tapped")
         ProgressHUD.showSuccess("We’ll fill in your profile to say you’re “Just Browsing” and classify it as such. Now have fun browsing!", interaction: true)
         //displayAlert("Skip It Then!", error: "We’ll fill in your profile to say you’re “Just Browsing” and classify it as such. Now have fun browsing!")
         self.performSegueWithIdentifier("adSegue", sender: self)
        
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         view.endEditing(true)
     }
     
@@ -106,7 +106,7 @@ class WelcomeViewController: UIViewController, UITextViewDelegate, UIAlertViewDe
     // **************** FUNCTION: Send Error Alert ****************************
     func displayAlert(title: String, error: String) {
         // add alert
-        var alert = UIAlertController(title: title, message: error, preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: title, message: error, preferredStyle: UIAlertControllerStyle.Alert)
         // add action to alert
         alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { action in
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -120,8 +120,8 @@ class WelcomeViewController: UIViewController, UITextViewDelegate, UIAlertViewDe
     func textView(textView: UITextField!,
          shouldChangeCharactersInRange range: NSRange,
         replacementText text: String!) -> Bool{
-            var newLength:Int = (textView.text as NSString).length + (text as NSString).length - range.length
-            var remainingChar:Int = 100 - newLength
+            let newLength:Int = textView.text!.characters.count + text.characters.count - range.length
+            let remainingChar:Int = 100 - newLength
             
             charRemainingLabel.text = "\(remainingChar)"
             

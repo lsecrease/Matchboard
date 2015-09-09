@@ -9,10 +9,12 @@
 import UIKit
 import Parse
 
-var AdsArray: [Ad] = []
+
+//var AdsArray: [Ad] = []
 
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AdTableViewCellDelegate{
+
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AdTableViewCellDelegate {
 
 
     
@@ -26,15 +28,69 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
    
     var isFirstTime = true
     
-    var adArray: [AdModel] = []
+    var adArray = NSMutableArray()
     
     var lookingForTitle = "lookingFor"
+    var distanceTitle = "distance"
+    var nameTitle = "name"
+    var creatorTitle = "createdBy"
+    
+    var refreshControl: UIRefreshControl!
     
     let transitionManager = TransitionManager()
     
+    //MARK: - Change Status Bar to White
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        PFUser.currentUser()
+        //PFUser.currentUser()
+        println("\(PFUser.currentUser()?.username)")
+        //PFUser.logOut()
+        
+        
+        //Pull to Refresh
+        refreshControl = UIRefreshControl()
+        refreshControl.backgroundColor = UIColor.whiteColor()
+        refreshControl.tintColor = UIColor.blueColor()
+        tableView.addSubview(refreshControl)
+        refreshControl?.addTarget(self, action: "refreshAds", forControlEvents: UIControlEvents.ValueChanged)
+        
+        
+        adArray.removeAllObjects()
+        //var innerQuery = PFQuery(className: "User")
+        //innerQuery.whereKeyExists("name")
+        var query = PFQuery(className: "Ad")
+        //query.whereKey(CLASSIF_CATEGORY, equalTo: categoryStr)
+        //query.whereKey("createdBy", matchesQuery: innerQuery)
+        query.orderByAscending("updatedAt")
+        query.limit = 30
+        query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
+            if error == nil {
+                if let objects = objects as? [PFObject] {
+                    for object in objects {
+                        self.adArray.addObject(object)
+                    } }
+                // Go to Browse Ads VC
+                println("\(self.adArray.count)")
+                self.tableView.reloadData()
+                
+            } else {
+                var alert = UIAlertView(title: "Matchboard",
+                    message: "Something went wrong, try again later or check your internet connection",
+                    delegate: self,
+                    cancelButtonTitle: "OK" )
+                alert.show()
+            }
+        }
+
+        
+       
+        
+        
+        
         
 //        session.saveInBackgroundWithBlock {
 //            (success: Bool, error: NSError?) -> Void in
@@ -49,10 +105,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
             
         
-        //PFUser.logOut()
+      
        
         
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: true)
+       
         
         
        //Segment Control Appearance
@@ -60,10 +116,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         mySegmentedControl.setDividerImage(UIImage(named: "SegCtrl-noneselected"), forLeftSegmentState: UIControlState.Normal, rightSegmentState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
         mySegmentedControl.setDividerImage(UIImage(named: "SegCtrl-noneselected"), forLeftSegmentState: UIControlState.Selected, rightSegmentState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
         mySegmentedControl.setDividerImage(UIImage(named: "SegCtrl-noneselected"), forLeftSegmentState: UIControlState.Normal, rightSegmentState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
-        
         mySegmentedControl.setBackgroundImage(UIImage(named: "SegCtrl-selected"), forState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
         mySegmentedControl.setBackgroundImage(UIImage(named: "SegCtrl-normal"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
-        
         var attr = NSDictionary(object: UIFont(name: "Avenir Next", size: 12.0)!, forKey: NSFontAttributeName)
         mySegmentedControl.setTitleTextAttributes(attr as [NSObject : AnyObject], forState: .Normal)
         
@@ -74,15 +128,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchBox.setImage(UIImage(named: "SearchIcon"), forSearchBarIcon: UISearchBarIcon.Search, state: UIControlState.Normal)
         
         
-        let ad1 = AdModel(profileImage: UIImage(named: "chris"), name: "Jesse", ad: "Looking for another gamer!", distance: "10 miles", category: "Gaming", fave: false)
-        let ad2 = AdModel(profileImage: UIImage(named: "paul"), name: "Paul", ad: "Need a donor for church clothes.", distance: "12 miles", category: "Community", fave: false)
-        let ad3 = AdModel(profileImage: UIImage(named: "Dallas"), name: "Dallas", ad: "Looking for more hackers.", distance: "15 miles", category: "Computer", fave: false)
         
-       adArray = [ad1, ad2, ad3, AdModel(profileImage: UIImage(named: "Profile.png"), name: "Lawrence", ad: "Testing", distance: "10 mile", category: "Paid Service", fave: false)]
+        //SAMPLE ARRAY MATERIAL
+//        let ad1 = AdModel(profileImage: UIImage(named: "chris"), name: "Jesse", ad: "Looking for another gamer!", distance: "10 miles", category: "Gaming", fave: false)
+//        let ad2 = AdModel(profileImage: UIImage(named: "paul"), name: "Paul", ad: "Need a donor for church clothes.", distance: "12 miles", category: "Community", fave: false)
+//        let ad3 = AdModel(profileImage: UIImage(named: "Dallas"), name: "Dallas", ad: "Looking for more hackers.", distance: "15 miles", category: "Computer", fave: false)
+//       adArray = [ad1, ad2, ad3, AdModel(profileImage: UIImage(named: "Profile.png"), name: "Lawrence", ad: "Testing", distance: "10 mile", category: "Paid Service", fave: false)]
+//               println("\(adArray.count)")
+        
+        
       
-        self.tableView.reloadData()
         
-        println("\(adArray.count)")
+        
+    
      
     }
     
@@ -95,12 +153,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.storyboard?.instantiateViewControllerWithIdentifier("ViewController")
         }
         
+        
+        
+        
     
     //Loading Indicator
         if isFirstTime {
-            view.showLoading()
+            ProgressHUD.showSuccess("Testing")
             isFirstTime = false
         }
+
 //        var session = PFSession()
 //        if (session.sessionToken == nil) {
 //            println("Error Occured")
@@ -114,10 +176,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //Passing Data - PrepareForSegue
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showProfile" {
+            var adClass = PFObject(className: "Ad")
             let adVC: AdProfileViewController = segue.destinationViewController as! AdProfileViewController
             let indexPath = self.tableView.indexPathForSelectedRow()
-            let thisAd = adArray[indexPath!.row]
-            adVC.adProfileModel = thisAd
+            adClass = adArray[indexPath!.row] as! PFObject
+            adVC.adProfileModel = adClass.objectId!
             adVC.mainVC = self
             adVC.transitioningDelegate = transitionManager
         }
@@ -181,45 +244,88 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return AdsArray.count
+        //return 4
+        
+             return self.adArray.count
+        
     }
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
+        //let thisAd: AnyObject = adArray[indexPath.row]
         
-        let thisAd = adArray[indexPath.row]
+         if indexPath == 0 {
+            currentUser()
+            var cell: AdTableViewCell = tableView.dequeueReusableCellWithIdentifier("AdCell") as! AdTableViewCell
+            cell.backgroundColor = UIColor.clearColor()
+            
+            var adClass = PFObject(className: "Ad")
+            adClass = adArray[indexPath.row] as! PFObject
+            var user = PFObject(className: "User")
+
+            cell.questionLabel.text = "What are you looking for?"
+            cell.adLabel.text = "\(adClass[lookingForTitle]!)"
+            cell.nameLabel.text = "\(adClass[creatorTitle]!)"
+            cell.distanceLabel.text = "10 miles"
+            cell.categoryLabel.setTitle("Paid Service", forState: UIControlState.Normal)
+            
+            
+            // Get image
+            let imageFile = adClass["profileImage"] as? PFFile
+            imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
+                if error == nil {
+                    if let imageData = imageData {
+                        cell.profileImageView.image = UIImage(data:imageData)
+                    } } }
+            
+            
+            cell.delegate = self
+            
+            return cell
+
+        } else {
         
         var cell: AdTableViewCell = tableView.dequeueReusableCellWithIdentifier("AdCell") as! AdTableViewCell
         cell.backgroundColor = UIColor.clearColor()
         
+
+        
         var adClass = PFObject(className: "Ad")
-        adClass = AdsArray[indexPath.row] as PFObject
+        adClass = adArray[indexPath.row] as! PFObject
         var user = PFObject(className: "User")
         
         cell.questionLabel.text = "What are you looking for?"
         cell.adLabel.text = "\(adClass[lookingForTitle]!)"
+        //cell.distanceLabel.text = ("\(adClass[distanceTitle]!)")
         
         
-        cell.profileImageView.image = thisAd.profileImage
-        cell.nameLabel.text = thisAd.name
-        //cell.adLabel.text = thisAd.ad
-        cell.distanceLabel.text = thisAd.distance
-        cell.categoryLabel.setTitle(thisAd.category, forState: UIControlState.Normal)
+        //cell.profileImageView.image = thisAd.image
+        cell.nameLabel.text = "\(adClass[creatorTitle]!)"
+        //cell.categoryLabel.setTitle(thisAd.category, forState: UIControlState.Normal)
         
         
         //cell.profileImageView.image = UIImage(named: "profile1")
         //cell.nameLabel.text = "Lawrence"
         //cell.questionLabel.text = "What are you looking for?"
         //cell.adLabel.text = "Looking for help moving next week!"
-        //cell.distanceLabel.text = "10 miles"
-       // cell.categoryLabel.setTitle("Paid Service", forState: UIControlState.Normal)
+        cell.distanceLabel.text = "10 miles"
+       cell.categoryLabel.setTitle("Paid Service", forState: UIControlState.Normal)
         
+        
+        // Get image
+        let imageFile = adClass["profileImage"] as? PFFile
+        imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
+            if error == nil {
+                if let imageData = imageData {
+                    cell.profileImageView.image = UIImage(data:imageData)
+                } } }
         
      
         cell.delegate = self
         
         return cell
+        }
     }
         
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -240,7 +346,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     //UITableViewDelagate
    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-         performSegueWithIdentifier("showProfile", sender: self)
+    
+    
+      performSegueWithIdentifier("showProfile", sender: self)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
     }
@@ -249,7 +357,69 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // TODO: Implement Categories
     }
     
- 
+    func refreshAds() {
+        
+        adArray.removeAllObjects()
+        //var innerQuery = PFQuery(className: "User")
+        //innerQuery.whereKeyExists("name")
+        var query = PFQuery(className: "Ad")
+        //query.whereKey(CLASSIF_CATEGORY, equalTo: categoryStr)
+        //query.whereKey("createdBy", matchesQuery: innerQuery)
+        query.orderByAscending("updatedAt")
+        query.limit = 30
+        query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
+            if error == nil {
+                if let objects = objects as? [PFObject] {
+                    for object in objects {
+                        self.adArray.addObject(object)
+                    } }
+                // Go to Browse Ads VC
+                println("\(self.adArray.count)")
+                self.tableView.reloadData()
+                self.refreshControl?.endRefreshing()
+                
+            } else {
+                var alert = UIAlertView(title: "Matchboard",
+                    message: "Something went wrong, try again later or check your internet connection",
+                    delegate: self,
+                    cancelButtonTitle: "OK" )
+                alert.show()
+            }
+        }
+        
+
+    }
+    
+   
+    
+    
+    func currentUser() {
+        adArray.removeAllObjects()
+        var query = PFQuery(className: "Ad")
+        query.whereKey("username", equalTo: PFUser.currentUser()!)
+        //query.orderByDescending(CLASSIF_UPDATED_AT)
+        query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
+            if error == nil {
+                if let objects = objects as? [PFObject] {
+                    for object in objects {
+                        self.adArray.addObject(object)
+                    } }
+                // Pupolate the TableView
+                self.tableView.reloadData()
+                
+            } else {
+                var alert = UIAlertView(title: "Matchboard",
+                    message: "Something went wrong, try again later or check your internet connection",
+                    delegate: nil,
+                    cancelButtonTitle: "OK" )
+                alert.show()
+            }
+        }
+
+        
+    }
+    
+    
 
 
 }

@@ -46,12 +46,17 @@ class WelcomeViewController: UIViewController, UITextViewDelegate, UIAlertViewDe
         println("Next Button Tapped")
         
         var lookingFor = PFObject(className:"Ad")
+        var user = PFUser.currentUser()!
         lookingFor["lookingFor"] = adTextView.text
+        lookingFor["username"] = PFUser.currentUser()
         lookingFor["createdBy"] = PFUser.currentUser()!.username
+        lookingFor["profileImage"] = user["profileImage"]
+        lookingFor["first_name"] = user["name"]
         lookingFor.saveInBackgroundWithBlock {
             (success: Bool, error: NSError?) -> Void in
             if (success) {
                 println("Looking For has been saved!")
+                self.performSegueWithIdentifier("adSegue", sender: self)
             } else {
                 println("There was a problem saving")
                 self.displayAlert("Could not Save Looking For", error: "Please try again later")

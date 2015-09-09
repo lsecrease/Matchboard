@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 class Ad: PFObject, PFSubclassing {
@@ -14,6 +15,7 @@ class Ad: PFObject, PFSubclassing {
     @NSManaged var user: PFUser
     @NSManaged var lookingFor: String?
     @NSManaged var name: String?
+    @NSManaged var distance: String?
     @NSManaged var category: NSMutableArray?
 
     //1
@@ -36,13 +38,14 @@ class Ad: PFObject, PFSubclassing {
         return query
     }
     
-    init(image: PFFile, user: PFUser, lookingFor: String?, name: String?, category: NSMutableArray?) {
+    init(image: PFFile, user: PFUser, lookingFor: String?, name: String?, distance: String?, category: NSMutableArray?) {
         super.init()
         
         self.image = image
         self.user = user
         self.lookingFor = lookingFor
         self.name = name
+        self.distance = distance
         self.category = category
     }
     

@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		22BB68C70F9EBC16041B3597 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C81E73C1811BA9BFE83D6848 /* libPods.a */; };
 		CE3FA5C41B2023E400762DA1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3FA5C31B2023E400762DA1 /* LoginViewController.swift */; };
+		CE5B43EC1B69A5BC00C97E15 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5B43EB1B69A5BC00C97E15 /* FavoritesViewController.swift */; };
 		CE672B051B54D45E0080A9E0 /* Ad.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE672B041B54D45E0080A9E0 /* Ad.swift */; };
+		CE6F72631B6EB5E200378C95 /* FavoritesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6F72621B6EB5E200378C95 /* FavoritesCell.swift */; };
 		CE735D421AC7D1FD00CD18D8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE735D411AC7D1FD00CD18D8 /* AppDelegate.swift */; };
 		CE735D441AC7D1FD00CD18D8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE735D431AC7D1FD00CD18D8 /* ViewController.swift */; };
 		CE735D471AC7D1FD00CD18D8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE735D451AC7D1FD00CD18D8 /* Main.storyboard */; };
@@ -102,7 +104,9 @@
 		C81E73C1811BA9BFE83D6848 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9AE21A3A78E4F418EDC1658 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		CE3FA5C31B2023E400762DA1 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		CE5B43EB1B69A5BC00C97E15 /* FavoritesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		CE672B041B54D45E0080A9E0 /* Ad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ad.swift; sourceTree = "<group>"; };
+		CE6F72621B6EB5E200378C95 /* FavoritesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesCell.swift; sourceTree = "<group>"; };
 		CE735D3C1AC7D1FD00CD18D8 /* Matchboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Matchboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE735D401AC7D1FD00CD18D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE735D411AC7D1FD00CD18D8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -292,6 +296,8 @@
 				CEC14CCA1B1E25A7009555A0 /* CFNetwork.framework */,
 				CEC14CC81B1E259B009555A0 /* AudioToolbox.framework */,
 				CE735D411AC7D1FD00CD18D8 /* AppDelegate.swift */,
+				CEC6BCD51B574C2B00B6AC7F /* Onboarding */,
+				CEC6BCD71B574C4E00B6AC7F /* SegmentControls */,
 				CEF7DA7E1B1E2BDE00917B53 /* Matchboard-Bridging-Header.h */,
 				CE3FA5C31B2023E400762DA1 /* LoginViewController.swift */,
 				CE7A6BDC1B2FB0C70098775E /* RegisterViewController.swift */,
@@ -303,6 +309,8 @@
 				CEAB27191B0DBD2A00279889 /* AdTableViewCell.swift */,
 				CE7C5A0A1B4A278800CE4AE0 /* Models */,
 				CEBA34A81B144C7800C3F406 /* AdProfileViewController.swift */,
+				CE5B43EB1B69A5BC00C97E15 /* FavoritesViewController.swift */,
+				CE6F72621B6EB5E200378C95 /* FavoritesCell.swift */,
 				CE735D451AC7D1FD00CD18D8 /* Main.storyboard */,
 				CE735D481AC7D1FD00CD18D8 /* Images.xcassets */,
 				CE735D4A1AC7D1FD00CD18D8 /* LaunchScreen.xib */,
@@ -412,6 +420,20 @@
 				CEC63FCA1B56052300B65C21 /* UnwindSegue.swift */,
 			);
 			path = Spring;
+			sourceTree = "<group>";
+		};
+		CEC6BCD51B574C2B00B6AC7F /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Onboarding;
+			sourceTree = "<group>";
+		};
+		CEC6BCD71B574C4E00B6AC7F /* SegmentControls */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = SegmentControls;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -566,6 +588,7 @@
 				CE7A6BDF1B2FB12C0098775E /* WelcomeViewController.swift in Sources */,
 				CEC63FE21B56052300B65C21 /* SpringTextField.swift in Sources */,
 				CE672B051B54D45E0080A9E0 /* Ad.swift in Sources */,
+				CE5B43EC1B69A5BC00C97E15 /* FavoritesViewController.swift in Sources */,
 				CEC63FD61B56052300B65C21 /* ImageLoader.swift in Sources */,
 				CEC63FD21B56052300B65C21 /* DesignableTabBarController.swift in Sources */,
 				CEC63FD51B56052300B65C21 /* DesignableView.swift in Sources */,
@@ -598,6 +621,7 @@
 				CEF8890E1B447CBA00F39692 /* CategoryTableViewCell.swift in Sources */,
 				CE92F9BE1B3CE7D700680947 /* Checkbox.swift in Sources */,
 				CEAB271A1B0DBD2A00279889 /* AdTableViewCell.swift in Sources */,
+				CE6F72631B6EB5E200378C95 /* FavoritesCell.swift in Sources */,
 				CEDF38611B0EB94200029A20 /* AdModel.swift in Sources */,
 				CEC63FDD1B56052300B65C21 /* Spring.swift in Sources */,
 				CEC63FD41B56052300B65C21 /* DesignableTextView.swift in Sources */,

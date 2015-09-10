@@ -13,7 +13,7 @@ import UIKit
 
 
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, AdTableViewCellDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, AdTableViewCellDelegate, LoginDelegate {
 
 
     
@@ -66,7 +66,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.addSubview(refreshControl)
         refreshControl?.addTarget(self, action: "refreshAds", forControlEvents: UIControlEvents.ValueChanged)
         
-        refreshAds()
         
 //        session.saveInBackgroundWithBlock {
 //            (success: Bool, error: NSError?) -> Void in
@@ -102,25 +101,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     //Check to see if User is logged in; If not, head over to login
     override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        if (PFUser.currentUser() == nil) {
-            //self.performSegueWithIdentifier("login", sender: self)
-        } else if (PFUser.currentUser() != nil) {
-            self.storyboard?.instantiateViewControllerWithIdentifier("ViewController")
-        }
+
+        self.storyboard?.instantiateViewControllerWithIdentifier("ViewController")
     
-    //Loading Indicator
+
+        //Loading Indicator
         if isFirstTime {
+            refreshAds()
             ProgressHUD.showSuccess("Testing")
             isFirstTime = false
         }
-
-//        var session = PFSession()
-//        if (session.sessionToken == nil) {
-//            println("Error Occured")
-//            PFUser.logOut()
-//            self.performSegueWithIdentifier("login", sender: self)
-//        }
     }
     
    
@@ -145,6 +135,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 adVC.mainVC = self
                 adVC.transitioningDelegate = transitionManager
             }
+        } else if segue.identifier == "login" {
+            let loginVC = segue.destinationViewController as! LoginViewController
+            
+            loginVC.delegate = self
         }
     }
 
@@ -205,7 +199,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         print(myAdArray.count)
         print(adArray.count)
         
-        return myAdArray.count > 0 ? 2 : 1
+        return 2
     }
     
     
@@ -369,15 +363,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 self.refreshControl?.endRefreshing()
                 
             } else {
-                let alert = UIAlertView(title: "Matchboard",
-                    message: "Something went wrong, try again later or check your internet connection",
-                    delegate: self,
-                    cancelButtonTitle: "OK" )
-                alert.show()
+                ParseErrorHandlingController.handleParseError(error!)
             }
         }
-        
-
     }
     
     
@@ -421,19 +409,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 self.tableView.reloadData()
                 
             } else {
-                let alert = UIAlertView(title: "Matchboard",
-                    message: "Something went wrong, try again later or check your internet connection",
-                    delegate: nil,
-                    cancelButtonTitle: "OK" )
-                alert.show()
+                ParseErrorHandlingController.handleParseError(error!)
             }
         }
-
-        
     }
     
-    
-
-
+    // MARK: - LoginDelegate
+    func userLoggedIn(sender: LoginViewController) {
+        sender.dismissViewControllerAnimated(true) { () -> Void in
+            self.refreshAds()
+        }
+    }
 }
 

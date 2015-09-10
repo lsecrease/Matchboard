@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		22BB68C70F9EBC16041B3597 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C81E73C1811BA9BFE83D6848 /* libPods.a */; };
+		4F702F111BA2110500A91046 /* ParseErrorHandlingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F702F101BA2110500A91046 /* ParseErrorHandlingController.swift */; settings = {ASSET_TAGS = (); }; };
 		CE3FA5C41B2023E400762DA1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3FA5C31B2023E400762DA1 /* LoginViewController.swift */; };
 		CE5B43EC1B69A5BC00C97E15 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5B43EB1B69A5BC00C97E15 /* FavoritesViewController.swift */; };
 		CE672B051B54D45E0080A9E0 /* Ad.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE672B041B54D45E0080A9E0 /* Ad.swift */; };
@@ -94,6 +95,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F702F101BA2110500A91046 /* ParseErrorHandlingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseErrorHandlingController.swift; sourceTree = "<group>"; };
 		7558752A677350BDA478709D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		C81E73C1811BA9BFE83D6848 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9AE21A3A78E4F418EDC1658 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -227,6 +229,19 @@
 		4F5AD8031BA20838001F8CCB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CEC14CE01B1E265A009555A0 /* Social.framework */,
+				CEC14CDE1B1E264E009555A0 /* Accounts.framework */,
+				CEC14CDC1B1E2643009555A0 /* libsqlite3.dylib */,
+				CEC14CDA1B1E262F009555A0 /* libz.dylib */,
+				CEC14CD81B1E261E009555A0 /* SystemConfiguration.framework */,
+				CEC14CD61B1E25FD009555A0 /* StoreKit.framework */,
+				CEC14CD41B1E25F5009555A0 /* Security.framework */,
+				CEC14CD21B1E25DF009555A0 /* QuartzCore.framework */,
+				CEC14CD01B1E25CF009555A0 /* MobileCoreServices.framework */,
+				CEC14CCE1B1E25BC009555A0 /* CoreLocation.framework */,
+				CEC14CCC1B1E25B5009555A0 /* CoreGraphics.framework */,
+				CEC14CCA1B1E25A7009555A0 /* CFNetwork.framework */,
+				CEC14CC81B1E259B009555A0 /* AudioToolbox.framework */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -266,19 +281,6 @@
 				CEC63FAC1B56052300B65C21 /* Spring */,
 				CEB389111B2FC9EA00F38492 /* TPKeyboardAvoiding */,
 				CEC0632B1B276FE5002A28C6 /* ProgressHUD */,
-				CEC14CE01B1E265A009555A0 /* Social.framework */,
-				CEC14CDE1B1E264E009555A0 /* Accounts.framework */,
-				CEC14CDC1B1E2643009555A0 /* libsqlite3.dylib */,
-				CEC14CDA1B1E262F009555A0 /* libz.dylib */,
-				CEC14CD81B1E261E009555A0 /* SystemConfiguration.framework */,
-				CEC14CD61B1E25FD009555A0 /* StoreKit.framework */,
-				CEC14CD41B1E25F5009555A0 /* Security.framework */,
-				CEC14CD21B1E25DF009555A0 /* QuartzCore.framework */,
-				CEC14CD01B1E25CF009555A0 /* MobileCoreServices.framework */,
-				CEC14CCE1B1E25BC009555A0 /* CoreLocation.framework */,
-				CEC14CCC1B1E25B5009555A0 /* CoreGraphics.framework */,
-				CEC14CCA1B1E25A7009555A0 /* CFNetwork.framework */,
-				CEC14CC81B1E259B009555A0 /* AudioToolbox.framework */,
 				CE735D411AC7D1FD00CD18D8 /* AppDelegate.swift */,
 				CEC6BCD51B574C2B00B6AC7F /* Onboarding */,
 				CEC6BCD71B574C4E00B6AC7F /* SegmentControls */,
@@ -299,6 +301,7 @@
 				CE735D481AC7D1FD00CD18D8 /* Images.xcassets */,
 				CE735D4A1AC7D1FD00CD18D8 /* LaunchScreen.xib */,
 				CE735D3F1AC7D1FD00CD18D8 /* Supporting Files */,
+				4F702F101BA2110500A91046 /* ParseErrorHandlingController.swift */,
 			);
 			path = Matchboard;
 			sourceTree = "<group>";
@@ -593,6 +596,7 @@
 				CEC63FDE1B56052300B65C21 /* SpringAnimation.swift in Sources */,
 				CEC63FE11B56052300B65C21 /* SpringLabel.swift in Sources */,
 				CE7C5A0E1B4A283300CE4AE0 /* CategoryHeader.swift in Sources */,
+				4F702F111BA2110500A91046 /* ParseErrorHandlingController.swift in Sources */,
 				CEC63FDB1B56052300B65C21 /* Misc.swift in Sources */,
 				CEB3891C1B2FC9EA00F38492 /* TPKeyboardAvoidingTableView.m in Sources */,
 				CEC63FCF1B56052300B65C21 /* DesignableButton.swift in Sources */,

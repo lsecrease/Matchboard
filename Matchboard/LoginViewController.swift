@@ -8,8 +8,13 @@
 
 import UIKit
 
+protocol LoginDelegate {
+    func userLoggedIn(sender: LoginViewController)
+}
+
 class LoginViewController: UIViewController {
 
+    var delegate : LoginDelegate!
    
     @IBOutlet weak var loginView: DesignableView!
     
@@ -67,19 +72,14 @@ class LoginViewController: UIViewController {
     }
     
     func userLoggedIn(user: PFUser) {
-        //PushNotication.parsePushUserAssign()
         ProgressHUD.showSuccess("Welcome Back!")
-        self.dismissViewControllerAnimated(true, completion: nil)
-        //performSegueWithIdentifier("dismissView", sender: self)
-        
-        
+        delegate.userLoggedIn(self)
     }
     
 
     override func viewDidAppear(animated: Bool) {
         if PFUser.currentUser() != nil {
-            print("User loggined in")
-            self.dismissViewControllerAnimated(true, completion: nil)
+            delegate.userLoggedIn(self)
         }
     }
     

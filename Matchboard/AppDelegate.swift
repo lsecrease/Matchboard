@@ -10,7 +10,6 @@ import UIKit
 
 
 
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -24,6 +23,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Parse.setApplicationId("lsaVahwTjwKvPegYQq9hubP8rj3PfuLSDmIgfpQm", clientKey:"DFcnbl7hCbht7haLXjWFAmiuLKcvdwXfT3lOy353")
         
         PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
+        
+        
+        let session = PFSession()
+        print(session.sessionToken)
+        print(PFUser.currentUser())
+        if (session.sessionToken == nil || PFUser.currentUser() == nil) {
+            print("Error Occured")
+            PFUser.logOut()
+            
+            if let rootVC = UIApplication.sharedApplication().keyWindow?.rootViewController
+            {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+                rootVC.presentViewController(vc, animated: true, completion: nil)
+            }
+        }
         
 
         return true

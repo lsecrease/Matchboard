@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Parse
 
 
 //var AdsArray: [Ad] = []
@@ -105,7 +104,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         if (PFUser.currentUser() == nil) {
-            self.performSegueWithIdentifier("login", sender: self)
+            //self.performSegueWithIdentifier("login", sender: self)
         } else if (PFUser.currentUser() != nil) {
             self.storyboard?.instantiateViewControllerWithIdentifier("ViewController")
         }

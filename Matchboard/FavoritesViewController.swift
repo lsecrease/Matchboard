@@ -19,15 +19,15 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     var profileImageTitle = "profileImage"
     
     override func viewWillAppear(animated: Bool) {
-        if PFUser.currentUser() != nil {
-            queryFavAds()
-        } else {
-            let alert = UIAlertView(title: "Matchboard",
-                message: "You must login/signup into your Account to add Favorites",
-                delegate: nil,
-                cancelButtonTitle: "OK" )
-            alert.show()
-        }
+//        if PFUser.currentUser() != nil {
+//            queryFavAds()
+//        } else {
+//            let alert = UIAlertView(title: "Matchboard",
+//                message: "You must login/signup into your Account to add Favorites",
+//                delegate: nil,
+//                cancelButtonTitle: "OK" )
+//            alert.show()
+//        }
     }
     
     override func viewDidLoad() {
@@ -132,15 +132,8 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                 self.faveTableView.reloadData()
                 
             } else {
-                let alert = UIAlertView(title: "Matchboard",
-                    message: "Something went wrong, try again later or check your internet connection",
-                    delegate: self,
-                    cancelButtonTitle: "OK" )
-                alert.show()
+                ParseErrorHandlingController.handleParseError(error!)
             }
         }
-        
     }
-
-
 }

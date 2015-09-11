@@ -10,7 +10,6 @@ import UIKit
 
 
 
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -22,8 +21,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Parse.enableLocalDatastore()
         Parse.setApplicationId("lsaVahwTjwKvPegYQq9hubP8rj3PfuLSDmIgfpQm", clientKey:"DFcnbl7hCbht7haLXjWFAmiuLKcvdwXfT3lOy353")
+        PFSession.getCurrentSessionInBackgroundWithBlock { (session, error) -> Void in
+            if let error = error
+            {
+                ParseErrorHandlingController.handleParseError(error)
+            }
+        }
         
         PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
+        
         
 
         return true

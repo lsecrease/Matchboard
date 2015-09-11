@@ -71,11 +71,7 @@ class AdProfileViewController: UIViewController {
                
                 
             } else {
-                let alert = UIAlertView(title: "Matchboard",
-                    message: "Something went wrong, try again later or check your internet connection",
-                    delegate: nil,
-                    cancelButtonTitle: "OK" )
-                alert.show()
+                ParseErrorHandlingController.handleParseError(error!)
             }
         }
         

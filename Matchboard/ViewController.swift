@@ -33,7 +33,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var lookingForTitle = "lookingFor"
     var distanceTitle = "distance"
     var nameTitle = "name"
-    var creatorTitle = "createdBy"
+    var creatorTitle = "first_name"
     
     var refreshControl: UIRefreshControl!
     
@@ -227,7 +227,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 var adClass = PFObject(className: "Ad")
                 adClass = adArray[indexPath.row] as! PFObject
-                var user = PFObject(className: "User")
+                //var user = PFObject(className: "User")
                 
                 cell.questionLabel.text = "What are you looking for?"
                 cell.adLabel.text = "\(adClass[lookingForTitle]!)"
@@ -299,17 +299,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return UITableViewCell()
     }
         
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        let imageView = UIImageView(frame: CGRectMake(0, 0, cell.frame.width, cell.frame.height))
-        let image = UIImage(named: "BkgrdBlur")
-        imageView.image = image
-        
-        if indexPath.row % 2 != 0 {
-            cell.backgroundView = UIView()
-            cell.backgroundView?.addSubview(imageView)
-        }
-
-    }
+//    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+//        let imageView = UIImageView(frame: CGRectMake(0, 0, cell.frame.width, cell.frame.height))
+//        let image = UIImage(named: "BkgrdBlur")
+//        imageView.image = image
+//        
+//        if indexPath.row % 2 != 0 {
+//            cell.backgroundView = UIView()
+//            cell.backgroundView?.addSubview(imageView)
+//        }
+//
+//    }
     
         
     
@@ -334,7 +334,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //var innerQuery = PFQuery(className: "User")
         //innerQuery.whereKeyExists("name")
         let query = PFQuery(className: "Ad")
-        //query.whereKey(CLASSIF_CATEGORY, equalTo: categoryStr)
         //query.whereKey("createdBy", matchesQuery: innerQuery)
         query.orderByAscending("updatedAt")
         query.limit = 30

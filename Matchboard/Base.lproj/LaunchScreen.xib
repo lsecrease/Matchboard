@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9046" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9035"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -12,21 +13,36 @@
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash.png" translatesAutoresizingMaskIntoConstraints="NO" id="e8d-uP-FpM">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                    </variation>
                 </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="e8d-uP-FpM" secondAttribute="bottom" id="1oK-H9-JfC"/>
+                <constraint firstAttribute="trailing" secondItem="e8d-uP-FpM" secondAttribute="trailing" id="8Te-b2-bib"/>
+                <constraint firstItem="e8d-uP-FpM" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="JHH-Dl-q1J"/>
+                <constraint firstItem="e8d-uP-FpM" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="NfO-I8-pm2"/>
+            </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
             <variation key="default">
                 <mask key="subviews">
                     <exclude reference="e8d-uP-FpM"/>
                 </mask>
+                <mask key="constraints">
+                    <exclude reference="1oK-H9-JfC"/>
+                    <exclude reference="8Te-b2-bib"/>
+                    <exclude reference="JHH-Dl-q1J"/>
+                    <exclude reference="NfO-I8-pm2"/>
+                </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
                 <mask key="subviews">
                     <include reference="e8d-uP-FpM"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="1oK-H9-JfC"/>
+                    <include reference="8Te-b2-bib"/>
+                    <include reference="JHH-Dl-q1J"/>
+                    <include reference="NfO-I8-pm2"/>
                 </mask>
             </variation>
             <point key="canvasLocation" x="551.5" y="400"/>

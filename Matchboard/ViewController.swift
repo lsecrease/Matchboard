@@ -331,6 +331,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func refreshAds() {
         
         adArray.removeAllObjects()
+        myAdArray.removeAllObjects()
         //var innerQuery = PFQuery(className: "User")
         //innerQuery.whereKeyExists("name")
         let query = PFQuery(className: "Ad")

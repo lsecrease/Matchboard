@@ -330,13 +330,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func refreshAds() {
         
-        adArray.removeAllObjects()
-        myAdArray.removeAllObjects()
-        //var innerQuery = PFQuery(className: "User")
-        //innerQuery.whereKeyExists("name")
         let query = PFQuery(className: "Ad")
-        //query.whereKey(CLASSIF_CATEGORY, equalTo: categoryStr)
-        //query.whereKey("createdBy", matchesQuery: innerQuery)
         query.orderByAscending("updatedAt")
         query.limit = 30
         query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
@@ -344,6 +338,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let myId = PFUser.currentUser()?.objectId
             
             if error == nil {
+                
+                self.adArray.removeAllObjects()
+                self.myAdArray.removeAllObjects()
+                
                 if let objects = objects as? [PFObject] {
                     for object in objects {
                         

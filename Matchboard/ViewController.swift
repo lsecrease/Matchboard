@@ -331,10 +331,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func refreshAds() {
         
         let query = PFQuery(className: "Ad")
-<<<<<<< HEAD
+
         //query.whereKey("createdBy", matchesQuery: innerQuery)
-=======
->>>>>>> develop
+
         query.orderByAscending("updatedAt")
         query.limit = 30
         query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in

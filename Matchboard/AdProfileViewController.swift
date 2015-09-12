@@ -21,6 +21,7 @@ class AdProfileViewController: UIViewController {
     @IBOutlet weak var aboutMeText: AutoTextView!
     @IBOutlet weak var faveIcon: UIImageView!
     @IBOutlet weak var faveButton: DesignableButton!
+    
     var searchedAdsArray = NSMutableArray()
     
     var singleAdArray = NSMutableArray()
@@ -28,6 +29,9 @@ class AdProfileViewController: UIViewController {
     
     var mainVC: ViewController!
     var faveVC: FavoritesViewController!
+    
+    var favArray = NSMutableArray()
+    var adObj = PFObject(className: "Ad")
     
     var createdByLabel = "first_name"
     var lookingForLabel = "lookingFor"
@@ -103,6 +107,36 @@ class AdProfileViewController: UIViewController {
                 if let imageData = imageData {
                     self.profileImage.image = UIImage(data: imageData)
                 } } }
+       
+        
+        
+        //Query to see if Ad is on the Favorites - HELP
+        favArray.removeAllObjects()
+        let query = PFQuery(className: "Favorites")
+        query.whereKey("username", equalTo: PFUser.currentUser()!)
+        query.whereKey("adPointer", equalTo: adObj)
+        query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
+            if error == nil {
+                if let objects = objects as? [PFObject] {
+                    for object in objects {
+                        self.favArray.addObject(object)
+                        print("Fave Array Added")
+                    } }
+                // Show/Hide Favorite Star and shareView
+                self.showFavHeart()
+                print("showFave ran")
+            } else { print("error: \(error!.description)") }
+        }
+        
+    }
+    
+    func showFavHeart() {
+        var favClass = PFObject(className: "Favorites")
+        favClass = singleAdArray[0] as! PFObject
+        if favClass["adPointer"] as! PFObject == adObj  {
+            self.faveIcon.image = UIImage(named: "goldheart")
+            self.faveButton.setTitle("Favorited", forState: .Normal)
+        }
     }
 
     
@@ -121,16 +155,18 @@ class AdProfileViewController: UIViewController {
         print("Fave Button Tapped")
         let button = sender as! UIButton
         
+
+        let favClass = PFObject(className: "Favorites")
+        var adClass = adObj
+        adClass = singleAdArray[button.tag] as! PFObject
+        //favClass["userPointer"] = PFUser.currentUser()
+       
         
-        if PFUser.currentUser() != nil {
-            var adClass = PFObject(className: "Ad")
-            adClass = singleAdArray[button.tag] as! PFObject
-            let favClass = PFObject(className: "Favorites")
             
             // ADD THIS AD TO FAVORITES
             favClass["username"] = PFUser.currentUser()?.username!
-            favClass["adPointer"] = adClass
-            favClass["adUsername"] = profileFirstName.text!
+           favClass["adPointer"] = adClass
+           favClass["adUsername"] = profileFirstName.text!
             // Saving block
             favClass.saveInBackgroundWithBlock { (success, error) -> Void in
                 if error == nil {
@@ -153,13 +189,6 @@ class AdProfileViewController: UIViewController {
             } // end Saving block
             
             
-        } else {
-            let alert = UIAlertView(title: "Matchboard",
-                message: "You have to login/signup to favorite ads!",
-                delegate: nil,
-                cancelButtonTitle: "OK")
-            alert.show()
-        }
         
     }
     

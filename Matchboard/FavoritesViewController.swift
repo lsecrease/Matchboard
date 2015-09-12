@@ -19,15 +19,15 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     var profileImageTitle = "profileImage"
     
     override func viewWillAppear(animated: Bool) {
-//        if PFUser.currentUser() != nil {
-//            queryFavAds()
-//        } else {
-//            let alert = UIAlertView(title: "Matchboard",
-//                message: "You must login/signup into your Account to add Favorites",
-//                delegate: nil,
-//                cancelButtonTitle: "OK" )
-//            alert.show()
-//        }
+        if PFUser.currentUser() != nil {
+            queryFavAds()
+        } else {
+            let alert = UIAlertView(title: "Matchboard",
+                message: "You must login/signup into your Account to add Favorites",
+                delegate: nil,
+                cancelButtonTitle: "OK" )
+            alert.show()
+        }
     }
     
     override func viewDidLoad() {
@@ -35,13 +35,12 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
 
        faveTableView.backgroundColor = UIColor.clearColor()
         
+        print("Favorites Array \(favoritesArray.count)")
+        
         
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+   
     
     
     //UITableViewDataSource
@@ -57,19 +56,21 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("FaveCell", forIndexPath: indexPath) as! FavoritesCell
+        let cell:FavoritesCell = tableView.dequeueReusableCellWithIdentifier("FaveCell", forIndexPath: indexPath) as! FavoritesCell
         cell.backgroundColor = UIColor.clearColor()
         
         var favClass = PFObject(className: "Favorites")
         favClass = favoritesArray[indexPath.row] as! PFObject
+        var adClass = PFObject(className:"Ad")
+        adClass = favClass["adPointer"] as! PFObject
         // Get Ads as a Pointer
-        let adPointer = favClass["adPointer"] as! PFObject
+        //let adPointer = favClass["adPointer"] as! PFObject
         
-        cell.userNameLabel.text = "\(adPointer[usernameTitle]!)"
-        cell.lookingForLabel.text = "\(adPointer[lookingForTitle]!)"
+        cell.userNameLabel.text = "\(adClass[usernameTitle]!)"
+        cell.lookingForLabel.text = "\(adClass[lookingForTitle]!)"
         
         // Get image
-        let imageFile = adPointer[profileImageTitle] as? PFFile
+        let imageFile = adClass[profileImageTitle] as? PFFile
         imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
             if error == nil {
                 if let imageData = imageData {
@@ -83,14 +84,14 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        let imageView = UIImageView(frame: CGRectMake(0, 0, cell.frame.width, cell.frame.height))
-        let image = UIImage(named: "BkgrdBlur")
-        imageView.image = image
-        
-        if indexPath.row % 2 != 0 {
-            cell.backgroundView = UIView()
-            cell.backgroundView?.addSubview(imageView)
-        }
+//        let imageView = UIImageView(frame: CGRectMake(0, 0, cell.frame.width, cell.frame.height))
+//        let image = UIImage(named: "BkgrdBlur")
+//        imageView.image = image
+//        
+//        if indexPath.row % 2 != 0 {
+//            cell.backgroundView = UIView()
+//            cell.backgroundView?.addSubview(imageView)
+//        }
         
     }
     

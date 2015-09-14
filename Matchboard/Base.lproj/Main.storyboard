@@ -693,21 +693,14 @@
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="3Go-nb-vdE" firstAttribute="leading" secondItem="dwi-zy-8G8" secondAttribute="leadingMargin" id="0fd-Vz-zel"/>
-                                    <constraint firstItem="3Go-nb-vdE" firstAttribute="leading" secondItem="LB8-cL-zB6" secondAttribute="leading" id="0i8-Pm-iGQ"/>
                                     <constraint firstItem="LB8-cL-zB6" firstAttribute="centerX" secondItem="RPQ-U6-2Bt" secondAttribute="centerX" id="1Mr-Oc-b9A"/>
-                                    <constraint firstItem="RPQ-U6-2Bt" firstAttribute="centerX" secondItem="3Go-nb-vdE" secondAttribute="centerX" id="2jm-Ly-lvc"/>
-                                    <constraint firstItem="3Go-nb-vdE" firstAttribute="leading" secondItem="dwi-zy-8G8" secondAttribute="leading" constant="8" id="2qn-DG-iM3"/>
                                     <constraint firstAttribute="trailing" secondItem="LB8-cL-zB6" secondAttribute="trailing" constant="8" id="2rO-VT-Q05"/>
-                                    <constraint firstItem="3Go-nb-vdE" firstAttribute="centerX" secondItem="RPQ-U6-2Bt" secondAttribute="centerX" id="4n7-4w-MXc"/>
                                     <constraint firstAttribute="trailing" secondItem="3Go-nb-vdE" secondAttribute="trailing" constant="8" id="8bz-Nr-wAz"/>
                                     <constraint firstItem="3Go-nb-vdE" firstAttribute="leading" secondItem="dwi-zy-8G8" secondAttribute="leading" constant="8" id="ELd-N2-YXT"/>
                                     <constraint firstItem="LB8-cL-zB6" firstAttribute="leading" secondItem="dwi-zy-8G8" secondAttribute="leadingMargin" id="HeK-9t-qDx"/>
                                     <constraint firstItem="LB8-cL-zB6" firstAttribute="leading" secondItem="3Go-nb-vdE" secondAttribute="leading" id="JVU-AO-AwL"/>
                                     <constraint firstItem="RPQ-U6-2Bt" firstAttribute="centerX" secondItem="dwi-zy-8G8" secondAttribute="centerX" id="On3-79-h6p"/>
                                     <constraint firstItem="3Go-nb-vdE" firstAttribute="leading" secondItem="dwi-zy-8G8" secondAttribute="leading" constant="8" id="Rwx-hN-Eya"/>
-                                    <constraint firstItem="RPQ-U6-2Bt" firstAttribute="centerX" secondItem="LB8-cL-zB6" secondAttribute="centerX" id="Wjq-a7-4PT"/>
-                                    <constraint firstItem="3Go-nb-vdE" firstAttribute="centerX" secondItem="dwi-zy-8G8" secondAttribute="centerX" id="WtN-Y3-lTo"/>
-                                    <constraint firstItem="3Go-nb-vdE" firstAttribute="trailing" secondItem="LB8-cL-zB6" secondAttribute="trailing" id="Y5p-iT-FC0"/>
                                     <constraint firstItem="3Go-nb-vdE" firstAttribute="centerX" secondItem="LB8-cL-zB6" secondAttribute="centerX" id="cd7-hb-QWP"/>
                                     <constraint firstItem="LB8-cL-zB6" firstAttribute="trailing" secondItem="3Go-nb-vdE" secondAttribute="trailing" id="eIq-5b-mQ4"/>
                                     <constraint firstItem="LB8-cL-zB6" firstAttribute="top" secondItem="RPQ-U6-2Bt" secondAttribute="bottom" constant="39" id="hSK-16-IRW"/>
@@ -716,23 +709,6 @@
                                     <constraint firstItem="3Go-nb-vdE" firstAttribute="top" secondItem="LB8-cL-zB6" secondAttribute="bottom" constant="22" id="kv6-kI-m5a"/>
                                     <constraint firstItem="RPQ-U6-2Bt" firstAttribute="leading" secondItem="dwi-zy-8G8" secondAttribute="leading" constant="69" id="kzm-8V-pFD"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="2jm-Ly-lvc"/>
-                                        <exclude reference="Wjq-a7-4PT"/>
-                                        <exclude reference="2rO-VT-Q05"/>
-                                        <exclude reference="0i8-Pm-iGQ"/>
-                                        <exclude reference="2qn-DG-iM3"/>
-                                        <exclude reference="4n7-4w-MXc"/>
-                                        <exclude reference="WtN-Y3-lTo"/>
-                                        <exclude reference="Y5p-iT-FC0"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="2rO-VT-Q05"/>
-                                    </mask>
-                                </variation>
                                 <variation key="heightClass=regular-widthClass=regular" ambiguous="YES">
                                     <rect key="frame" x="0.0" y="378" width="375" height="0.0"/>
                                 </variation>
@@ -745,16 +721,6 @@
                             <constraint firstItem="dwi-zy-8G8" firstAttribute="bottom" secondItem="TKV-bb-IAZ" secondAttribute="top" id="rFr-zK-Lfv"/>
                             <constraint firstAttribute="trailing" secondItem="dwi-zy-8G8" secondAttribute="trailing" id="tKL-9i-sYl"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="tKL-9i-sYl"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=regular-widthClass=compact">
-                            <mask key="constraints">
-                                <include reference="tKL-9i-sYl"/>
-                            </mask>
-                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		22BB68C70F9EBC16041B3597 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C81E73C1811BA9BFE83D6848 /* libPods.a */; };
 		4F702F111BA2110500A91046 /* ParseErrorHandlingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F702F101BA2110500A91046 /* ParseErrorHandlingController.swift */; settings = {ASSET_TAGS = (); }; };
+		4FFB10D31BA9C69D007D2CC6 /* BioCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB10D21BA9C69D007D2CC6 /* BioCell.swift */; settings = {ASSET_TAGS = (); }; };
 		CE3FA5C41B2023E400762DA1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3FA5C31B2023E400762DA1 /* LoginViewController.swift */; };
 		CE5B43EC1B69A5BC00C97E15 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5B43EB1B69A5BC00C97E15 /* FavoritesViewController.swift */; };
 		CE672B051B54D45E0080A9E0 /* Ad.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE672B041B54D45E0080A9E0 /* Ad.swift */; };
@@ -96,6 +97,7 @@
 
 /* Begin PBXFileReference section */
 		4F702F101BA2110500A91046 /* ParseErrorHandlingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseErrorHandlingController.swift; sourceTree = "<group>"; };
+		4FFB10D21BA9C69D007D2CC6 /* BioCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BioCell.swift; sourceTree = "<group>"; };
 		7558752A677350BDA478709D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		C81E73C1811BA9BFE83D6848 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9AE21A3A78E4F418EDC1658 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -246,6 +248,14 @@
 			path = Frameworks;
 			sourceTree = "<group>";
 		};
+		4FFB10D11BA9C677007D2CC6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4FFB10D21BA9C69D007D2CC6 /* BioCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		CCCE71EB1D4F150806A0EB54 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -278,6 +288,7 @@
 		CE735D3E1AC7D1FD00CD18D8 /* Matchboard */ = {
 			isa = PBXGroup;
 			children = (
+				4FFB10D11BA9C677007D2CC6 /* Views */,
 				CEC63FAC1B56052300B65C21 /* Spring */,
 				CEB389111B2FC9EA00F38492 /* TPKeyboardAvoiding */,
 				CEC0632B1B276FE5002A28C6 /* ProgressHUD */,
@@ -595,6 +606,7 @@
 				CEBA34A91B144C7800C3F406 /* AdProfileViewController.swift in Sources */,
 				CEC63FDE1B56052300B65C21 /* SpringAnimation.swift in Sources */,
 				CEC63FE11B56052300B65C21 /* SpringLabel.swift in Sources */,
+				4FFB10D31BA9C69D007D2CC6 /* BioCell.swift in Sources */,
 				CE7C5A0E1B4A283300CE4AE0 /* CategoryHeader.swift in Sources */,
 				4F702F111BA2110500A91046 /* ParseErrorHandlingController.swift in Sources */,
 				CEC63FDB1B56052300B65C21 /* Misc.swift in Sources */,

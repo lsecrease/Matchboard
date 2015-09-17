@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		22BB68C70F9EBC16041B3597 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C81E73C1811BA9BFE83D6848 /* libPods.a */; };
+		4F0D56521BAB1704007D9E1F /* LookingForCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D56511BAB1704007D9E1F /* LookingForCell.swift */; settings = {ASSET_TAGS = (); }; };
+		4F0D56541BAB172F007D9E1F /* AboutMeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D56531BAB172F007D9E1F /* AboutMeCell.swift */; settings = {ASSET_TAGS = (); }; };
+		4F0D56561BAB1747007D9E1F /* BlockUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D56551BAB1747007D9E1F /* BlockUserCell.swift */; settings = {ASSET_TAGS = (); }; };
 		4F702F111BA2110500A91046 /* ParseErrorHandlingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F702F101BA2110500A91046 /* ParseErrorHandlingController.swift */; settings = {ASSET_TAGS = (); }; };
 		4FFB10D31BA9C69D007D2CC6 /* BioCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB10D21BA9C69D007D2CC6 /* BioCell.swift */; settings = {ASSET_TAGS = (); }; };
 		CE3FA5C41B2023E400762DA1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3FA5C31B2023E400762DA1 /* LoginViewController.swift */; };
@@ -96,6 +99,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F0D56511BAB1704007D9E1F /* LookingForCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LookingForCell.swift; sourceTree = "<group>"; };
+		4F0D56531BAB172F007D9E1F /* AboutMeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutMeCell.swift; sourceTree = "<group>"; };
+		4F0D56551BAB1747007D9E1F /* BlockUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockUserCell.swift; sourceTree = "<group>"; };
 		4F702F101BA2110500A91046 /* ParseErrorHandlingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseErrorHandlingController.swift; sourceTree = "<group>"; };
 		4FFB10D21BA9C69D007D2CC6 /* BioCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BioCell.swift; sourceTree = "<group>"; };
 		7558752A677350BDA478709D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -252,6 +258,9 @@
 			isa = PBXGroup;
 			children = (
 				4FFB10D21BA9C69D007D2CC6 /* BioCell.swift */,
+				4F0D56511BAB1704007D9E1F /* LookingForCell.swift */,
+				4F0D56531BAB172F007D9E1F /* AboutMeCell.swift */,
+				4F0D56551BAB1747007D9E1F /* BlockUserCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -582,7 +591,9 @@
 				CE735D441AC7D1FD00CD18D8 /* ViewController.swift in Sources */,
 				CEC63FE31B56052300B65C21 /* SpringTextView.swift in Sources */,
 				CEC63FD81B56052300B65C21 /* KeyboardLayoutConstraint.swift in Sources */,
+				4F0D56561BAB1747007D9E1F /* BlockUserCell.swift in Sources */,
 				CEB3891A1B2FC9EA00F38492 /* TPKeyboardAvoidingCollectionView.m in Sources */,
+				4F0D56521BAB1704007D9E1F /* LookingForCell.swift in Sources */,
 				CE735D421AC7D1FD00CD18D8 /* AppDelegate.swift in Sources */,
 				CEC63FE51B56052300B65C21 /* TransitionManager.swift in Sources */,
 				CE7A6BDF1B2FB12C0098775E /* WelcomeViewController.swift in Sources */,
@@ -599,6 +610,7 @@
 				CEB3891B1B2FC9EA00F38492 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				CEC63FE41B56052300B65C21 /* SpringView.swift in Sources */,
 				CEC63FE71B56052300B65C21 /* UnwindSegue.swift in Sources */,
+				4F0D56541BAB172F007D9E1F /* AboutMeCell.swift in Sources */,
 				CEC63FE61B56052300B65C21 /* TransitionZoom.swift in Sources */,
 				CEF8890C1B44794E00F39692 /* CategoryViewController.swift in Sources */,
 				CEC63FCB1B56052300B65C21 /* AsyncButton.swift in Sources */,

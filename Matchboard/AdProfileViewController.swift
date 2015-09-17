@@ -13,8 +13,8 @@ enum ProfileTableSection : Int {
     case Bio
     case LookingFor
     case AboutMe
-    case Links
     case Block
+    case Links
 }
 
 enum UserColumns : String {
@@ -25,7 +25,7 @@ enum UserColumns : String {
 }
 
 
-class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate {
+class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, BlockUserDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -79,7 +79,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     // MARK: - UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return 1
+        return 4
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
@@ -94,11 +94,17 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
             return cell
             
         case ProfileTableSection.LookingFor.rawValue:
-            let cell = tableView.dequeueReusableCellWithIdentifier("LookingForCell", forIndexPath: indexPath)
+            let cell = tableView.dequeueReusableCellWithIdentifier("LookingForCell", forIndexPath: indexPath) as! LookingForCell
+            if let currentAd = currentAd {
+                cell.configureCellWithAd(currentAd)
+            }
             return cell
             
         case ProfileTableSection.AboutMe.rawValue:
-            let cell = tableView.dequeueReusableCellWithIdentifier("AboutMeCell", forIndexPath: indexPath)
+            let cell = tableView.dequeueReusableCellWithIdentifier("AboutMeCell", forIndexPath: indexPath) as! AboutMeCell
+            if let currentAd = currentAd {
+                cell.configureCellWithAd(currentAd)
+            }
             return cell
             
         case ProfileTableSection.Links.rawValue:
@@ -106,7 +112,8 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
             return cell
             
         case ProfileTableSection.Block.rawValue:
-            let cell = tableView.dequeueReusableCellWithIdentifier("BlockCell", forIndexPath: indexPath)
+            let cell = tableView.dequeueReusableCellWithIdentifier("BlockUserCell", forIndexPath: indexPath) as! BlockUserCell
+            cell.delegate = self
             return cell
             
         default:
@@ -117,6 +124,30 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     // MARK: - UITableViewDelegate
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    {
+        switch indexPath.row {
+        case ProfileTableSection.Bio.rawValue:
+            return 118.0
+            
+        case ProfileTableSection.LookingFor.rawValue:
+            return 270.0
+            
+        case ProfileTableSection.AboutMe.rawValue:
+            return 140.0
+            
+        case ProfileTableSection.Links.rawValue:
+            return 100.0
+            
+        case ProfileTableSection.Block.rawValue:
+            return 100.0
+            
+        default:
+            return 90.0
+            
+        }
+    }
     
 //
 //    func showAdDetails() {
@@ -235,6 +266,12 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     @IBAction func backButtonPressed(sender: AnyObject) {
         
         navigationController?.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // // MARK: - BlockUserDelegate
+    func blockUserPressed()
+    {
+        print("block user")
     }
    
     // MARK: - BioCellDelegate

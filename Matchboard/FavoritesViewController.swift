@@ -101,18 +101,20 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     
     //UITableViewDelagate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        var favClass = PFObject(className: "Favorites")
-        favClass = favoritesArray[indexPath.row] as! PFObject
-        // Get favorite Ads as a Pointer
-        let adPointer = favClass["adPointer"] as! PFObject
-        
-        let showAdVC = self.storyboard?.instantiateViewControllerWithIdentifier("showProfile") as! AdProfileViewController
-        // Pass the Ad ID to the Controller
-        showAdVC.adProfileModel = adPointer.objectId!
-        self.navigationController?.pushViewController(showAdVC, animated: true)
-        
-        //performSegueWithIdentifier("showProfile", sender: self)
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+
+        // TODO: do this through the "showProfile" segue
+//        var favClass = PFObject(className: "Favorites")
+//        favClass = favoritesArray[indexPath.row] as! PFObject
+//        // Get favorite Ads as a Pointer
+//        let adPointer = favClass["adPointer"] as! PFObject
+//        
+//        let showAdVC = self.storyboard?.instantiateViewControllerWithIdentifier("showProfile") as! AdProfileViewController
+//        // Pass the Ad ID to the Controller
+//        showAdVC.adProfileModel = adPointer.objectId!
+//        self.navigationController?.pushViewController(showAdVC, animated: true)
+//        
+//        performSegueWithIdentifier("showProfile", sender: self)
+//        tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
     }
     

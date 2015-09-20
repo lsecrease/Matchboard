@@ -119,22 +119,27 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showProfile" {
             var adClass = PFObject(className: "Ad")
-            let adVC: AdProfileViewController = segue.destinationViewController as! AdProfileViewController
-
-            if let indexPath = self.tableView.indexPathForSelectedRow
+            if let navVC = segue.destinationViewController as? UINavigationController
             {
-                if indexPath.section == 0
+                if let adVC  = navVC.topViewController as? AdProfileViewController
                 {
-                    adClass = myAdArray[indexPath.row] as! PFObject
-                } else {
-                    adClass = adArray[indexPath.row] as! PFObject
+                    if let indexPath = self.tableView.indexPathForSelectedRow
+                    {
+                        if indexPath.section == 0
+                        {
+                            adClass = myAdArray[indexPath.row] as! PFObject
+                        } else {
+                            adClass = adArray[indexPath.row] as! PFObject
+                        }
+                        
+                        
+                        adVC.adProfileModel = adClass.objectId!
+                        adVC.mainVC = self
+                        adVC.transitioningDelegate = transitionManager
+                    }
                 }
-                
-                
-                adVC.adProfileModel = adClass.objectId!
-                adVC.mainVC = self
-                adVC.transitioningDelegate = transitionManager
             }
+
         } else if segue.identifier == "login" {
             let loginVC = segue.destinationViewController as! LoginViewController
             
@@ -318,8 +323,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //UITableViewDelagate
    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
     
-    
-      performSegueWithIdentifier("showProfile", sender: self)
+        //performSegueWithIdentifier("showProfile", sender: self)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
     }

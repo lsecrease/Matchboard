@@ -86,7 +86,6 @@
 		CEC948DC1AD7715C000E95F2 /* Nav Bar iphone 5.png in Resources */ = {isa = PBXBuildFile; fileRef = CEC948D91AD7715C000E95F2 /* Nav Bar iphone 5.png */; };
 		CEC948DD1AD7715C000E95F2 /* Nav Bar iphone 6 Plus.png in Resources */ = {isa = PBXBuildFile; fileRef = CEC948DA1AD7715C000E95F2 /* Nav Bar iphone 6 Plus.png */; };
 		CEC948DE1AD7715C000E95F2 /* Nav Bar iphone 6.png in Resources */ = {isa = PBXBuildFile; fileRef = CEC948DB1AD7715C000E95F2 /* Nav Bar iphone 6.png */; };
-		CEDF38611B0EB94200029A20 /* AdModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDF38601B0EB94200029A20 /* AdModel.swift */; };
 		CEF8890E1B447CBA00F39692 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF8890D1B447CBA00F39692 /* CategoryTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -192,7 +191,6 @@
 		CEC948D91AD7715C000E95F2 /* Nav Bar iphone 5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Nav Bar iphone 5.png"; sourceTree = "<group>"; };
 		CEC948DA1AD7715C000E95F2 /* Nav Bar iphone 6 Plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Nav Bar iphone 6 Plus.png"; sourceTree = "<group>"; };
 		CEC948DB1AD7715C000E95F2 /* Nav Bar iphone 6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Nav Bar iphone 6.png"; sourceTree = "<group>"; };
-		CEDF38601B0EB94200029A20 /* AdModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdModel.swift; sourceTree = "<group>"; };
 		CEF7DA7E1B1E2BDE00917B53 /* Matchboard-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Matchboard-Bridging-Header.h"; sourceTree = "<group>"; };
 		CEF8890D1B447CBA00F39692 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -395,7 +393,6 @@
 		CE7C5A0A1B4A278800CE4AE0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				CEDF38601B0EB94200029A20 /* AdModel.swift */,
 				CE672B041B54D45E0080A9E0 /* Ad.swift */,
 				CE7C5A0B1B4A27D100CE4AE0 /* Category.swift */,
 				CE7C5A0D1B4A283300CE4AE0 /* CategoryHeader.swift */,
@@ -660,7 +657,6 @@
 				CEF8890E1B447CBA00F39692 /* CategoryTableViewCell.swift in Sources */,
 				CEAB271A1B0DBD2A00279889 /* AdTableViewCell.swift in Sources */,
 				CE6F72631B6EB5E200378C95 /* FavoritesCell.swift in Sources */,
-				CEDF38611B0EB94200029A20 /* AdModel.swift in Sources */,
 				CEC63FDD1B56052300B65C21 /* Spring.swift in Sources */,
 				CEC63FD41B56052300B65C21 /* DesignableTextView.swift in Sources */,
 				CEC63FD11B56052300B65C21 /* DesignableLabel.swift in Sources */,
@@ -789,13 +785,13 @@
 					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtilsV4\"",
 					"\"${PODS_ROOT}/Headers/Public/ParseUI\"",
 				);
-				INFOPLIST_FILE = Matchboard/Info.plist;
+				INFOPLIST_FILE = "Matchboard/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Matchboard/Matchboard-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Matchboard/Supporting Files/Matchboard-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -825,12 +821,12 @@
 					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtilsV4\"",
 					"\"${PODS_ROOT}/Headers/Public/ParseUI\"",
 				);
-				INFOPLIST_FILE = Matchboard/Info.plist;
+				INFOPLIST_FILE = "Matchboard/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Matchboard/Matchboard-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Matchboard/Supporting Files/Matchboard-Bridging-Header.h";
 			};
 			name = Release;
 		};

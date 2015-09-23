@@ -81,22 +81,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
  
 
        //Segment Control Appearance
-        
-        mySegmentedControl.setDividerImage(UIImage(named: "SegCtrl-noneselected"), forLeftSegmentState: UIControlState.Normal, rightSegmentState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
-        mySegmentedControl.setDividerImage(UIImage(named: "SegCtrl-noneselected"), forLeftSegmentState: UIControlState.Selected, rightSegmentState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
-        mySegmentedControl.setDividerImage(UIImage(named: "SegCtrl-noneselected"), forLeftSegmentState: UIControlState.Normal, rightSegmentState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
+        mySegmentedControl.setDividerImage(MatchboardUtils.getImageWithColor(MatchboardColors.DarkBackground.color(), size: CGSizeMake(1.0, 1.0)), forLeftSegmentState: UIControlState.Normal, rightSegmentState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
+        mySegmentedControl.setDividerImage(MatchboardUtils.getImageWithColor(MatchboardColors.DarkBackground.color(), size: CGSizeMake(1.0, 1.0)), forLeftSegmentState: UIControlState.Selected, rightSegmentState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
+        mySegmentedControl.setDividerImage(MatchboardUtils.getImageWithColor(MatchboardColors.DarkBackground.color(), size: CGSizeMake(1.0, 1.0)), forLeftSegmentState: UIControlState.Normal, rightSegmentState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
         mySegmentedControl.setBackgroundImage(UIImage(named: "SegCtrl-selected"), forState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
         mySegmentedControl.setBackgroundImage(UIImage(named: "SegCtrl-normal"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
-        let attr = NSDictionary(object: UIFont(name: "Avenir Next", size: 12.0)!, forKey: NSFontAttributeName)
-        mySegmentedControl.setTitleTextAttributes(attr as [NSObject : AnyObject], forState: .Normal)
-        
-        
+        let attributes = [NSFontAttributeName: UIFont(name: "Avenir Next", size: 12.0)!]
+        mySegmentedControl.setTitleTextAttributes(attributes, forState: .Normal)
+        let selectedAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        mySegmentedControl.setTitleTextAttributes(selectedAttributes, forState: .Selected)
+
+        // other appearance
         tableView.backgroundColor = UIColor.clearColor()
         searchBox.backgroundColor = UIColor.clearColor()
-        
         searchBox.setImage(UIImage(named: "SearchIcon"), forSearchBarIcon: UISearchBarIcon.Search, state: UIControlState.Normal)
-  
-     
     }
     
     //Check to see if User is logged in; If not, head over to login
@@ -104,7 +102,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         self.storyboard?.instantiateViewControllerWithIdentifier("ViewController")
     
-
         //Loading Indicator
         if isFirstTime {
             refreshAds()
@@ -112,8 +109,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             isFirstTime = false
         }
     }
-    
-   
     
     //Passing Data - PrepareForSegue
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

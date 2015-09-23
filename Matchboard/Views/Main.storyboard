@@ -40,19 +40,8 @@
                                     <action selector="mySegmentedControlAction:" destination="vXZ-lx-hvc" eventType="valueChanged" id="G93-Og-89s"/>
                                 </connections>
                             </segmentedControl>
-                            <searchBar contentMode="redraw" translucent="NO" backgroundImage="Searchbox" translatesAutoresizingMaskIntoConstraints="NO" id="zfg-UY-eoC">
-                                <rect key="frame" x="0.0" y="82" width="600" height="44"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <scopeButtonTitles>
-                                    <string>Title</string>
-                                    <string>Title</string>
-                                </scopeButtonTitles>
-                                <connections>
-                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="GXP-lV-h5C"/>
-                                </connections>
-                            </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Y0G-8l-I1s">
-                                <rect key="frame" x="0.0" y="126" width="600" height="474"/>
+                                <rect key="frame" x="0.0" y="82" width="600" height="518"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AdCell" rowHeight="100" id="vT8-5R-rTV" customClass="AdTableViewCell" customModule="Matchboard" customModuleProvider="target">
@@ -203,20 +192,17 @@
                             <constraint firstItem="0vL-oG-qHt" firstAttribute="trailing" secondItem="fFL-Rs-WWs" secondAttribute="trailing" id="DiS-3g-7Md"/>
                             <constraint firstItem="0vL-oG-qHt" firstAttribute="trailing" secondItem="HV2-kZ-HuZ" secondAttribute="trailing" id="DvV-M5-tgh"/>
                             <constraint firstItem="dFh-Wq-0hE" firstAttribute="bottom" secondItem="HV2-kZ-HuZ" secondAttribute="bottom" id="E9R-TD-CeE"/>
-                            <constraint firstItem="0vL-oG-qHt" firstAttribute="leading" secondItem="zfg-UY-eoC" secondAttribute="leading" id="G2q-Ah-IRF"/>
                             <constraint firstItem="dFh-Wq-0hE" firstAttribute="bottom" secondItem="Y0G-8l-I1s" secondAttribute="bottom" id="HKW-bj-PPg"/>
                             <constraint firstItem="dFh-Wq-0hE" firstAttribute="top" secondItem="G7c-m2-Lbj" secondAttribute="top" id="ItJ-Dq-aWs"/>
                             <constraint firstItem="0vL-oG-qHt" firstAttribute="trailing" secondItem="dFh-Wq-0hE" secondAttribute="trailing" id="Kbc-uR-Wax"/>
                             <constraint firstItem="0vL-oG-qHt" firstAttribute="leading" secondItem="HV2-kZ-HuZ" secondAttribute="leading" id="L7n-i6-ARA"/>
                             <constraint firstItem="0vL-oG-qHt" firstAttribute="trailing" secondItem="Y0G-8l-I1s" secondAttribute="trailing" id="QsG-Gs-kgE"/>
                             <constraint firstItem="0vL-oG-qHt" firstAttribute="leading" secondItem="Mm4-GA-UAv" secondAttribute="leading" id="QuD-ws-T7Q"/>
-                            <constraint firstItem="Y0G-8l-I1s" firstAttribute="top" secondItem="zfg-UY-eoC" secondAttribute="bottom" id="WqG-EN-NQZ"/>
+                            <constraint firstItem="Y0G-8l-I1s" firstAttribute="top" secondItem="0vL-oG-qHt" secondAttribute="bottom" id="Wuv-uJ-3dL"/>
                             <constraint firstItem="0vL-oG-qHt" firstAttribute="trailing" secondItem="Mm4-GA-UAv" secondAttribute="trailing" id="YCu-IF-BoR"/>
                             <constraint firstItem="0vL-oG-qHt" firstAttribute="leading" secondItem="fFL-Rs-WWs" secondAttribute="leading" id="bYC-nE-Uht"/>
-                            <constraint firstItem="0vL-oG-qHt" firstAttribute="trailing" secondItem="zfg-UY-eoC" secondAttribute="trailing" id="c96-VA-teS"/>
                             <constraint firstItem="dFh-Wq-0hE" firstAttribute="bottom" secondItem="2fi-mo-0CV" secondAttribute="top" id="daY-d6-Ks5"/>
                             <constraint firstItem="dFh-Wq-0hE" firstAttribute="top" secondItem="Mm4-GA-UAv" secondAttribute="top" id="i4l-so-pBM"/>
-                            <constraint firstItem="0vL-oG-qHt" firstAttribute="bottom" secondItem="zfg-UY-eoC" secondAttribute="top" id="iTk-MM-wwY"/>
                             <constraint firstItem="0vL-oG-qHt" firstAttribute="trailing" secondItem="G7c-m2-Lbj" secondAttribute="trailing" id="kyq-4D-8yD"/>
                             <constraint firstItem="0vL-oG-qHt" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="34" id="mtH-G1-mJD"/>
                             <constraint firstItem="dFh-Wq-0hE" firstAttribute="bottom" secondItem="G7c-m2-Lbj" secondAttribute="bottom" id="vJy-Lu-Tx9"/>
@@ -231,25 +217,14 @@
                         <outlet property="favoritesView" destination="Mm4-GA-UAv" id="Blo-ML-IDY"/>
                         <outlet property="messagesView" destination="HV2-kZ-HuZ" id="qXA-Ec-eVj"/>
                         <outlet property="mySegmentedControl" destination="0vL-oG-qHt" id="T17-lF-aO7"/>
-                        <outlet property="searchBox" destination="zfg-UY-eoC" id="eXn-IA-8ni"/>
-                        <outlet property="searchDisplayController" destination="FeZ-Wi-cbW" id="PhE-1o-AwY"/>
                         <outlet property="settingsView" destination="dFh-Wq-0hE" id="O7q-dF-2mr"/>
                         <outlet property="tableView" destination="Y0G-8l-I1s" id="pO7-03-q7W"/>
                         <segue destination="XIb-JJ-eK0" kind="presentation" identifier="login" modalPresentationStyle="overCurrentContext" id="I76-Ml-IiE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="FeZ-Wi-cbW">
-                    <connections>
-                        <outlet property="delegate" destination="vXZ-lx-hvc" id="bXC-gD-zgj"/>
-                        <outlet property="searchBar" destination="zfg-UY-eoC" id="ZxM-IO-opD"/>
-                        <outlet property="searchContentsController" destination="vXZ-lx-hvc" id="fIM-Mp-n6l"/>
-                        <outlet property="searchResultsDataSource" destination="vXZ-lx-hvc" id="JBs-O0-1mw"/>
-                        <outlet property="searchResultsDelegate" destination="vXZ-lx-hvc" id="lyA-xq-aKL"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="-310.5" y="-45.5"/>
+            <point key="canvasLocation" x="-311" y="-46"/>
         </scene>
         <!--Ad Profile View Controller-->
         <scene sceneID="Fy8-o5-yO9">
@@ -2378,7 +2353,6 @@
         <image name="MessageIcon" width="35" height="31"/>
         <image name="Profile" width="167" height="197"/>
         <image name="RoundedRectangle" width="269" height="219"/>
-        <image name="Searchbox" width="750" height="82"/>
         <image name="TextBox@1x" width="344" height="113"/>
         <image name="layer25" width="750" height="63"/>
         <image name="sample" width="190" height="169"/>

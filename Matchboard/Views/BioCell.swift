@@ -36,7 +36,7 @@ class BioCell: UITableViewCell {
     
     func configureCellWithAd(currentAd : PFObject)
     {
-        if let name = currentAd[UserColumns.firstName.rawValue] as? String {
+        if let name = currentAd[AdColumns.firstName.rawValue] as? String {
             nameLabel.text = name
         }
         
@@ -47,7 +47,7 @@ class BioCell: UITableViewCell {
         // TODO: add age
         
         // Profile Image
-        if let profilePic = currentAd[UserColumns.profileImage.rawValue] as? PFFile
+        if let profilePic = currentAd[AdColumns.profileImage.rawValue] as? PFFile
         {
             profilePic.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
                 if error == nil {

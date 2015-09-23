@@ -18,7 +18,7 @@ class LookingForCell: UITableViewCell {
     
     func configureCellWithAd(currentAd : PFObject)
     {
-        if let lookingFor = currentAd[UserColumns.lookingFor.rawValue] as? String {
+        if let lookingFor = currentAd[AdColumns.lookingFor.rawValue] as? String {
             lookingForTextView.text = lookingFor
         }
         

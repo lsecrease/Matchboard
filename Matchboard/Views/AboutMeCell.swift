@@ -15,5 +15,12 @@ class AboutMeCell: UITableViewCell {
     func configureCellWithAd(currentAd : PFObject)
     {
         // TODO: setup text
+        if let user = currentAd[AdColumns.username.rawValue] as? PFObject
+        {
+            if let aboutMe = user[UserColumns.aboutMe.rawValue] as? String {
+                aboutMeTextView.text = aboutMe
+            }
+            
+        }
     }
 }

@@ -13,12 +13,11 @@ import UIKit
 
 
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, AdTableViewCellDelegate, LoginDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate, AdTableViewCellDelegate, LoginDelegate {
 
-
+    let searchController = UISearchController(searchResultsController: nil)
     
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchBox: UISearchBar!
     @IBOutlet weak var mySegmentedControl: UISegmentedControl!
     @IBOutlet weak var favoritesView: UIView!
     @IBOutlet weak var messagesView: UIView!
@@ -34,6 +33,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var distanceTitle = "distance"
     var nameTitle = "name"
     var creatorTitle = "first_name"
+    
+    var originalSearchBarHeight : CGFloat!
     
     var refreshControl: UIRefreshControl!
     
@@ -51,36 +52,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //PFUser.currentUser()
-        print("\(PFUser.currentUser()?.username)")
-        //PFUser.logOut()
         
-        searchBox.delegate = self
-        
-        
+        //searchBox.delegate = self
         
         //Pull to Refresh
         refreshControl = UIRefreshControl()
         refreshControl.backgroundColor = UIColor.whiteColor()
         refreshControl.tintColor = UIColor.blueColor()
         tableView.addSubview(refreshControl)
-        refreshControl?.addTarget(self, action: "refreshAds", forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl?.addTarget(self, action: "pullToRefreshAds", forControlEvents: UIControlEvents.ValueChanged)
         
-        
-//        session.saveInBackgroundWithBlock {
-//            (success: Bool, error: NSError?) -> Void in
-//            if (success) {
-//                println("Success")
-//            } else {
-//                println("Error Occured")
-//                PFUser.logOut()
-//                self.performSegueWithIdentifier("login", sender: self)
-//            }
-       //}
-        
- 
-
-       //Segment Control Appearance
+        //Segment Control Appearance
         mySegmentedControl.setDividerImage(MatchboardUtils.getImageWithColor(MatchboardColors.DarkBackground.color(), size: CGSizeMake(1.0, 1.0)), forLeftSegmentState: UIControlState.Normal, rightSegmentState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
         mySegmentedControl.setDividerImage(MatchboardUtils.getImageWithColor(MatchboardColors.DarkBackground.color(), size: CGSizeMake(1.0, 1.0)), forLeftSegmentState: UIControlState.Selected, rightSegmentState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
         mySegmentedControl.setDividerImage(MatchboardUtils.getImageWithColor(MatchboardColors.DarkBackground.color(), size: CGSizeMake(1.0, 1.0)), forLeftSegmentState: UIControlState.Normal, rightSegmentState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
@@ -90,11 +72,28 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         mySegmentedControl.setTitleTextAttributes(attributes, forState: .Normal)
         let selectedAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         mySegmentedControl.setTitleTextAttributes(selectedAttributes, forState: .Selected)
-
+        
+        // search controller
+        searchController.searchResultsUpdater = self
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.dimsBackgroundDuringPresentation = false
+        //let searchBarView = UIView()
+        //searchBarView.addSubview(searchController.searchBar)
+        self.tableView.tableHeaderView = searchController.searchBar
+        searchController.searchBar.sizeToFit()
+        searchController.searchBar.delegate = self
+        
         // other appearance
         tableView.backgroundColor = UIColor.clearColor()
-        searchBox.backgroundColor = UIColor.clearColor()
-        searchBox.setImage(UIImage(named: "SearchIcon"), forSearchBarIcon: UISearchBarIcon.Search, state: UIControlState.Normal)
+        searchController.searchBar.backgroundColor = UIColor.whiteColor()
+        searchController.searchBar.setImage(UIImage(named: "SearchIcon"), forSearchBarIcon: UISearchBarIcon.Search, state: UIControlState.Normal)
+        searchController.searchBar.setBackgroundImage(MatchboardUtils.getImageWithColor(UIColor.whiteColor(), size: CGSizeMake(1.0, 1.0)), forBarPosition: UIBarPosition.Any, barMetrics: UIBarMetrics.Default)
+        searchController.searchBar.scopeBarBackgroundImage = UIImage()
+        searchController.searchBar.scopeButtonTitles = ["Ad Search", "Profile Search"]
+        searchController.hidesNavigationBarDuringPresentation = true
+        searchController.searchResultsUpdater = self
+        
+        self.definesPresentationContext = false
     }
     
     //Check to see if User is logged in; If not, head over to login
@@ -102,10 +101,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         self.storyboard?.instantiateViewControllerWithIdentifier("ViewController")
     
+        originalSearchBarHeight = searchController.searchBar.frame.height
+        
         //Loading Indicator
         if isFirstTime {
-            refreshAds()
-            ProgressHUD.showSuccess("Testing")
+            refreshAds(nil)
             isFirstTime = false
         }
     }
@@ -195,10 +195,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //UITableViewDataSource
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
-        print(myAdArray.count)
-        print(adArray.count)
-        
         return 2
     }
     
@@ -298,43 +294,64 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         return UITableViewCell()
     }
-        
-//    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-//        let imageView = UIImageView(frame: CGRectMake(0, 0, cell.frame.width, cell.frame.height))
-//        let image = UIImage(named: "BkgrdBlur")
-//        imageView.image = image
-//        
-//        if indexPath.row % 2 != 0 {
-//            cell.backgroundView = UIView()
-//            cell.backgroundView?.addSubview(imageView)
-//        }
-//
-//    }
-    
-        
     
 
 
-    //UITableViewDelagate
+    // MARK: - UITableViewDelegate
+    
    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    
-        //performSegueWithIdentifier("showProfile", sender: self)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        
     }
+    
+    // MARK: - UISearchBarDelegate
 
+    func searchBarSearchButtonClicked(searchBar: UISearchBar)
+    {
+        refreshAds(searchBar.text)
+    }
+    
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        self.tableView.contentInset = UIEdgeInsetsMake(searchController.searchBar.isFirstResponder() == true ? 44.0 : 0.0, 0.0, 0.0, 0.0)
+    }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar)
+    {
+        refreshAds(nil)
+    }
+    
+    // MARK: - Custom Methods
+    
     func adTableViewCellDidTouchCategory(cell: AdTableViewCell, sender: AnyObject) {
         // TODO: Implement Categories
     }
     
-    func refreshAds() {
+    func pullToRefreshAds()
+    {
+        refreshAds(nil)
+    }
+    
+    func refreshAds(search: String?) {
+        
+        ProgressHUD.show("")
         
         let query = PFQuery(className: "Ad")
-
-        //query.whereKey("createdBy", matchesQuery: innerQuery)
-
+        
         query.orderByAscending("updatedAt")
         query.limit = 30
+        
+        if let search = search {
+            
+            if searchController.searchBar.selectedScopeButtonIndex == 0
+            {
+                query.whereKey("lookingFor", containsString: search)
+            } else if searchController.searchBar.selectedScopeButtonIndex == 1
+            {
+                let aboutQuery = PFQuery(className: "_User")
+                aboutQuery.whereKey("aboutMe", containsString: search)
+                query.whereKey("username", matchesQuery: aboutQuery)
+            }
+        }
+        
         query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
             
             let myId = PFUser.currentUser()?.objectId
@@ -353,7 +370,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                             {
                                 self.myAdArray.addObject(object)
                             } else {
-                        
+                                
                                 self.adArray.addObject(object)
                             }
                         }
@@ -361,6 +378,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 // Go to Browse Ads VC
                 print("\(self.adArray.count)")
                 self.tableView.reloadData()
+                ProgressHUD.dismiss()
                 self.refreshControl?.endRefreshing()
                 
             } else {
@@ -368,32 +386,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
         }
     }
-    
-    
-    //Search Function Delegate
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String){
-        if searchBar.text!.isEmpty{
-            is_Searching = false
-            tableView.reloadData()
-        } else {
-            print(" search text %@ ",searchBar.text)
-            is_Searching = true
-            searchingAdArray.removeAllObjects()
-            for var index = 0; index < self.adArray.count; index++
-           {
-//                var currentString = adArray.objectAtIndex(index) as! String
-//                if currentString.lowercaseString.rangeOfString(searchText.lowercaseString)  != nil {
-//                    searchingAdArray.addObject(currentString)
-//                    
-//                }
-           }
-           tableView.reloadData()
-        }
-    }
-
-    
-   
-    
     
     func currentUser() {
         adArray.removeAllObjects()
@@ -418,7 +410,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: - LoginDelegate
     func userLoggedIn(sender: LoginViewController) {
         sender.dismissViewControllerAnimated(true) { () -> Void in
-            self.refreshAds()
+            self.refreshAds(nil)
         }
     }
 }

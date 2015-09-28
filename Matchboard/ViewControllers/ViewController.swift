@@ -141,8 +141,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             loginVC.delegate = self
         }
     }
-
-    
     
     @IBAction func mySegmentedControlAction(sender: AnyObject) {
         if(mySegmentedControl.selectedSegmentIndex == 0)

@@ -32,9 +32,16 @@ class BioCell: UITableViewCell {
 
     @IBAction func favoriteButtonPressed(sender: AnyObject) {
         delegate.favoriteButtonPressed(sender)
+        
+        if favoriteImageView.tintColor != UIColor.yellowColor()
+        {
+            favoriteImageView.tintColor = UIColor.yellowColor()
+        } else {
+            favoriteImageView.tintColor = UIColor.whiteColor()
+        }
     }
     
-    func configureCellWithAd(currentAd : PFObject)
+    func configureCellWithAd(currentAd : PFObject, isFavorite : Bool)
     {
         if let name = currentAd[AdColumns.firstName.rawValue] as? String {
             nameLabel.text = name
@@ -47,6 +54,9 @@ class BioCell: UITableViewCell {
         // TODO: add age
         
         // Profile Image
+        favoriteImageView.tintColor = isFavorite ? UIColor.yellowColor() : UIColor.whiteColor()
+        favoriteImageView.image = favoriteImageView.image?.imageWithRenderingMode(.AlwaysTemplate)
+        
         if let profilePic = currentAd[AdColumns.profileImage.rawValue] as? PFFile
         {
             profilePic.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in

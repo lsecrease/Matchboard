@@ -17,6 +17,6 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 
-#import "ProgressHUD/ProgressHUD.h"
+#import "../ThirdParty/ProgressHUD/ProgressHUD.h"
 
 #endif

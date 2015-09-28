@@ -18,12 +18,15 @@ enum ProfileTableSection : Int {
 }
 
 enum UserColumns : String {
+    case aboutMe = "aboutMe"
+}
+
+enum AdColumns : String {
     case firstName = "first_name"
     case lookingFor = "lookingFor"
     case profileImage = "profileImage"
     case username = "username"
 }
-
 
 class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, BlockUserDelegate {
     
@@ -63,7 +66,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                     } }
                 // Show Ad details
 
-                if let name = self.currentAd?[UserColumns.firstName.rawValue] as? String
+                if let name = self.currentAd?[AdColumns.firstName.rawValue] as? String
                 {
                     self.title = name
                 }

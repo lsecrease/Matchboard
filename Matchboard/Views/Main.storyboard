@@ -159,7 +159,7 @@
                             <containerView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mm4-GA-UAv">
                                 <rect key="frame" x="0.0" y="85" width="600" height="515"/>
                                 <connections>
-                                    <segue destination="rqZ-Sz-udI" kind="embed" id="lWY-8n-UNp"/>
+                                    <segue destination="rqZ-Sz-udI" kind="embed" identifier="FavoritesSegue" id="lWY-8n-UNp"/>
                                 </connections>
                             </containerView>
                             <containerView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HV2-kZ-HuZ">

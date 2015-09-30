@@ -38,12 +38,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var refreshControl: UIRefreshControl!
     
-    
     //Search stuff
     var is_Searching:Bool! = false
     var searchingAdArray:NSMutableArray!
     
     let transitionManager = TransitionManager()
+    
+    var favoritesVC : FavoritesViewController?
     
     //MARK: - Change Status Bar to White
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -139,6 +140,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let loginVC = segue.destinationViewController as! LoginViewController
             
             loginVC.delegate = self
+        } else if segue.identifier == "FavoritesSegue" {
+            if let favVCObject = segue.destinationViewController as? FavoritesViewController
+            {
+                favoritesVC = favVCObject
+            }
         }
     }
     
@@ -150,6 +156,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             messagesView.hidden = true
             categoriesView.hidden = true
             settingsView.hidden = true
+            favoritesVC?.queryFavAds()
         }
         else if(mySegmentedControl.selectedSegmentIndex == 1)
         {

@@ -32,6 +32,8 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     
     @IBOutlet weak var tableView: UITableView!
     
+    var editButton: UIBarButtonItem?
+    
     var searchedAdsArray = NSMutableArray()
     
     var adProfileModel = String()
@@ -46,8 +48,14 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     override func viewWillAppear(animated: Bool) {
         // Query the selected Ad to get its details
         querySingleAd()
+        editButton = navigationItem.rightBarButtonItem
+        navigationItem.rightBarButtonItem = nil
     }
 
+    @IBAction func editButtonPressed(sender: AnyObject) {
+        print("edit button pressed")
+    }
+    
     func querySingleAd() {
         print("SINGLE AD ID: \(adProfileModel)")
         
@@ -62,10 +70,17 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                     for object in objects {
                         self.currentAd = object
                         
-                        let favQuery = PFQuery(className: "Favorites")
-                        favQuery.whereKey("adPointer", equalTo: object)
+                        // if we have a current user
                         if let user = PFUser.currentUser()
                         {
+                            // if this ad is mine, show the edit button
+                            if object[AdColumns.username.rawValue]?.objectId == user.objectId {
+                                self.navigationItem.rightBarButtonItem = self.editButton
+                            }
+                            
+                            let favQuery = PFQuery(className: "Favorites")
+                            favQuery.whereKey("adPointer", equalTo: object)
+
                             favQuery.whereKey("userPointer", equalTo:user)
                             favQuery.limit = 1
                             favQuery.findObjectsInBackgroundWithBlock({ (objects, error) -> Void in

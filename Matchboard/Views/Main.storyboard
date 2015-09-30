@@ -1241,6 +1241,11 @@
                                 <action selector="backButtonPressed:" destination="Egk-xn-6Zq" id="7w0-3y-DaW"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="ovm-An-KY8">
+                            <connections>
+                                <action selector="editButtonPressed:" destination="Egk-xn-6Zq" id="VuE-70-GOU"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="Kav-9P-s9x" id="BUX-4C-Fa8"/>

@@ -41,9 +41,27 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     }
 
    
-    
-    
-    //UITableViewDataSource
+    //Passing Data - PrepareForSegue
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "showProfile" {
+            var favClass = PFObject(className: "Favorites")
+            if let navVC = segue.destinationViewController as? UINavigationController
+            {
+                if let adVC  = navVC.topViewController as? AdProfileViewController
+                {
+                    if let indexPath = self.faveTableView.indexPathForSelectedRow
+                    {
+                        favClass = favoritesArray[indexPath.row] as! PFObject
+                    }
+                    
+                    if let adObject = favClass["adPointer"] as? PFObject
+                    {
+                        adVC.adProfileModel = adObject.objectId!
+                    }
+                }
+            }
+        }
+    }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -123,19 +141,22 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         favoritesArray.removeAllObjects()
         
         let query = PFQuery(className: "Favorites")
-        query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
-        query.includeKey("adPointer")
-        query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
-            if error == nil {
-                if let objects = objects as? [PFObject] {
-                    for object in objects {
-                        self.favoritesArray.addObject(object)
-                    } }
-                // Show details (or reload a TableView)
-                self.faveTableView.reloadData()
-                
-            } else {
-                ParseErrorHandlingController.handleParseError(error!)
+        if let user = PFUser.currentUser()
+        {
+            query.whereKey("userPointer", equalTo: user)
+            query.includeKey("adPointer")
+            query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
+                if error == nil {
+                    if let objects = objects as? [PFObject] {
+                        for object in objects {
+                            self.favoritesArray.addObject(object)
+                        } }
+                    // Show details (or reload a TableView)
+                    self.faveTableView.reloadData()
+                    
+                } else {
+                    ParseErrorHandlingController.handleParseError(error!)
+                }
             }
         }
     }

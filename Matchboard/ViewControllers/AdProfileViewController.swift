@@ -34,15 +34,14 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     
     var searchedAdsArray = NSMutableArray()
     
-    var singleAdArray = NSMutableArray()
     var adProfileModel = String()
     var currentAd : PFObject?
+    var favoriteObj : PFObject?
     
     var mainVC: ViewController!
     var faveVC: FavoritesViewController!
     
     var favArray = NSMutableArray()
-    var adObj = PFObject(className: "Ad")
     
     override func viewWillAppear(animated: Bool) {
         // Query the selected Ad to get its details
@@ -59,19 +58,45 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
             if error == nil {
                 if let objects = objects as? [PFObject] {
-                    self.singleAdArray.removeAllObjects()
+                    
                     for object in objects {
                         self.currentAd = object
-                       
-                    } }
+                        
+                        let favQuery = PFQuery(className: "Favorites")
+                        favQuery.whereKey("adPointer", equalTo: object)
+                        if let user = PFUser.currentUser()
+                        {
+                            favQuery.whereKey("userPointer", equalTo:user)
+                            favQuery.limit = 1
+                            favQuery.findObjectsInBackgroundWithBlock({ (objects, error) -> Void in
+                                if error == nil {
+                                    if let objects = objects as? [PFObject] {
+                                        
+                                        for object in objects
+                                        {
+                                            self.favoriteObj = object
+                                        }
+                                        
+                                    } else {
+                                        self.favoriteObj = nil
+                                    }
+                                } else {
+                                    self.favoriteObj = nil
+                                }
+                                
+                                self.tableView.reloadData()
+                            })
+                        } else {
+                            self.tableView.reloadData()
+                        }
+                    }
+                }
+                
                 // Show Ad details
-
                 if let name = self.currentAd?[AdColumns.firstName.rawValue] as? String
                 {
                     self.title = name
                 }
-                self.tableView.reloadData()
-               
                 
             } else {
                 ParseErrorHandlingController.handleParseError(error!)
@@ -91,7 +116,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         case ProfileTableSection.Bio.rawValue:
             let cell = tableView.dequeueReusableCellWithIdentifier("BioCell", forIndexPath: indexPath) as! BioCell
             if let currentAd = currentAd {
-                cell.configureCellWithAd(currentAd)
+                cell.configureCellWithAd(currentAd, isFavorite: favoriteObj != nil)
             }
             cell.delegate = self
             return cell
@@ -285,41 +310,48 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     func favoriteButtonPressed(sender:AnyObject)
     {
         print("Favorite button Tapped")
-        // TODO: clean this up
         
-//        let button = sender as! UIButton
-//        
-//        
-//        let favClass = PFObject(className: "Favorites")
-//        var adClass = adObj
-//        adClass = singleAdArray[button.tag] as! PFObject
-//        //favClass["userPointer"] = PFUser.currentUser()
-//        
-//        
-//        
-//        // ADD THIS AD TO FAVORITES
-//        favClass["username"] = PFUser.currentUser()?.username!
-//        favClass["adPointer"] = adClass
-//        favClass["adUsername"] = profileFirstName.text!
-//        // Saving block
-//        favClass.saveInBackgroundWithBlock { (success, error) -> Void in
-//            if error == nil {
-//                print("Fave Added Successfully")
-//                self.faveIcon.image = UIImage(named: "goldheart")
-//                self.faveButton.setTitle("Favorited", forState: .Normal)
-//                let alert = UIAlertView(title: "Matchboard",
-//                    message: "\(self.profileFirstName.text!) has been added to your Favorites List!",
-//                    delegate: nil,
-//                    cancelButtonTitle: "OK" )
-//                alert.show()
-//            } else {
-//                let alert = UIAlertView(title: "Matchboard",
-//                    message: "Something went wrong, try again later, or check your internet connection",
-//                    delegate: nil,
-//                    cancelButtonTitle: "OK" )
-//                alert.show()
-//            }
-//            
-//        } // end Saving block
+        // favorite something
+        if favoriteObj == nil
+        {
+            let favClass = PFObject(className: "Favorites")
+            favClass["userPointer"] = PFUser.currentUser()
+            
+            // figure out if it's a favorite already or not
+            
+            // ADD THIS AD TO FAVORITES
+            favClass["username"] = PFUser.currentUser()?.username!
+            favClass["adPointer"] = currentAd
+            if let name = currentAd?[AdColumns.firstName.rawValue] as? String {
+                favClass["adUsername"] = name
+            }
+            
+            // Saving block
+            favClass.saveInBackgroundWithBlock { (success, error) -> Void in
+                if error == nil {
+                    if let objectId = favClass.objectId
+                    {
+                        self.favoriteObj = favClass
+                        print("Fave Added Successfully \(objectId)")
+                    }
+                    
+                } else {
+                    print ("Fave add failed")
+                }
+                
+            } // end Saving block
+        }
+
+        // unfavorite something
+        else {
+            
+            if let favoriteObj = favoriteObj
+            {
+                favoriteObj.deleteInBackgroundWithBlock({ (success, error) -> Void in
+                    print("delete in background \(success)")
+                    self.favoriteObj = nil
+                })
+            }
+        }
     }
 }

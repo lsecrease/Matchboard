@@ -28,7 +28,7 @@ enum AdColumns : String {
     case username = "username"
 }
 
-class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, BlockUserDelegate {
+class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, BlockUserDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -39,6 +39,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     var adProfileModel = String()
     var currentAd : PFObject?
     var favoriteObj : PFObject?
+    var isMine = false
     
     var mainVC: ViewController!
     var faveVC: FavoritesViewController!
@@ -75,7 +76,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                         {
                             // if this ad is mine, show the edit button
                             if object[AdColumns.username.rawValue]?.objectId == user.objectId {
-                                self.navigationItem.rightBarButtonItem = self.editButton
+                                self.isMine = true
                             }
                             
                             let favQuery = PFQuery(className: "Favorites")
@@ -131,7 +132,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         case ProfileTableSection.Bio.rawValue:
             let cell = tableView.dequeueReusableCellWithIdentifier("BioCell", forIndexPath: indexPath) as! BioCell
             if let currentAd = currentAd {
-                cell.configureCellWithAd(currentAd, isFavorite: favoriteObj != nil)
+                cell.configureCellWithAd(currentAd, isFavorite: favoriteObj != nil, isMine: isMine)
             }
             cell.delegate = self
             return cell
@@ -139,15 +140,17 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         case ProfileTableSection.LookingFor.rawValue:
             let cell = tableView.dequeueReusableCellWithIdentifier("LookingForCell", forIndexPath: indexPath) as! LookingForCell
             if let currentAd = currentAd {
-                cell.configureCellWithAd(currentAd)
+                cell.configureCellWithAd(currentAd, isMine: isMine)
             }
+            cell.delegate = self
             return cell
             
         case ProfileTableSection.AboutMe.rawValue:
             let cell = tableView.dequeueReusableCellWithIdentifier("AboutMeCell", forIndexPath: indexPath) as! AboutMeCell
             if let currentAd = currentAd {
-                cell.configureCellWithAd(currentAd)
+                cell.configureCellWithAd(currentAd, isMine: isMine)
             }
+            cell.delegate = self
             return cell
             
         case ProfileTableSection.Links.rawValue:
@@ -312,16 +315,19 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     // // MARK: - BlockUserDelegate
+    
     func blockUserPressed()
     {
         print("block user")
     }
    
     // MARK: - BioCellDelegate
+    
     func messageButtonPressed(sender:AnyObject)
     {
         print("Message button Tapped")
     }
+    
     func favoriteButtonPressed(sender:AnyObject)
     {
         print("Favorite button Tapped")
@@ -368,5 +374,25 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                 })
             }
         }
+    }
+    
+    func avatarEditButtonPressed(sender: AnyObject) {
+        print("avatar edit button pressed")
+    }
+    
+    func profileEditButtonPressed(sender: AnyObject) {
+        print("profile edit button pressed")
+    }
+
+    // MARK: - LookingForCellDelegate
+    
+    func editLookingForPressed(sender: AnyObject) {
+        print("looking for edit pressed")
+    }
+    
+    // MARK: - AboutMeCellDelegate
+    
+    func aboutEditButtonPressed(sender: AnyObject) {
+        print("about me edit pressed")
     }
 }

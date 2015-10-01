@@ -8,12 +8,31 @@
 
 import UIKit
 
+protocol AboutMeCellDelegate {
+    func aboutEditButtonPressed(sender: AnyObject)
+}
+
 class AboutMeCell: UITableViewCell {
 
-    @IBOutlet weak var aboutMeTextView: AutoTextView!
+    var delegate : AboutMeCellDelegate!
     
-    func configureCellWithAd(currentAd : PFObject)
+    @IBOutlet weak var aboutMeTextView: AutoTextView!
+    @IBOutlet weak var aboutEditButton: UIButton!
+    
+    @IBAction func aboutEditButtonPressed(sender: AnyObject) {
+        delegate.aboutEditButtonPressed(sender)
+    }
+    
+    override func layoutSubviews() {
+        aboutEditButton.setImage(aboutEditButton.imageView!.image?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: UIControlState.Normal)
+        
+        aboutEditButton.layer.cornerRadius = 3.0
+    }
+    
+    func configureCellWithAd(currentAd : PFObject, isMine : Bool)
     {
+        aboutEditButton.hidden = !isMine
+        
         // TODO: setup text
         if let user = currentAd[AdColumns.username.rawValue] as? PFObject
         {

@@ -826,6 +826,7 @@
                                                                     <state key="normal" image="EditIcon"/>
                                                                     <connections>
                                                                         <action selector="profileEditButtonPressed:" destination="QIy-w2-Nk5" eventType="touchUpInside" id="Lmn-fN-Zi0"/>
+                                                                        <segue destination="3mQ-NL-cM0" kind="show" identifier="EditProfileSegue" id="2zJ-nX-QOE"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
@@ -1026,6 +1027,7 @@
                                                     <state key="normal" image="EditIcon"/>
                                                     <connections>
                                                         <action selector="lookingForEditButtonPressed:" destination="mLr-Pk-OtT" eventType="touchUpInside" id="DeZ-zx-fB7"/>
+                                                        <segue destination="U5z-XG-ubC" kind="show" identifier="EditLookingForSegue" id="KGn-cj-7Nd"/>
                                                     </connections>
                                                 </button>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LookingForLine" translatesAutoresizingMaskIntoConstraints="NO" id="QMM-nd-Oz5">
@@ -1181,6 +1183,7 @@
                                                     <state key="normal" image="EditIcon"/>
                                                     <connections>
                                                         <action selector="aboutEditButtonPressed:" destination="fpX-oj-76S" eventType="touchUpInside" id="ABf-Zh-YZ8"/>
+                                                        <segue destination="7xG-lF-lIH" kind="show" identifier="EditAboutMeSegue" id="7Hc-Zc-j1R"/>
                                                     </connections>
                                                 </button>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LookingForLine" translatesAutoresizingMaskIntoConstraints="NO" id="jRm-7v-onp">
@@ -1325,6 +1328,93 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WZM-yE-7w2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1340" y="105"/>
+        </scene>
+        <!--Edit Profile View Controller-->
+        <scene sceneID="puL-PX-rqR">
+            <objects>
+                <viewController id="3mQ-NL-cM0" userLabel="Edit Profile View Controller" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="BKz-78-5wU"/>
+                        <viewControllerLayoutGuide type="bottom" id="fPt-R5-UWa"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="iET-a2-5yx">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="515"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BackgroundPro" translatesAutoresizingMaskIntoConstraints="NO" id="bBl-ul-DS8">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="515"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="bBl-ul-DS8" secondAttribute="trailing" id="3y2-Em-Y3N"/>
+                            <constraint firstItem="bBl-ul-DS8" firstAttribute="top" secondItem="iET-a2-5yx" secondAttribute="top" id="Dnu-Ee-pVc"/>
+                            <constraint firstItem="bBl-ul-DS8" firstAttribute="leading" secondItem="iET-a2-5yx" secondAttribute="leading" id="m3K-Rt-MSN"/>
+                            <constraint firstItem="fPt-R5-UWa" firstAttribute="top" secondItem="bBl-ul-DS8" secondAttribute="bottom" id="pHi-0E-zLc"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oNm-AI-hF2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1321" y="856"/>
+        </scene>
+        <!--Edit Looking For View Controller-->
+        <scene sceneID="Kid-rL-Sg1">
+            <objects>
+                <viewController id="U5z-XG-ubC" userLabel="Edit Looking For View Controller" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="DeW-pM-GWR"/>
+                        <viewControllerLayoutGuide type="bottom" id="BxW-fo-mM0"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Whq-cd-0xC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="515"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BackgroundPro" translatesAutoresizingMaskIntoConstraints="NO" id="6tx-1x-PFa">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="515"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="6tx-1x-PFa" secondAttribute="trailing" id="H8Q-di-gRh"/>
+                            <constraint firstItem="6tx-1x-PFa" firstAttribute="leading" secondItem="Whq-cd-0xC" secondAttribute="leading" id="QZ2-f6-va5"/>
+                            <constraint firstItem="BxW-fo-mM0" firstAttribute="top" secondItem="6tx-1x-PFa" secondAttribute="bottom" id="Rp4-om-CcO"/>
+                            <constraint firstItem="6tx-1x-PFa" firstAttribute="top" secondItem="Whq-cd-0xC" secondAttribute="top" id="ZmV-79-2dP"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DXx-4P-jEX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2001" y="855.5"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="jXj-0N-Ubo">
+            <objects>
+                <viewController id="7xG-lF-lIH" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="GiK-VT-io5"/>
+                        <viewControllerLayoutGuide type="bottom" id="zFp-OU-pEM"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="fN9-w8-TfU">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="515"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BackgroundPro" translatesAutoresizingMaskIntoConstraints="NO" id="iI0-Kh-BjK">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="515"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="iI0-Kh-BjK" secondAttribute="trailing" id="73n-8h-lty"/>
+                            <constraint firstItem="zFp-OU-pEM" firstAttribute="top" secondItem="iI0-Kh-BjK" secondAttribute="bottom" id="Lr0-kI-pds"/>
+                            <constraint firstItem="iI0-Kh-BjK" firstAttribute="leading" secondItem="fN9-w8-TfU" secondAttribute="leading" id="Ybh-R6-or8"/>
+                            <constraint firstItem="iI0-Kh-BjK" firstAttribute="top" secondItem="fN9-w8-TfU" secondAttribute="top" id="k4D-CS-0h3"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ds0-Er-bL1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2709" y="898"/>
         </scene>
         <!--Welcome View Controller-->
         <scene sceneID="q2B-LA-Rr5">
@@ -1925,7 +2015,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3Ht-ps-hOx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2063" y="662.5"/>
+            <point key="canvasLocation" x="-943" y="882.5"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="em5-KL-XeD">

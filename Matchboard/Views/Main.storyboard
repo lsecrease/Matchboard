@@ -7,6 +7,7 @@
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--ViewController-->
@@ -1387,10 +1388,10 @@
             </objects>
             <point key="canvasLocation" x="2001" y="855.5"/>
         </scene>
-        <!--View Controller-->
+        <!--Edit About Me View Controller-->
         <scene sceneID="jXj-0N-Ubo">
             <objects>
-                <viewController id="7xG-lF-lIH" sceneMemberID="viewController">
+                <viewController id="7xG-lF-lIH" customClass="EditAboutMeViewController" customModule="Matchboard" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="GiK-VT-io5"/>
                         <viewControllerLayoutGuide type="bottom" id="zFp-OU-pEM"/>
@@ -1402,19 +1403,48 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BackgroundPro" translatesAutoresizingMaskIntoConstraints="NO" id="iI0-Kh-BjK">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="515"/>
                             </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="uSo-Qk-yau">
+                                <rect key="frame" x="20" y="52" width="560" height="301"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wvv-d4-d0x">
+                                <rect key="frame" x="20" y="318" width="560" height="45"/>
+                                <color key="backgroundColor" red="0.1176470588" green="0.31372549020000001" blue="0.51764705879999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="z5J-pJ-sla"/>
+                                </constraints>
+                                <state key="normal" title="Save">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="saveButtonPressed:" destination="7xG-lF-lIH" eventType="touchUpInside" id="RyU-CW-Ict"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="iI0-Kh-BjK" secondAttribute="trailing" id="73n-8h-lty"/>
+                            <constraint firstItem="Wvv-d4-d0x" firstAttribute="leading" secondItem="fN9-w8-TfU" secondAttribute="leadingMargin" id="CHb-Ez-SvZ"/>
+                            <constraint firstItem="uSo-Qk-yau" firstAttribute="top" secondItem="GiK-VT-io5" secondAttribute="bottom" constant="8" id="GYx-gf-RC5"/>
+                            <constraint firstItem="uSo-Qk-yau" firstAttribute="trailing" secondItem="fN9-w8-TfU" secondAttribute="trailingMargin" id="LPq-t0-S5K"/>
                             <constraint firstItem="zFp-OU-pEM" firstAttribute="top" secondItem="iI0-Kh-BjK" secondAttribute="bottom" id="Lr0-kI-pds"/>
+                            <constraint firstItem="uSo-Qk-yau" firstAttribute="leading" secondItem="fN9-w8-TfU" secondAttribute="leadingMargin" id="Rtw-jX-ShT"/>
+                            <constraint firstItem="Wvv-d4-d0x" firstAttribute="top" secondItem="uSo-Qk-yau" secondAttribute="bottom" constant="8" id="WQm-0A-Ltj"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Wvv-d4-d0x" secondAttribute="trailing" id="YOp-bG-sGW"/>
                             <constraint firstItem="iI0-Kh-BjK" firstAttribute="leading" secondItem="fN9-w8-TfU" secondAttribute="leading" id="Ybh-R6-or8"/>
                             <constraint firstItem="iI0-Kh-BjK" firstAttribute="top" secondItem="fN9-w8-TfU" secondAttribute="top" id="k4D-CS-0h3"/>
+                            <constraint firstItem="uSo-Qk-yau" firstAttribute="height" secondItem="fN9-w8-TfU" secondAttribute="height" multiplier="0.5" id="oiQ-lj-jKd"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="aboutMeTextView" destination="uSo-Qk-yau" id="bGT-Gw-Oi7"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ds0-Er-bL1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2709" y="898"/>
+            <point key="canvasLocation" x="2709" y="897.5"/>
         </scene>
         <!--Welcome View Controller-->
         <scene sceneID="q2B-LA-Rr5">

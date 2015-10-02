@@ -10,10 +10,13 @@ import Foundation
 
 enum MatchboardColors {
     case DarkBackground
+    case FieldBorder
     
     func color() -> UIColor {
         switch (self) {
         case .DarkBackground:
+            return UIColor(red:0.12, green:0.31, blue:0.52, alpha:1)
+        case .FieldBorder:
             return UIColor(red:0.12, green:0.31, blue:0.52, alpha:1)
         default:
             return UIColor.blackColor()

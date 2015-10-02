@@ -28,7 +28,7 @@ enum AdColumns : String {
     case username = "username"
 }
 
-class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, BlockUserDelegate {
+class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, BlockUserDelegate, EditAboutMeDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -53,9 +53,34 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         navigationItem.rightBarButtonItem = nil
     }
 
+    // MARK: - Actions
+    
     @IBAction func editButtonPressed(sender: AnyObject) {
         print("edit button pressed")
     }
+    
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "EditAboutMeSegue"
+        {
+            if let editAboutMeVC = segue.destinationViewController as? EditAboutMeViewController
+            {
+                editAboutMeVC.delegate = self
+                
+                // setup text
+                if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
+                {
+                    if let aboutMe = user[UserColumns.aboutMe.rawValue] as? String {
+                        editAboutMeVC.configureWithAboutMeText(aboutMe)
+                    }
+                    
+                }
+            }
+        }
+    }
+    
+    // MARK: - Custom
     
     func querySingleAd() {
         print("SINGLE AD ID: \(adProfileModel)")
@@ -394,5 +419,19 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     
     func aboutEditButtonPressed(sender: AnyObject) {
         print("about me edit pressed")
+    }
+    
+    // MARK: - EditAboutMeDelegate
+    func aboutMeSaved(aboutMeString: String) {
+
+        if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
+        {
+            user[UserColumns.aboutMe.rawValue] = aboutMeString
+            let indexPath = NSIndexPath(forRow: ProfileTableSection.AboutMe.rawValue, inSection: 0)
+            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            user.saveInBackground()
+        }
+        
+        navigationController?.popViewControllerAnimated(true)
     }
 }

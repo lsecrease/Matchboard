@@ -33,7 +33,7 @@ class AboutMeCell: UITableViewCell {
     {
         aboutEditButton.hidden = !isMine
         
-        // TODO: setup text
+        // setup text
         if let user = currentAd[AdColumns.username.rawValue] as? PFObject
         {
             if let aboutMe = user[UserColumns.aboutMe.rawValue] as? String {

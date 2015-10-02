@@ -17,7 +17,7 @@ enum MatchboardColors {
         case .DarkBackground:
             return UIColor(red:0.12, green:0.31, blue:0.52, alpha:1)
         case .FieldBorder:
-            return UIColor(red:0.12, green:0.31, blue:0.52, alpha:1)
+            return UIColor(red:0.78, green:0.78, blue:0.78, alpha:1)
         default:
             return UIColor.blackColor()
         }

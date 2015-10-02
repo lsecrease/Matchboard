@@ -64,17 +64,18 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "EditAboutMeSegue"
         {
-            if let editAboutMeVC = segue.destinationViewController as? EditAboutMeViewController
-            {
-                editAboutMeVC.delegate = self
-                
-                // setup text
-                if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
+            if let navVC = segue.destinationViewController as? UINavigationController {
+                if let editAboutMeVC = navVC.topViewController as? EditAboutMeViewController
                 {
-                    if let aboutMe = user[UserColumns.aboutMe.rawValue] as? String {
-                        editAboutMeVC.configureWithAboutMeText(aboutMe)
-                    }
+                    editAboutMeVC.delegate = self
                     
+                    // setup text
+                    if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
+                    {
+                        if let aboutMe = user[UserColumns.aboutMe.rawValue] as? String {
+                            editAboutMeVC.configureWithAboutMeText(aboutMe)
+                        }
+                    }
                 }
             }
         }
@@ -422,6 +423,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     // MARK: - EditAboutMeDelegate
+    
     func aboutMeSaved(aboutMeString: String) {
 
         if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
@@ -433,5 +435,9 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         }
         
         navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func aboutMeCancelled(sender: AnyObject) {
+        sender.dismissViewControllerAnimated(true, completion: nil)
     }
 }

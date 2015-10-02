@@ -28,6 +28,17 @@ class EditProfileViewController: UIViewController {
         stateField.text = state
         neighborhoodField.text = neighborhood
         ageField.text = "\(age)"
+        
+        
+        
+        displayNameField.layer.borderWidth = 1.0
+        displayNameField.layer.cornerRadius = 4.0
+        displayNameField.layer.borderColor = MatchboardColors.FieldBorder.color().CGColor
+        displayNameField.backgroundColor = UIColor.whiteColor()
+        
+//        nameBackground.layer.borderWidth = 1.0
+//        nameBackground.layer.cornerRadius = 4.0
+//        nameBackground.layer.borderColor = MatchboardColors.FieldBorder.color().CGColor
     }
     
     @IBOutlet weak var displayNameField: JVFloatLabeledTextField!
@@ -35,6 +46,7 @@ class EditProfileViewController: UIViewController {
     @IBOutlet weak var stateField: JVFloatLabeledTextField!
     @IBOutlet weak var neighborhoodField: JVFloatLabeledTextField!
     @IBOutlet weak var ageField: JVFloatLabeledTextField!
+    @IBOutlet weak var nameBackground: UIView!
     
     @IBAction func cancelButtonPressed(sender: AnyObject) {
         delegate?.profileCancelled(navigationController!)

@@ -78,11 +78,40 @@ class BioCell: UITableViewCell {
             nameLabel.text = name
         }
         
-        // TODO: add location
+        if let user = currentAd[AdColumns.username.rawValue] as? PFObject
+        {
+            var locationString = ""
+            
+            if let neighborhood = user[UserColumns.neighborhood.rawValue] as? String {
+                locationString += "\(neighborhood)"
+            }
+            
+            if let city = user[UserColumns.city.rawValue] as? String {
+                if locationString.length > 0
+                {
+                    locationString += ", "
+                }
+                
+                locationString += "\(city)"
+            }
+            
+            if let state = user[UserColumns.state.rawValue] as? String {
+                if locationString.length > 0
+                {
+                    locationString += ", "
+                }
+                
+                locationString += "\(state)"
+            }
+            
+            locationLabel.text = locationString
+            
+            if let age = user[UserColumns.age.rawValue] as? Int {
+                ageLabel.text = "\(age)"
+            }
+        }
         
         // TODO: add gender
-        
-        // TODO: add age
         
         // Profile Image
         favoriteImageView.tintColor = isFavorite ? UIColor.yellowColor() : UIColor.whiteColor()

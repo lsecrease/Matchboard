@@ -9,7 +9,7 @@
 import UIKit
 
 protocol EditAboutMeDelegate {
-    func aboutMeSaved(aboutMeString: String)
+    func aboutMeSaved(sender: AnyObject, aboutMeString: String)
     func aboutMeCancelled(sender: AnyObject)
 }
 
@@ -20,7 +20,7 @@ class EditAboutMeViewController: UIViewController {
     
     @IBOutlet weak var aboutMeTextView: UITextView!
     @IBAction func saveButtonPressed(sender: AnyObject) {
-        delegate?.aboutMeSaved(aboutMeTextView.text)
+        delegate?.aboutMeSaved(navigationController!, aboutMeString: aboutMeTextView.text)
     }
     
     @IBAction func cancelButtonPressed(sender: AnyObject) {

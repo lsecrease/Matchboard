@@ -12,6 +12,7 @@
 		4F0D56541BAB172F007D9E1F /* AboutMeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D56531BAB172F007D9E1F /* AboutMeCell.swift */; settings = {ASSET_TAGS = (); }; };
 		4F0D56561BAB1747007D9E1F /* BlockUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D56551BAB1747007D9E1F /* BlockUserCell.swift */; settings = {ASSET_TAGS = (); }; };
 		4F5C548E1BBED9D6006E8096 /* EditAboutMeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5C548D1BBED9D6006E8096 /* EditAboutMeViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		4F5C54901BBF084A006E8096 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5C548F1BBF084A006E8096 /* EditProfileViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		4F6B2FA41BB2DE8000EAE7BE /* MatchboardColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6B2FA31BB2DE8000EAE7BE /* MatchboardColors.swift */; settings = {ASSET_TAGS = (); }; };
 		4F6B2FA61BB2DF7B00EAE7BE /* MatchboardUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6B2FA51BB2DF7B00EAE7BE /* MatchboardUtils.swift */; settings = {ASSET_TAGS = (); }; };
 		4F6B2FAE1BB30AD800EAE7BE /* AdProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6B2FA81BB30AD800EAE7BE /* AdProfileViewController.swift */; settings = {ASSET_TAGS = (); }; };
@@ -105,6 +106,7 @@
 		4F0D56531BAB172F007D9E1F /* AboutMeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutMeCell.swift; sourceTree = "<group>"; };
 		4F0D56551BAB1747007D9E1F /* BlockUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockUserCell.swift; sourceTree = "<group>"; };
 		4F5C548D1BBED9D6006E8096 /* EditAboutMeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditAboutMeViewController.swift; sourceTree = "<group>"; };
+		4F5C548F1BBF084A006E8096 /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		4F6B2FA31BB2DE8000EAE7BE /* MatchboardColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchboardColors.swift; sourceTree = "<group>"; };
 		4F6B2FA51BB2DF7B00EAE7BE /* MatchboardUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchboardUtils.swift; sourceTree = "<group>"; };
 		4F6B2FA81BB30AD800EAE7BE /* AdProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdProfileViewController.swift; sourceTree = "<group>"; };
@@ -272,12 +274,13 @@
 			children = (
 				4F6B2FA81BB30AD800EAE7BE /* AdProfileViewController.swift */,
 				4F6B2FA91BB30AD800EAE7BE /* CategoryViewController.swift */,
+				4F5C548D1BBED9D6006E8096 /* EditAboutMeViewController.swift */,
+				4F5C548F1BBF084A006E8096 /* EditProfileViewController.swift */,
 				4F6B2FAA1BB30AD800EAE7BE /* FavoritesViewController.swift */,
+				CE3FA5C31B2023E400762DA1 /* LoginViewController.swift */,
 				4F6B2FAB1BB30AD800EAE7BE /* RegisterViewController.swift */,
 				4F6B2FAC1BB30AD800EAE7BE /* ViewController.swift */,
 				4F6B2FAD1BB30AD800EAE7BE /* WelcomeViewController.swift */,
-				CE3FA5C31B2023E400762DA1 /* LoginViewController.swift */,
-				4F5C548D1BBED9D6006E8096 /* EditAboutMeViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -635,6 +638,7 @@
 				CEC63FE71B56052300B65C21 /* UnwindSegue.swift in Sources */,
 				4F0D56541BAB172F007D9E1F /* AboutMeCell.swift in Sources */,
 				CEC63FE61B56052300B65C21 /* TransitionZoom.swift in Sources */,
+				4F5C54901BBF084A006E8096 /* EditProfileViewController.swift in Sources */,
 				CEC63FCB1B56052300B65C21 /* AsyncButton.swift in Sources */,
 				CEC63FE01B56052300B65C21 /* SpringImageView.swift in Sources */,
 				CEC63FDE1B56052300B65C21 /* SpringAnimation.swift in Sources */,

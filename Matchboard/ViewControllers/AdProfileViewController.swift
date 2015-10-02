@@ -19,6 +19,11 @@ enum ProfileTableSection : Int {
 
 enum UserColumns : String {
     case aboutMe = "aboutMe"
+    case name = "name"
+    case city = "city"
+    case state = "state"
+    case age = "age"
+    case neighborhood = "neighborhood"
 }
 
 enum AdColumns : String {
@@ -28,7 +33,7 @@ enum AdColumns : String {
     case username = "username"
 }
 
-class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, BlockUserDelegate, EditAboutMeDelegate {
+class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -74,6 +79,38 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                     {
                         if let aboutMe = user[UserColumns.aboutMe.rawValue] as? String {
                             editAboutMeVC.configureWithAboutMeText(aboutMe)
+                        }
+                    }
+                }
+            }
+        } else if segue.identifier == "EditProfileSegue"
+        {
+            if let navVC = segue.destinationViewController as? UINavigationController {
+                if let editProfileVC = navVC.topViewController as? EditProfileViewController
+                {
+                    editProfileVC.delegate = self
+                    
+                    if let displayName = currentAd?[AdColumns.firstName.rawValue] as? String {
+                        editProfileVC.displayName = displayName
+                    }
+                    
+                    // setup text
+                    if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
+                    {
+                        if let city = user[UserColumns.city.rawValue] as? String {
+                            editProfileVC.city = city
+                        }
+                        
+                        if let state = user[UserColumns.state.rawValue] as? String {
+                            editProfileVC.state = state
+                        }
+                        
+                        if let neighborhood = user[UserColumns.neighborhood.rawValue] as? String {
+                            editProfileVC.neighborhood = neighborhood
+                        }
+                        
+                        if let age = user[UserColumns.age.rawValue] as? Int {
+                            editProfileVC.age = age
                         }
                     }
                 }
@@ -424,7 +461,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     
     // MARK: - EditAboutMeDelegate
     
-    func aboutMeSaved(aboutMeString: String) {
+    func aboutMeSaved(sender: AnyObject, aboutMeString: String) {
 
         if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
         {
@@ -434,10 +471,38 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
             user.saveInBackground()
         }
         
-        navigationController?.popViewControllerAnimated(true)
+        sender.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func aboutMeCancelled(sender: AnyObject) {
+        sender.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // MARK: - EditProfileDelegate
+    
+    func profileSaved(sender: AnyObject, displayName: String, city: String, state: String, neighborhood: String, age: Int)
+    {
+        currentAd?[AdColumns.firstName.rawValue] = displayName
+        
+        if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
+        {
+            user[UserColumns.city.rawValue] = city
+            user[UserColumns.state.rawValue] = state
+            user[UserColumns.neighborhood.rawValue] = neighborhood
+            user[UserColumns.age.rawValue] = age
+            
+            let indexPath = NSIndexPath(forRow: ProfileTableSection.Bio.rawValue, inSection: 0)
+            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            user.saveInBackground()
+        }
+        
+        currentAd?.saveInBackground()
+        
+        sender.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func profileCancelled(sender: AnyObject)
+    {
         sender.dismissViewControllerAnimated(true, completion: nil)
     }
 }

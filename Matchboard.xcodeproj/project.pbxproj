@@ -30,6 +30,7 @@
 		4FC206901BC3053500DFFCDD /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC2068A1BC3053500DFFCDD /* TPKeyboardAvoidingScrollView.m */; settings = {ASSET_TAGS = (); }; };
 		4FC206911BC3053500DFFCDD /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC2068C1BC3053500DFFCDD /* TPKeyboardAvoidingTableView.m */; settings = {ASSET_TAGS = (); }; };
 		4FC206921BC3053500DFFCDD /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC2068E1BC3053500DFFCDD /* UIScrollView+TPKeyboardAvoidingAdditions.m */; settings = {ASSET_TAGS = (); }; };
+		4FC206941BC309D200DFFCDD /* EditLookingForViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC206931BC309D200DFFCDD /* EditLookingForViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		4FFB10D31BA9C69D007D2CC6 /* BioCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB10D21BA9C69D007D2CC6 /* BioCell.swift */; settings = {ASSET_TAGS = (); }; };
 		CE3FA5C41B2023E400762DA1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3FA5C31B2023E400762DA1 /* LoginViewController.swift */; };
 		CE672B051B54D45E0080A9E0 /* Ad.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE672B041B54D45E0080A9E0 /* Ad.swift */; };
@@ -128,6 +129,7 @@
 		4FC2068C1BC3053500DFFCDD /* TPKeyboardAvoidingTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingTableView.m; sourceTree = "<group>"; };
 		4FC2068D1BC3053500DFFCDD /* UIScrollView+TPKeyboardAvoidingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+TPKeyboardAvoidingAdditions.h"; sourceTree = "<group>"; };
 		4FC2068E1BC3053500DFFCDD /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; };
+		4FC206931BC309D200DFFCDD /* EditLookingForViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditLookingForViewController.swift; sourceTree = "<group>"; };
 		4FFB10D21BA9C69D007D2CC6 /* BioCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BioCell.swift; sourceTree = "<group>"; };
 		7558752A677350BDA478709D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		C81E73C1811BA9BFE83D6848 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -281,6 +283,7 @@
 				4F6B2FAB1BB30AD800EAE7BE /* RegisterViewController.swift */,
 				4F6B2FAC1BB30AD800EAE7BE /* ViewController.swift */,
 				4F6B2FAD1BB30AD800EAE7BE /* WelcomeViewController.swift */,
+				4FC206931BC309D200DFFCDD /* EditLookingForViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -632,6 +635,7 @@
 				CEC63FD31B56052300B65C21 /* DesignableTextField.swift in Sources */,
 				4FC206901BC3053500DFFCDD /* TPKeyboardAvoidingScrollView.m in Sources */,
 				CEAB3E121B4DE71900197E85 /* CustomHeaderCell.swift in Sources */,
+				4FC206941BC309D200DFFCDD /* EditLookingForViewController.swift in Sources */,
 				4F6B2FA41BB2DE8000EAE7BE /* MatchboardColors.swift in Sources */,
 				4FC206911BC3053500DFFCDD /* TPKeyboardAvoidingTableView.m in Sources */,
 				4F6B2FAE1BB30AD800EAE7BE /* AdProfileViewController.swift in Sources */,

@@ -23,7 +23,6 @@ enum UserColumns : String {
     case city = "city"
     case state = "state"
     case age = "age"
-    case neighborhood = "neighborhood"
 }
 
 enum AdColumns : String {
@@ -103,10 +102,6 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                         
                         if let state = user[UserColumns.state.rawValue] as? String {
                             editProfileVC.state = state
-                        }
-                        
-                        if let neighborhood = user[UserColumns.neighborhood.rawValue] as? String {
-                            editProfileVC.neighborhood = neighborhood
                         }
                         
                         if let age = user[UserColumns.age.rawValue] as? Int {
@@ -480,7 +475,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     
     // MARK: - EditProfileDelegate
     
-    func profileSaved(sender: AnyObject, displayName: String, city: String, state: String, neighborhood: String, age: Int)
+    func profileSaved(sender: AnyObject, displayName: String, city: String, state: String, age: Int)
     {
         currentAd?[AdColumns.firstName.rawValue] = displayName
         
@@ -488,7 +483,6 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         {
             user[UserColumns.city.rawValue] = city
             user[UserColumns.state.rawValue] = state
-            user[UserColumns.neighborhood.rawValue] = neighborhood
             user[UserColumns.age.rawValue] = age
             
             let indexPath = NSIndexPath(forRow: ProfileTableSection.Bio.rawValue, inSection: 0)

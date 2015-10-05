@@ -82,10 +82,6 @@ class BioCell: UITableViewCell {
         {
             var locationString = ""
             
-            if let neighborhood = user[UserColumns.neighborhood.rawValue] as? String {
-                locationString += "\(neighborhood)"
-            }
-            
             if let city = user[UserColumns.city.rawValue] as? String {
                 if locationString.length > 0
                 {

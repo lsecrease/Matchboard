@@ -7,3 +7,5 @@ pod 'Parse'
 pod 'ParseFacebookUtilsV4'
 pod 'Bolts', '~> 1.2'
 
+pod 'JVFloatLabeledTextField'
+

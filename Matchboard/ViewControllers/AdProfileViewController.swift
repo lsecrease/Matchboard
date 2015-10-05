@@ -19,6 +19,11 @@ enum ProfileTableSection : Int {
 
 enum UserColumns : String {
     case aboutMe = "aboutMe"
+    case name = "name"
+    case city = "city"
+    case state = "state"
+    case age = "age"
+    case neighborhood = "neighborhood"
 }
 
 enum AdColumns : String {
@@ -28,15 +33,18 @@ enum AdColumns : String {
     case username = "username"
 }
 
-class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, BlockUserDelegate {
+class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+    
+    var editButton: UIBarButtonItem?
     
     var searchedAdsArray = NSMutableArray()
     
     var adProfileModel = String()
     var currentAd : PFObject?
     var favoriteObj : PFObject?
+    var isMine = false
     
     var mainVC: ViewController!
     var faveVC: FavoritesViewController!
@@ -46,8 +54,72 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     override func viewWillAppear(animated: Bool) {
         // Query the selected Ad to get its details
         querySingleAd()
+        editButton = navigationItem.rightBarButtonItem
+        navigationItem.rightBarButtonItem = nil
     }
 
+    // MARK: - Actions
+    
+    @IBAction func editButtonPressed(sender: AnyObject) {
+        print("edit button pressed")
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "EditAboutMeSegue"
+        {
+            if let navVC = segue.destinationViewController as? UINavigationController {
+                if let editAboutMeVC = navVC.topViewController as? EditAboutMeViewController
+                {
+                    editAboutMeVC.delegate = self
+                    
+                    // setup text
+                    if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
+                    {
+                        if let aboutMe = user[UserColumns.aboutMe.rawValue] as? String {
+                            editAboutMeVC.configureWithAboutMeText(aboutMe)
+                        }
+                    }
+                }
+            }
+        } else if segue.identifier == "EditProfileSegue"
+        {
+            if let navVC = segue.destinationViewController as? UINavigationController {
+                if let editProfileVC = navVC.topViewController as? EditProfileViewController
+                {
+                    editProfileVC.delegate = self
+                    
+                    if let displayName = currentAd?[AdColumns.firstName.rawValue] as? String {
+                        editProfileVC.displayName = displayName
+                    }
+                    
+                    // setup text
+                    if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
+                    {
+                        if let city = user[UserColumns.city.rawValue] as? String {
+                            editProfileVC.city = city
+                        }
+                        
+                        if let state = user[UserColumns.state.rawValue] as? String {
+                            editProfileVC.state = state
+                        }
+                        
+                        if let neighborhood = user[UserColumns.neighborhood.rawValue] as? String {
+                            editProfileVC.neighborhood = neighborhood
+                        }
+                        
+                        if let age = user[UserColumns.age.rawValue] as? Int {
+                            editProfileVC.age = age
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: - Custom
+    
     func querySingleAd() {
         print("SINGLE AD ID: \(adProfileModel)")
         
@@ -62,10 +134,17 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                     for object in objects {
                         self.currentAd = object
                         
-                        let favQuery = PFQuery(className: "Favorites")
-                        favQuery.whereKey("adPointer", equalTo: object)
+                        // if we have a current user
                         if let user = PFUser.currentUser()
                         {
+                            // if this ad is mine, show the edit button
+                            if object[AdColumns.username.rawValue]?.objectId == user.objectId {
+                                self.isMine = true
+                            }
+                            
+                            let favQuery = PFQuery(className: "Favorites")
+                            favQuery.whereKey("adPointer", equalTo: object)
+
                             favQuery.whereKey("userPointer", equalTo:user)
                             favQuery.limit = 1
                             favQuery.findObjectsInBackgroundWithBlock({ (objects, error) -> Void in
@@ -116,7 +195,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         case ProfileTableSection.Bio.rawValue:
             let cell = tableView.dequeueReusableCellWithIdentifier("BioCell", forIndexPath: indexPath) as! BioCell
             if let currentAd = currentAd {
-                cell.configureCellWithAd(currentAd, isFavorite: favoriteObj != nil)
+                cell.configureCellWithAd(currentAd, isFavorite: favoriteObj != nil, isMine: isMine)
             }
             cell.delegate = self
             return cell
@@ -124,15 +203,17 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         case ProfileTableSection.LookingFor.rawValue:
             let cell = tableView.dequeueReusableCellWithIdentifier("LookingForCell", forIndexPath: indexPath) as! LookingForCell
             if let currentAd = currentAd {
-                cell.configureCellWithAd(currentAd)
+                cell.configureCellWithAd(currentAd, isMine: isMine)
             }
+            cell.delegate = self
             return cell
             
         case ProfileTableSection.AboutMe.rawValue:
             let cell = tableView.dequeueReusableCellWithIdentifier("AboutMeCell", forIndexPath: indexPath) as! AboutMeCell
             if let currentAd = currentAd {
-                cell.configureCellWithAd(currentAd)
+                cell.configureCellWithAd(currentAd, isMine: isMine)
             }
+            cell.delegate = self
             return cell
             
         case ProfileTableSection.Links.rawValue:
@@ -297,16 +378,19 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     // // MARK: - BlockUserDelegate
+    
     func blockUserPressed()
     {
         print("block user")
     }
    
     // MARK: - BioCellDelegate
+    
     func messageButtonPressed(sender:AnyObject)
     {
         print("Message button Tapped")
     }
+    
     func favoriteButtonPressed(sender:AnyObject)
     {
         print("Favorite button Tapped")
@@ -353,5 +437,72 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                 })
             }
         }
+    }
+    
+    func avatarEditButtonPressed(sender: AnyObject) {
+        print("avatar edit button pressed")
+    }
+    
+    func profileEditButtonPressed(sender: AnyObject) {
+        print("profile edit button pressed")
+    }
+
+    // MARK: - LookingForCellDelegate
+    
+    func editLookingForPressed(sender: AnyObject) {
+        print("looking for edit pressed")
+    }
+    
+    // MARK: - AboutMeCellDelegate
+    
+    func aboutEditButtonPressed(sender: AnyObject) {
+        print("about me edit pressed")
+    }
+    
+    // MARK: - EditAboutMeDelegate
+    
+    func aboutMeSaved(sender: AnyObject, aboutMeString: String) {
+
+        if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
+        {
+            user[UserColumns.aboutMe.rawValue] = aboutMeString
+            let indexPath = NSIndexPath(forRow: ProfileTableSection.AboutMe.rawValue, inSection: 0)
+            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            user.saveInBackground()
+        }
+        
+        sender.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func aboutMeCancelled(sender: AnyObject) {
+        sender.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // MARK: - EditProfileDelegate
+    
+    func profileSaved(sender: AnyObject, displayName: String, city: String, state: String, neighborhood: String, age: Int)
+    {
+        currentAd?[AdColumns.firstName.rawValue] = displayName
+        
+        if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
+        {
+            user[UserColumns.city.rawValue] = city
+            user[UserColumns.state.rawValue] = state
+            user[UserColumns.neighborhood.rawValue] = neighborhood
+            user[UserColumns.age.rawValue] = age
+            
+            let indexPath = NSIndexPath(forRow: ProfileTableSection.Bio.rawValue, inSection: 0)
+            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            user.saveInBackground()
+        }
+        
+        currentAd?.saveInBackground()
+        
+        sender.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func profileCancelled(sender: AnyObject)
+    {
+        sender.dismissViewControllerAnimated(true, completion: nil)
     }
 }

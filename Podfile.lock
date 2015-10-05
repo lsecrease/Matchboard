@@ -20,6 +20,7 @@ PODS:
     - FBSDKCoreKit
   - FBSDKShareKit (4.5.1):
     - FBSDKCoreKit
+  - JVFloatLabeledTextField (1.1.0)
   - Parse (1.8.1):
     - Bolts/Tasks (>= 1.2.0)
   - ParseFacebookUtilsV4 (1.8.1):
@@ -34,6 +35,7 @@ DEPENDENCIES:
   - FBSDKCoreKit
   - FBSDKLoginKit
   - FBSDKShareKit
+  - JVFloatLabeledTextField
   - Parse
   - ParseFacebookUtilsV4
 
@@ -43,7 +45,8 @@ SPEC CHECKSUMS:
   FBSDKCoreKit: f335eaf6865e1e1597dee1debfb533045500da47
   FBSDKLoginKit: 225cc9a388a92916ee3f3bb14422017b6e44b65b
   FBSDKShareKit: 642034ac9f30793dfd897851b724bb4281750266
+  JVFloatLabeledTextField: ea4a3d8387ddd43724c472bb2b8ab39b79af05d4
   Parse: 2155953b1565494095d5fa5c83b3c77f2c677c09
   ParseFacebookUtilsV4: 2c54f1c9756f4827417984f42b64bc38571d626b
 
-COCOAPODS: 0.37.1
+COCOAPODS: 0.38.2

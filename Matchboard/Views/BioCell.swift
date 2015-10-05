@@ -12,11 +12,15 @@ protocol BioCellDelegate
 {
     func messageButtonPressed(sender: AnyObject)
     func favoriteButtonPressed(sender: AnyObject)
+    func avatarEditButtonPressed(sender: AnyObject)
+    func profileEditButtonPressed(sender: AnyObject)
 }
 
 class BioCell: UITableViewCell {
 
     var delegate : BioCellDelegate!
+    
+    // MARK: - Outlets
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -25,6 +29,28 @@ class BioCell: UITableViewCell {
     @IBOutlet weak var ageLabel: UILabel!
     @IBOutlet weak var favoriteButton: DesignableButton!
     @IBOutlet weak var favoriteImageView: UIImageView!
+    @IBOutlet weak var profileEditButton: UIButton!
+    @IBOutlet weak var avatarEditButton: UIButton!
+    
+    override func layoutSubviews() {
+        avatarEditButton.setImage(avatarEditButton.imageView!.image?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: UIControlState.Normal)
+        profileEditButton.setImage(profileEditButton.imageView!.image?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: UIControlState.Normal)
+        
+        avatarEditButton.layer.cornerRadius = 3.0
+        profileEditButton.layer.cornerRadius = 3.0
+        profileImageView.layer.masksToBounds = true
+        profileImageView.layer.cornerRadius = 3.0
+    }
+    
+    // MARK: - Actions
+    
+    @IBAction func profileEditButtonPressed(sender: AnyObject) {
+        delegate.profileEditButtonPressed(sender)
+    }
+    
+    @IBAction func avatarEditButtonPressed(sender: AnyObject) {
+        delegate.avatarEditButtonPressed(sender)
+    }
     
     @IBAction func messageButtonPressed(sender: AnyObject) {
         delegate.messageButtonPressed(sender)
@@ -41,17 +67,51 @@ class BioCell: UITableViewCell {
         }
     }
     
-    func configureCellWithAd(currentAd : PFObject, isFavorite : Bool)
+    // MARK: - Custom Methods
+    
+    func configureCellWithAd(currentAd : PFObject, isFavorite : Bool, isMine : Bool)
     {
+        avatarEditButton.hidden = (isMine == false)
+        profileEditButton.hidden = (isMine == false)
+        
         if let name = currentAd[AdColumns.firstName.rawValue] as? String {
             nameLabel.text = name
         }
         
-        // TODO: add location
+        if let user = currentAd[AdColumns.username.rawValue] as? PFObject
+        {
+            var locationString = ""
+            
+            if let neighborhood = user[UserColumns.neighborhood.rawValue] as? String {
+                locationString += "\(neighborhood)"
+            }
+            
+            if let city = user[UserColumns.city.rawValue] as? String {
+                if locationString.length > 0
+                {
+                    locationString += ", "
+                }
+                
+                locationString += "\(city)"
+            }
+            
+            if let state = user[UserColumns.state.rawValue] as? String {
+                if locationString.length > 0
+                {
+                    locationString += ", "
+                }
+                
+                locationString += "\(state)"
+            }
+            
+            locationLabel.text = locationString
+            
+            if let age = user[UserColumns.age.rawValue] as? Int {
+                ageLabel.text = "\(age)"
+            }
+        }
         
         // TODO: add gender
-        
-        // TODO: add age
         
         // Profile Image
         favoriteImageView.tintColor = isFavorite ? UIColor.yellowColor() : UIColor.whiteColor()

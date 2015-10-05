@@ -19,4 +19,6 @@
 
 #import "../ThirdParty/ProgressHUD/ProgressHUD.h"
 
+#import <JVFloatLabeledTextField/JVFloatLabeledTextField.h>
+
 #endif

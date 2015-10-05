@@ -277,13 +277,13 @@
 				4F6B2FA81BB30AD800EAE7BE /* AdProfileViewController.swift */,
 				4F6B2FA91BB30AD800EAE7BE /* CategoryViewController.swift */,
 				4F5C548D1BBED9D6006E8096 /* EditAboutMeViewController.swift */,
+				4FC206931BC309D200DFFCDD /* EditLookingForViewController.swift */,
 				4F5C548F1BBF084A006E8096 /* EditProfileViewController.swift */,
 				4F6B2FAA1BB30AD800EAE7BE /* FavoritesViewController.swift */,
 				CE3FA5C31B2023E400762DA1 /* LoginViewController.swift */,
 				4F6B2FAB1BB30AD800EAE7BE /* RegisterViewController.swift */,
 				4F6B2FAC1BB30AD800EAE7BE /* ViewController.swift */,
 				4F6B2FAD1BB30AD800EAE7BE /* WelcomeViewController.swift */,
-				4FC206931BC309D200DFFCDD /* EditLookingForViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";

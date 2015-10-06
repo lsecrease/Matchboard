@@ -18,4 +18,9 @@ class MatchboardUtils {
         UIGraphicsEndImageContext()
         return image
     }
+    
+    static func cornerRadius() -> CGFloat
+    {
+        return 4.0
+    }
 }

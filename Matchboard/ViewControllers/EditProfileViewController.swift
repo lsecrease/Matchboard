@@ -9,7 +9,7 @@
 import UIKit
 
 protocol EditProfileDelegate {
-    func profileSaved(sender: AnyObject, displayName: String, city: String, state: String, neighborhood: String, age: Int)
+    func profileSaved(sender: AnyObject, displayName: String, city: String, state: String, age: Int)
     func profileCancelled(sender: AnyObject)
 }
 
@@ -19,43 +19,40 @@ class EditProfileViewController: UIViewController {
     var displayName = ""
     var city = ""
     var state = ""
-    var neighborhood = ""
     var age = 0
     
     override func viewDidLoad() {
         displayNameField.text = displayName
         cityField.text = city
         stateField.text = state
-        neighborhoodField.text = neighborhood
         ageField.text = "\(age)"
-        
-        
-        
-        displayNameField.layer.borderWidth = 1.0
-        displayNameField.layer.cornerRadius = 4.0
-        displayNameField.layer.borderColor = MatchboardColors.FieldBorder.color().CGColor
-        displayNameField.backgroundColor = UIColor.whiteColor()
-        
-//        nameBackground.layer.borderWidth = 1.0
-//        nameBackground.layer.cornerRadius = 4.0
-//        nameBackground.layer.borderColor = MatchboardColors.FieldBorder.color().CGColor
     }
     
-    @IBOutlet weak var displayNameField: JVFloatLabeledTextField!
-    @IBOutlet weak var cityField: JVFloatLabeledTextField!
-    @IBOutlet weak var stateField: JVFloatLabeledTextField!
-    @IBOutlet weak var neighborhoodField: JVFloatLabeledTextField!
-    @IBOutlet weak var ageField: JVFloatLabeledTextField!
-    @IBOutlet weak var nameBackground: UIView!
+    @IBOutlet weak var displayNameField: UITextField!
+    @IBOutlet weak var cityField: UITextField!
+    @IBOutlet weak var stateField: UITextField!
+    @IBOutlet weak var ageField: UITextField!
     
     @IBAction func cancelButtonPressed(sender: AnyObject) {
         delegate?.profileCancelled(navigationController!)
     }
     
+    @IBAction func textFieldDidEndOnExit(sender: AnyObject) {
+        if let textField = sender as? UITextField {
+            if textField == displayNameField {
+                cityField.becomeFirstResponder()
+            } else if textField == cityField {
+                stateField.becomeFirstResponder()
+            } else if textField == stateField {
+                ageField.becomeFirstResponder()
+            }
+        }
+    }
+    
     @IBAction func saveButtonPressed(sender: AnyObject) {
         if let ageString = ageField.text {
             if let ageInt = Int(ageString) {
-                delegate?.profileSaved(navigationController!, displayName: displayNameField.text!, city: cityField.text!, state: stateField.text!, neighborhood: neighborhoodField.text!, age: ageInt)
+                delegate?.profileSaved(navigationController!, displayName: displayNameField.text!, city: cityField.text!, state: stateField.text!, age: ageInt)
             }
         } else {
             // TODO: some kind of validation error

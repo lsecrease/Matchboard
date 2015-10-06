@@ -23,7 +23,6 @@ enum UserColumns : String {
     case city = "city"
     case state = "state"
     case age = "age"
-    case neighborhood = "neighborhood"
 }
 
 enum AdColumns : String {
@@ -33,7 +32,7 @@ enum AdColumns : String {
     case username = "username"
 }
 
-class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate {
+class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate, EditLookingForDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -83,8 +82,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                     }
                 }
             }
-        } else if segue.identifier == "EditProfileSegue"
-        {
+        } else if segue.identifier == "EditProfileSegue" {
             if let navVC = segue.destinationViewController as? UINavigationController {
                 if let editProfileVC = navVC.topViewController as? EditProfileViewController
                 {
@@ -105,14 +103,19 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                             editProfileVC.state = state
                         }
                         
-                        if let neighborhood = user[UserColumns.neighborhood.rawValue] as? String {
-                            editProfileVC.neighborhood = neighborhood
-                        }
-                        
                         if let age = user[UserColumns.age.rawValue] as? Int {
                             editProfileVC.age = age
                         }
                     }
+                }
+            }
+        } else if segue.identifier == "EditLookingForSegue" {
+            if let navVC = segue.destinationViewController as? UINavigationController {
+                if let editProfileVC = navVC.topViewController as? EditLookingForViewController
+                {
+                    editProfileVC.delegate = self
+                    
+                    // TODO: pass data
                 }
             }
         }
@@ -186,7 +189,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     // MARK: - UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return 4
+        return isMine ? 3 : 4
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
@@ -480,7 +483,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     
     // MARK: - EditProfileDelegate
     
-    func profileSaved(sender: AnyObject, displayName: String, city: String, state: String, neighborhood: String, age: Int)
+    func profileSaved(sender: AnyObject, displayName: String, city: String, state: String, age: Int)
     {
         currentAd?[AdColumns.firstName.rawValue] = displayName
         
@@ -488,7 +491,6 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         {
             user[UserColumns.city.rawValue] = city
             user[UserColumns.state.rawValue] = state
-            user[UserColumns.neighborhood.rawValue] = neighborhood
             user[UserColumns.age.rawValue] = age
             
             let indexPath = NSIndexPath(forRow: ProfileTableSection.Bio.rawValue, inSection: 0)
@@ -503,6 +505,18 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     
     func profileCancelled(sender: AnyObject)
     {
+        sender.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // MARK: - EditLookingForDelegate
+    
+    func lookingForSaved(sender: AnyObject, classifiedString: String, lookingForString: String, images: [UIImage]?) {
+        
+        // TODO: save the stuff
+        sender.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func lookingForCancelled(sender: AnyObject) {
         sender.dismissViewControllerAnimated(true, completion: nil)
     }
 }

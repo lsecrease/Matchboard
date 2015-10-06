@@ -18,6 +18,7 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 
 #import "../ThirdParty/ProgressHUD/ProgressHUD.h"
+#import "../ThirdParty/TPKeyboardAvoiding/TPKeyboardAvoidingScrollView.h"
 
 #import <JVFloatLabeledTextField/JVFloatLabeledTextField.h>
 

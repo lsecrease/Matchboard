@@ -125,7 +125,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                 {
                     editLookingForVC.delegate = self
                     
-                    // TODO: pass data
+                    // pass data
                     if let lookingForString = currentAd?[AdColumns.lookingFor.rawValue] as? String
                     {
                         editLookingForVC.lookingForString = lookingForString
@@ -140,6 +140,11 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                     editLookingForVC.imageFile02 = currentAd?[AdColumns.image02.rawValue] as? PFFile
                     editLookingForVC.imageFile03 = currentAd?[AdColumns.image03.rawValue] as? PFFile
                     editLookingForVC.imageFile04 = currentAd?[AdColumns.image04.rawValue] as? PFFile
+                    
+                    if let categoriesArray = currentAd?[AdColumns.categories.rawValue] as? [String]
+                    {
+                        editLookingForVC.categoriesString = categoriesArray.joinWithSeparator(", ")
+                    }
                 }
             }
         }

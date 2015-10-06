@@ -32,6 +32,7 @@ class EditLookingForViewController: UIViewController, UINavigationControllerDele
     var image04 : UIImage?
     
     var lookingForString = ""
+    var categoriesString = ""
     
     // MARK: - Outlets
     
@@ -104,6 +105,8 @@ class EditLookingForViewController: UIViewController, UINavigationControllerDele
         }
         
         lookingForTextView.text = lookingForString
+        
+        classifiedField.text = categoriesString
     }
     
     // MARK: - Actions

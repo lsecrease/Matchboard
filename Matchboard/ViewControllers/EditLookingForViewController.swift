@@ -133,16 +133,44 @@ class EditLookingForViewController: UIViewController, UINavigationControllerDele
             }
         }
         
-        // TODO: do action sheet to pick camera or photo library
+        let actionSheet: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        
+        
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
+        {
+            let cameraAction: UIAlertAction = UIAlertAction(title: "Camera", style: .Default) { (action) -> Void in
+                // camera
+                // photo library
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.mediaTypes = [kUTTypeImage as String]
+                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+                
+                self.presentViewController(imagePicker, animated: true, completion: nil)
+            }
+            
+            actionSheet.addAction(cameraAction)
+        }
+        
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary)
         {
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.mediaTypes = [kUTTypeImage as String]
-            imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
             
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            let libraryAction: UIAlertAction = UIAlertAction(title: "Photo Library", style: .Default) { (action) -> Void in
+                // photo library
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.mediaTypes = [kUTTypeImage as String]
+                imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+                
+                self.presentViewController(imagePicker, animated: true, completion: nil)
+            }
+            
+            actionSheet.addAction(libraryAction)
         }
+
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        
+        presentViewController(actionSheet, animated: true, completion:nil)
     }
     
     // MARK: - ImagePickerControllerDelegate

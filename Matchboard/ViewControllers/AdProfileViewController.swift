@@ -34,6 +34,7 @@ enum AdColumns : String {
     case image02 = "image02"
     case image03 = "image03"
     case image04 = "image04"
+    case categories = "category"
 }
 
 class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate, EditLookingForDelegate {
@@ -558,19 +559,27 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     
     func lookingForSaved(sender: AnyObject, classifiedString: String, lookingForString: String, image01: UIImage?, image02: UIImage?, image03: UIImage?, image04: UIImage?) {
         
-        addImage(image01, imageName: "image01")
-        addImage(image02, imageName: "image02")
-        addImage(image03, imageName: "image03")
-        addImage(image04, imageName: "image04")
-        
-        currentAd?[AdColumns.lookingFor.rawValue] = lookingForString
-        
-        currentAd?.saveInBackground()
-        sender.dismissViewControllerAnimated(true, completion: nil)
-        
-        // reload the cell
-        let indexPath = NSIndexPath(forRow: ProfileTableSection.LookingFor.rawValue, inSection: 0)
-        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        sender.dismissViewControllerAnimated(true, completion: { () -> Void in
+            self.addImage(image01, imageName: "image01")
+            self.addImage(image02, imageName: "image02")
+            self.addImage(image03, imageName: "image03")
+            self.addImage(image04, imageName: "image04")
+            
+            if classifiedString.length > 0 {
+                var categoryArray = classifiedString.characters.split{$0 == ","}.map(String.init)
+                categoryArray = categoryArray.map{$0.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())}
+                self.currentAd?[AdColumns.categories.rawValue] = categoryArray
+            }
+            
+            self.currentAd?[AdColumns.lookingFor.rawValue] = lookingForString
+            
+            self.currentAd?.saveInBackground()
+            
+            // reload the cell
+            let indexPath = NSIndexPath(forRow: ProfileTableSection.LookingFor.rawValue, inSection: 0)
+            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+
+        })
     }
     
     func lookingForCancelled(sender: AnyObject) {

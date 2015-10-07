@@ -30,6 +30,11 @@ enum AdColumns : String {
     case lookingFor = "lookingFor"
     case profileImage = "profileImage"
     case username = "username"
+    case image01 = "image01"
+    case image02 = "image02"
+    case image03 = "image03"
+    case image04 = "image04"
+    case categories = "category"
 }
 
 class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate, EditLookingForDelegate {
@@ -44,6 +49,11 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     var currentAd : PFObject?
     var favoriteObj : PFObject?
     var isMine = false
+    
+    var image01 : UIImage?
+    var image02 : UIImage?
+    var image03 : UIImage?
+    var image04 : UIImage?
     
     var mainVC: ViewController!
     var faveVC: FavoritesViewController!
@@ -111,11 +121,30 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
             }
         } else if segue.identifier == "EditLookingForSegue" {
             if let navVC = segue.destinationViewController as? UINavigationController {
-                if let editProfileVC = navVC.topViewController as? EditLookingForViewController
+                if let editLookingForVC = navVC.topViewController as? EditLookingForViewController
                 {
-                    editProfileVC.delegate = self
+                    editLookingForVC.delegate = self
                     
-                    // TODO: pass data
+                    // pass data
+                    if let lookingForString = currentAd?[AdColumns.lookingFor.rawValue] as? String
+                    {
+                        editLookingForVC.lookingForString = lookingForString
+                    }
+                    
+                    editLookingForVC.image01 = image01
+                    editLookingForVC.image02 = image02
+                    editLookingForVC.image03 = image03
+                    editLookingForVC.image04 = image04
+                    
+                    editLookingForVC.imageFile01 = currentAd?[AdColumns.image01.rawValue] as? PFFile
+                    editLookingForVC.imageFile02 = currentAd?[AdColumns.image02.rawValue] as? PFFile
+                    editLookingForVC.imageFile03 = currentAd?[AdColumns.image03.rawValue] as? PFFile
+                    editLookingForVC.imageFile04 = currentAd?[AdColumns.image04.rawValue] as? PFFile
+                    
+                    if let categoriesArray = currentAd?[AdColumns.categories.rawValue] as? [String]
+                    {
+                        editLookingForVC.categoriesString = categoriesArray.joinWithSeparator(", ")
+                    }
                 }
             }
         }
@@ -206,7 +235,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         case ProfileTableSection.LookingFor.rawValue:
             let cell = tableView.dequeueReusableCellWithIdentifier("LookingForCell", forIndexPath: indexPath) as! LookingForCell
             if let currentAd = currentAd {
-                cell.configureCellWithAd(currentAd, isMine: isMine)
+                cell.configureCellWithAd(currentAd, isMine: isMine, image01: image01, image02: image02, image03: image03, image04: image04)
             }
             cell.delegate = self
             return cell
@@ -456,6 +485,18 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         print("looking for edit pressed")
     }
     
+    func lookingForImageUpdated(name: String, image: UIImage) {
+        if name == AdColumns.image01.rawValue {
+            image01 = image
+        } else if name == AdColumns.image02.rawValue {
+            image02 = image
+        } else if name == AdColumns.image03.rawValue {
+            image03 = image
+        } else if name == AdColumns.image04.rawValue {
+            image04 = image
+        }
+    }
+    
     // MARK: - AboutMeCellDelegate
     
     func aboutEditButtonPressed(sender: AnyObject) {
@@ -508,12 +549,42 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         sender.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    func addImage(image: UIImage?, imageName: String) {
+        if let objectId = currentAd?.objectId {
+            if let image = image {
+                if let imageData = UIImageJPEGRepresentation(image, 0.75) {
+                    let imageFile = PFFile(name: "\(objectId)-\(imageName).jpg", data: imageData)
+                    currentAd?[imageName] = imageFile
+                }
+            }
+        }
+    }
+    
     // MARK: - EditLookingForDelegate
     
-    func lookingForSaved(sender: AnyObject, classifiedString: String, lookingForString: String, images: [UIImage]?) {
+    func lookingForSaved(sender: AnyObject, classifiedString: String, lookingForString: String, image01: UIImage?, image02: UIImage?, image03: UIImage?, image04: UIImage?) {
         
-        // TODO: save the stuff
-        sender.dismissViewControllerAnimated(true, completion: nil)
+        sender.dismissViewControllerAnimated(true, completion: { () -> Void in
+            self.addImage(image01, imageName: "image01")
+            self.addImage(image02, imageName: "image02")
+            self.addImage(image03, imageName: "image03")
+            self.addImage(image04, imageName: "image04")
+            
+            if classifiedString.length > 0 {
+                var categoryArray = classifiedString.characters.split{$0 == ","}.map(String.init)
+                categoryArray = categoryArray.map{$0.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())}
+                self.currentAd?[AdColumns.categories.rawValue] = categoryArray
+            }
+            
+            self.currentAd?[AdColumns.lookingFor.rawValue] = lookingForString
+            
+            self.currentAd?.saveInBackground()
+            
+            // reload the cell
+            let indexPath = NSIndexPath(forRow: ProfileTableSection.LookingFor.rawValue, inSection: 0)
+            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+
+        })
     }
     
     func lookingForCancelled(sender: AnyObject) {

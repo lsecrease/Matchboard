@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import MobileCoreServices
 
 enum ProfileTableSection : Int {
     case Bio
@@ -23,6 +24,7 @@ enum UserColumns : String {
     case city = "city"
     case state = "state"
     case age = "age"
+    case profileImage = "profileImage"
 }
 
 enum AdColumns : String {
@@ -37,7 +39,7 @@ enum AdColumns : String {
     case categories = "category"
 }
 
-class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate, EditLookingForDelegate {
+class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate, EditLookingForDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -472,7 +474,46 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func avatarEditButtonPressed(sender: AnyObject) {
-        print("avatar edit button pressed")
+        // use an action sheet to choose photo library or camera
+        let actionSheet: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        
+        
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
+        {
+            let cameraAction: UIAlertAction = UIAlertAction(title: "Camera", style: .Default) { (action) -> Void in
+                // camera
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.allowsEditing = true
+                imagePicker.mediaTypes = [kUTTypeImage as String]
+                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+                
+                self.presentViewController(imagePicker, animated: true, completion: nil)
+            }
+            
+            actionSheet.addAction(cameraAction)
+        }
+        
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary)
+        {
+            
+            let libraryAction: UIAlertAction = UIAlertAction(title: "Photo Library", style: .Default) { (action) -> Void in
+                // photo library
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.allowsEditing = true
+                imagePicker.mediaTypes = [kUTTypeImage as String]
+                imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+                
+                self.presentViewController(imagePicker, animated: true, completion: nil)
+            }
+            
+            actionSheet.addAction(libraryAction)
+        }
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        
+        presentViewController(actionSheet, animated: true, completion:nil)
     }
     
     func profileEditButtonPressed(sender: AnyObject) {
@@ -589,5 +630,35 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     
     func lookingForCancelled(sender: AnyObject) {
         sender.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // MARK: - ImagePickerControllerDelegate
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
+        picker.dismissViewControllerAnimated(true) { () -> Void in
+            if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
+                
+                // save the image
+                if let user = self.currentAd?[AdColumns.username.rawValue] as? PFObject
+                {
+                    
+                    if let objectId = self.currentAd?.objectId {
+                        if let imageData = UIImageJPEGRepresentation(image, 0.75) {
+                            let imageFile = PFFile(name: "\(objectId)-avatar.jpg", data: imageData)
+                            user["profileImage"] = imageFile
+                        }
+                    }
+                    user.saveInBackground()
+                    
+                    let indexPath = NSIndexPath(forRow: ProfileTableSection.Bio.rawValue, inSection: 0)
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                }
+            }
+        }
+    }
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        picker.dismissViewControllerAnimated(true, completion: nil)
     }
 }

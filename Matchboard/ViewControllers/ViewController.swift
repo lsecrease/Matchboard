@@ -238,14 +238,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 
                 // Get image
-                let imageFile = adClass["profileImage"] as? PFFile
-                imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
-                    if error == nil {
-                        if let imageData = imageData {
-                            cell.profileImageView.image = UIImage(data:imageData)
-                        } } }
-                
-                
+                if let user = adClass[AdColumns.username.rawValue] as? PFUser
+                {
+                    let imageFile = user[UserColumns.profileImage.rawValue] as? PFFile
+                    imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
+                        if error == nil {
+                            if let imageData = imageData {
+                                cell.profileImageView.image = UIImage(data:imageData)
+                            } } }
+                    
+                }
                 cell.delegate = self
                 
                 return cell
@@ -283,13 +285,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 
                 // Get image
-                let imageFile = adClass["profileImage"] as? PFFile
-                imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
-                    if error == nil {
-                        if let imageData = imageData {
-                            cell.profileImageView.image = UIImage(data:imageData)
-                        } } }
-                
+                if let user = adClass[AdColumns.username.rawValue] as? PFUser
+                {
+                    let imageFile = user[UserColumns.profileImage.rawValue] as? PFFile
+                    imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
+                        if error == nil {
+                            if let imageData = imageData {
+                                cell.profileImageView.image = UIImage(data:imageData)
+                            } } }
+                    
+                }
                 
                 cell.delegate = self
                 
@@ -343,6 +348,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         query.orderByAscending("updatedAt")
         query.limit = 30
+        query.includeKey("username")
         
         if let search = search {
             

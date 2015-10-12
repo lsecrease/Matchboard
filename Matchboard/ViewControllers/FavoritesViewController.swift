@@ -88,12 +88,16 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         cell.lookingForLabel.text = "\(adClass[lookingForTitle]!)"
         
         // Get image
-        let imageFile = adClass[profileImageTitle] as? PFFile
-        imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
-            if error == nil {
-                if let imageData = imageData {
-                    cell.userProfileImage.image = UIImage(data:imageData)
-                } } }
+        if let user = adClass[AdColumns.username.rawValue] as? PFUser
+        {
+            let imageFile = user[UserColumns.profileImage.rawValue] as? PFFile
+            imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
+                if error == nil {
+                    if let imageData = imageData {
+                        cell.userProfileImage.image = UIImage(data:imageData)
+                    } } }
+            
+        }
         
 
         

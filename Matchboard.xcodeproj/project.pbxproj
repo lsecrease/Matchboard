@@ -11,6 +11,7 @@
 		4F0D56521BAB1704007D9E1F /* LookingForCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D56511BAB1704007D9E1F /* LookingForCell.swift */; settings = {ASSET_TAGS = (); }; };
 		4F0D56541BAB172F007D9E1F /* AboutMeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D56531BAB172F007D9E1F /* AboutMeCell.swift */; settings = {ASSET_TAGS = (); }; };
 		4F0D56561BAB1747007D9E1F /* BlockUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D56551BAB1747007D9E1F /* BlockUserCell.swift */; settings = {ASSET_TAGS = (); }; };
+		4F37DB731BCC51C400F24A9D /* LinkToWebCel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F37DB721BCC51C400F24A9D /* LinkToWebCel.swift */; settings = {ASSET_TAGS = (); }; };
 		4F5C548E1BBED9D6006E8096 /* EditAboutMeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5C548D1BBED9D6006E8096 /* EditAboutMeViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		4F5C54901BBF084A006E8096 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5C548F1BBF084A006E8096 /* EditProfileViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		4F6B2FA41BB2DE8000EAE7BE /* MatchboardColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6B2FA31BB2DE8000EAE7BE /* MatchboardColors.swift */; settings = {ASSET_TAGS = (); }; };
@@ -106,6 +107,7 @@
 		4F0D56511BAB1704007D9E1F /* LookingForCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LookingForCell.swift; sourceTree = "<group>"; };
 		4F0D56531BAB172F007D9E1F /* AboutMeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutMeCell.swift; sourceTree = "<group>"; };
 		4F0D56551BAB1747007D9E1F /* BlockUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockUserCell.swift; sourceTree = "<group>"; };
+		4F37DB721BCC51C400F24A9D /* LinkToWebCel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkToWebCel.swift; sourceTree = "<group>"; };
 		4F5C548D1BBED9D6006E8096 /* EditAboutMeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditAboutMeViewController.swift; sourceTree = "<group>"; };
 		4F5C548F1BBF084A006E8096 /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		4F6B2FA31BB2DE8000EAE7BE /* MatchboardColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchboardColors.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 				CEAB3E111B4DE71900197E85 /* CustomHeaderCell.swift */,
 				CE6F72621B6EB5E200378C95 /* FavoritesCell.swift */,
 				4F6B2FB41BB30C0100EAE7BE /* LaunchScreen.xib */,
+				4F37DB721BCC51C400F24A9D /* LinkToWebCel.swift */,
 				4F0D56511BAB1704007D9E1F /* LookingForCell.swift */,
 				4F6B2FB51BB30C0100EAE7BE /* Main.storyboard */,
 			);
@@ -618,6 +621,7 @@
 				CEC63FD01B56052300B65C21 /* DesignableImageView.swift in Sources */,
 				CEC63FE31B56052300B65C21 /* SpringTextView.swift in Sources */,
 				CEC63FD81B56052300B65C21 /* KeyboardLayoutConstraint.swift in Sources */,
+				4F37DB731BCC51C400F24A9D /* LinkToWebCel.swift in Sources */,
 				4F0D56561BAB1747007D9E1F /* BlockUserCell.swift in Sources */,
 				4F5C548E1BBED9D6006E8096 /* EditAboutMeViewController.swift in Sources */,
 				4F0D56521BAB1704007D9E1F /* LookingForCell.swift in Sources */,

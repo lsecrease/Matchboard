@@ -9,13 +9,14 @@
 import UIKit
 import Foundation
 import MobileCoreServices
+import SafariServices
 
 enum ProfileTableSection : Int {
     case Bio
     case LookingFor
     case AboutMe
-    case Block
     case Links
+    case Block
 }
 
 enum UserColumns : String {
@@ -39,7 +40,7 @@ enum AdColumns : String {
     case categories = "category"
 }
 
-class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate, EditLookingForDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, LinkToWebCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate, EditLookingForDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -220,7 +221,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     // MARK: - UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return isMine ? 3 : 4
+        return isMine ? 4 : 5
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
@@ -251,7 +252,8 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
             return cell
             
         case ProfileTableSection.Links.rawValue:
-            let cell = tableView.dequeueReusableCellWithIdentifier("LinksCell", forIndexPath: indexPath)
+            let cell = tableView.dequeueReusableCellWithIdentifier("LinksCell", forIndexPath: indexPath) as! LinkToWebCell
+            cell.delegate = self
             return cell
             
         case ProfileTableSection.Block.rawValue:
@@ -281,7 +283,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
             return 140.0
             
         case ProfileTableSection.Links.rawValue:
-            return 100.0
+            return 130.0
             
         case ProfileTableSection.Block.rawValue:
             return 100.0
@@ -660,5 +662,19 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         picker.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // MARK: - LinkToWebCellDelegate
+    func linkButtonPressed(sender: AnyObject, url: NSURL)
+    {
+        
+        if #available(iOS 9.0, *) {
+            let svc = SFSafariViewController(URL: NSURL(string: "https://twitter.com/reallyseth")!)
+            navigationController?.presentViewController(svc, animated: true, completion: nil)
+            
+        } else {
+            // Fallback on earlier versions
+            UIApplication.sharedApplication().openURL(url)
+        }
     }
 }

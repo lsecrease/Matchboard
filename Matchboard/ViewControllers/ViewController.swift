@@ -111,7 +111,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    //Passing Data - PrepareForSegue
+    // MARK: - Navigation
+    
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+        if PFUser.currentUser() == nil && identifier == "showProfile" {
+            performSegueWithIdentifier("login", sender: self)
+            return false
+        }
+        
+        return true
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showProfile" {
             var adClass = PFObject(className: "Ad")

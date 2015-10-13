@@ -26,12 +26,16 @@ enum UserColumns : String {
     case state = "state"
     case age = "age"
     case profileImage = "profileImage"
+    case twitter = "twitter"
+    case facebook = "facebook"
+    case instagram = "instagram"
+    case linkedin = "linkedin"
+    case web = "web"
 }
 
 enum AdColumns : String {
     case firstName = "first_name"
     case lookingFor = "lookingFor"
-    case profileImage = "profileImage"
     case username = "username"
     case image01 = "image01"
     case image02 = "image02"
@@ -40,7 +44,7 @@ enum AdColumns : String {
     case categories = "category"
 }
 
-class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, LinkToWebCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate, EditLookingForDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, LinkToWebCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate, EditLookingForDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SFSafariViewControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -254,6 +258,9 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         case ProfileTableSection.Links.rawValue:
             let cell = tableView.dequeueReusableCellWithIdentifier("LinksCell", forIndexPath: indexPath) as! LinkToWebCell
             cell.delegate = self
+            if let currentAd = currentAd {
+                cell.configureCellWithAd(currentAd)
+            }
             return cell
             
         case ProfileTableSection.Block.rawValue:
@@ -665,16 +672,26 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     // MARK: - LinkToWebCellDelegate
+    
     func linkButtonPressed(sender: AnyObject, url: NSURL)
     {
         
         if #available(iOS 9.0, *) {
-            let svc = SFSafariViewController(URL: NSURL(string: "https://twitter.com/reallyseth")!)
-            navigationController?.presentViewController(svc, animated: true, completion: nil)
+            let svc = SFSafariViewController(URL: url, entersReaderIfAvailable: false)
+            svc.delegate = self
+            self.presentViewController(svc, animated: true, completion: nil)
             
         } else {
             // Fallback on earlier versions
             UIApplication.sharedApplication().openURL(url)
         }
     }
+    
+    // MARK: - SFSafariViewControllerDelegate
+    
+    @available(iOS 9.0, *)
+    func safariViewControllerDidFinish(controller: SFSafariViewController) {
+        controller.dismissViewControllerAnimated(true, completion: nil)
+    }
+
 }

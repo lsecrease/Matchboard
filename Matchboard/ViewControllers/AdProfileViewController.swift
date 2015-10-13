@@ -44,7 +44,7 @@ enum AdColumns : String {
     case categories = "category"
 }
 
-class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, LinkToWebCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate, EditLookingForDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SFSafariViewControllerDelegate {
+class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, LinkToWebCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate, EditLookingForDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SFSafariViewControllerDelegate, EditLinksDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -154,6 +154,37 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                     }
                 }
             }
+        } else if segue.identifier == "EditLinksSegue" {
+            if let navVC = segue.destinationViewController as? UINavigationController {
+                if let editLinksTVC = navVC.topViewController as? EditLinksTVC
+                {
+                    editLinksTVC.delegate = self
+                    
+                    // pass data
+                    if let user = currentAd?[AdColumns.username.rawValue] as? PFUser
+                    {
+                        if let twitter = user[UserColumns.twitter.rawValue] as? String {
+                            editLinksTVC.twitter = twitter
+                        }
+                        
+                        if let facebook = user[UserColumns.facebook.rawValue] as? String {
+                            editLinksTVC.facebook = facebook
+                        }
+                        
+                        if let linkedin = user[UserColumns.linkedin.rawValue] as? String {
+                            editLinksTVC.linkedin = linkedin
+                        }
+                        
+                        if let instagram = user[UserColumns.instagram.rawValue] as? String {
+                            editLinksTVC.instagram = instagram
+                        }
+                        
+                        if let web = user[UserColumns.web.rawValue] as? String {
+                            editLinksTVC.web = web
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -259,7 +290,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
             let cell = tableView.dequeueReusableCellWithIdentifier("LinksCell", forIndexPath: indexPath) as! LinkToWebCell
             cell.delegate = self
             if let currentAd = currentAd {
-                cell.configureCellWithAd(currentAd)
+                cell.configureCellWithAd(currentAd, isMine: isMine)
             }
             return cell
             
@@ -687,11 +718,44 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         }
     }
     
+    func editLinksButtonPressed(sender: AnyObject)
+    {
+        print("editLinksButtonPRessed")
+    }
+    
     // MARK: - SFSafariViewControllerDelegate
     
     @available(iOS 9.0, *)
     func safariViewControllerDidFinish(controller: SFSafariViewController) {
         controller.dismissViewControllerAnimated(true, completion: nil)
     }
-
+    
+    // MARK: - EditLinksDelegate
+    
+    func saveLinks(sender:AnyObject, facebook: String, linkedin: String, instagram: String, twitter: String, web: String)
+    {
+        sender.dismissViewControllerAnimated(true, completion: { () -> Void in
+            
+            // save the image
+            if let user = self.currentAd?[AdColumns.username.rawValue] as? PFObject
+            {
+                user[UserColumns.facebook.rawValue] = facebook
+                user[UserColumns.linkedin.rawValue] = linkedin
+                user[UserColumns.instagram.rawValue] = instagram
+                user[UserColumns.twitter.rawValue] = twitter
+                user[UserColumns.web.rawValue] = web
+                
+                user.saveInBackground()
+                
+                let indexPath = NSIndexPath(forRow: ProfileTableSection.Links.rawValue, inSection: 0)
+                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            }
+            
+        })
+    }
+    
+    func cancelEditLinks(sender: AnyObject)
+    {
+        sender.dismissViewControllerAnimated(true, completion: nil)
+    }
 }

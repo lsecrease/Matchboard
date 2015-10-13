@@ -10,6 +10,7 @@ import UIKit
 
 protocol LinkToWebCellDelegate {
     func linkButtonPressed(sender: AnyObject, url: NSURL)
+    func editLinksButtonPressed(sender: AnyObject)
 }
 
 class LinkToWebCell: UITableViewCell {
@@ -22,7 +23,15 @@ class LinkToWebCell: UITableViewCell {
     var webUrl : NSURL?
     var twitterUrl : NSURL?
     
-    func configureCellWithAd(currentAd : PFObject)
+    @IBOutlet weak var editLinksButton: UIButton!
+    
+    override func layoutSubviews() {
+        editLinksButton.setImage(editLinksButton.imageView!.image?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: UIControlState.Normal)
+        
+        editLinksButton.layer.cornerRadius = MatchboardUtils.cornerRadius()
+    }
+    
+    func configureCellWithAd(currentAd : PFObject, isMine: Bool)
     {
         // save urls from current user from ad
         if let user = currentAd[AdColumns.username.rawValue] as? PFUser {
@@ -48,6 +57,10 @@ class LinkToWebCell: UITableViewCell {
         }
     }
 
+
+    @IBAction func editLinksButtonPressed(sender: AnyObject) {
+        delegate?.editLinksButtonPressed(sender)
+    }
     @IBAction func facebookButtonPressed(sender: AnyObject) {
         if let fbUrl = fbUrl {
             delegate?.linkButtonPressed(sender, url: fbUrl)

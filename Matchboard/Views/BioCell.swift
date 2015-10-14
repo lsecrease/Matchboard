@@ -113,12 +113,16 @@ class BioCell: UITableViewCell {
         favoriteImageView.tintColor = isFavorite ? UIColor.yellowColor() : UIColor.whiteColor()
         favoriteImageView.image = favoriteImageView.image?.imageWithRenderingMode(.AlwaysTemplate)
         
-        if let profilePic = currentAd[AdColumns.profileImage.rawValue] as? PFFile
+        if let user = currentAd[AdColumns.username.rawValue] as? PFUser
         {
-            profilePic.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
-                if error == nil {
-                    if let imageData = imageData {
-                        self.profileImageView.image = UIImage(data: imageData)
+        
+            if let profilePic = user[UserColumns.profileImage.rawValue] as? PFFile
+            {
+                profilePic.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
+                    if error == nil {
+                        if let imageData = imageData {
+                            self.profileImageView.image = UIImage(data: imageData)
+                        }
                     }
                 }
             }

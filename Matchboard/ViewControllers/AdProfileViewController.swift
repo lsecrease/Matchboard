@@ -8,13 +8,15 @@
 
 import UIKit
 import Foundation
+import MobileCoreServices
+import SafariServices
 
 enum ProfileTableSection : Int {
     case Bio
     case LookingFor
     case AboutMe
-    case Block
     case Links
+    case Block
 }
 
 enum UserColumns : String {
@@ -23,12 +25,17 @@ enum UserColumns : String {
     case city = "city"
     case state = "state"
     case age = "age"
+    case profileImage = "profileImage"
+    case twitter = "twitter"
+    case facebook = "facebook"
+    case instagram = "instagram"
+    case linkedin = "linkedin"
+    case web = "web"
 }
 
 enum AdColumns : String {
     case firstName = "first_name"
     case lookingFor = "lookingFor"
-    case profileImage = "profileImage"
     case username = "username"
     case image01 = "image01"
     case image02 = "image02"
@@ -37,7 +44,7 @@ enum AdColumns : String {
     case categories = "category"
 }
 
-class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate, EditLookingForDelegate {
+class AdProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BioCellDelegate, AboutMeCellDelegate, LookingForCellDelegate, LinkToWebCellDelegate, BlockUserDelegate, EditAboutMeDelegate, EditProfileDelegate, EditLookingForDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SFSafariViewControllerDelegate, EditLinksDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -147,6 +154,37 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                     }
                 }
             }
+        } else if segue.identifier == "EditLinksSegue" {
+            if let navVC = segue.destinationViewController as? UINavigationController {
+                if let editLinksTVC = navVC.topViewController as? EditLinksTVC
+                {
+                    editLinksTVC.delegate = self
+                    
+                    // pass data
+                    if let user = currentAd?[AdColumns.username.rawValue] as? PFUser
+                    {
+                        if let twitter = user[UserColumns.twitter.rawValue] as? String {
+                            editLinksTVC.twitter = twitter
+                        }
+                        
+                        if let facebook = user[UserColumns.facebook.rawValue] as? String {
+                            editLinksTVC.facebook = facebook
+                        }
+                        
+                        if let linkedin = user[UserColumns.linkedin.rawValue] as? String {
+                            editLinksTVC.linkedin = linkedin
+                        }
+                        
+                        if let instagram = user[UserColumns.instagram.rawValue] as? String {
+                            editLinksTVC.instagram = instagram
+                        }
+                        
+                        if let web = user[UserColumns.web.rawValue] as? String {
+                            editLinksTVC.web = web
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -218,7 +256,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     // MARK: - UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return isMine ? 3 : 4
+        return isMine ? 4 : 5
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
@@ -249,7 +287,11 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
             return cell
             
         case ProfileTableSection.Links.rawValue:
-            let cell = tableView.dequeueReusableCellWithIdentifier("LinksCell", forIndexPath: indexPath)
+            let cell = tableView.dequeueReusableCellWithIdentifier("LinksCell", forIndexPath: indexPath) as! LinkToWebCell
+            cell.delegate = self
+            if let currentAd = currentAd {
+                cell.configureCellWithAd(currentAd, isMine: isMine)
+            }
             return cell
             
         case ProfileTableSection.Block.rawValue:
@@ -279,7 +321,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
             return 140.0
             
         case ProfileTableSection.Links.rawValue:
-            return 100.0
+            return 130.0
             
         case ProfileTableSection.Block.rawValue:
             return 100.0
@@ -472,7 +514,46 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func avatarEditButtonPressed(sender: AnyObject) {
-        print("avatar edit button pressed")
+        // use an action sheet to choose photo library or camera
+        let actionSheet: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        
+        
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
+        {
+            let cameraAction: UIAlertAction = UIAlertAction(title: "Camera", style: .Default) { (action) -> Void in
+                // camera
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.allowsEditing = true
+                imagePicker.mediaTypes = [kUTTypeImage as String]
+                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+                
+                self.presentViewController(imagePicker, animated: true, completion: nil)
+            }
+            
+            actionSheet.addAction(cameraAction)
+        }
+        
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary)
+        {
+            
+            let libraryAction: UIAlertAction = UIAlertAction(title: "Photo Library", style: .Default) { (action) -> Void in
+                // photo library
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.allowsEditing = true
+                imagePicker.mediaTypes = [kUTTypeImage as String]
+                imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+                
+                self.presentViewController(imagePicker, animated: true, completion: nil)
+            }
+            
+            actionSheet.addAction(libraryAction)
+        }
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        
+        presentViewController(actionSheet, animated: true, completion:nil)
     }
     
     func profileEditButtonPressed(sender: AnyObject) {
@@ -588,6 +669,93 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func lookingForCancelled(sender: AnyObject) {
+        sender.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // MARK: - ImagePickerControllerDelegate
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
+        picker.dismissViewControllerAnimated(true) { () -> Void in
+            if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
+                
+                // save the image
+                if let user = self.currentAd?[AdColumns.username.rawValue] as? PFObject
+                {
+                    
+                    if let objectId = self.currentAd?.objectId {
+                        if let imageData = UIImageJPEGRepresentation(image, 0.75) {
+                            let imageFile = PFFile(name: "\(objectId)-avatar.jpg", data: imageData)
+                            user["profileImage"] = imageFile
+                        }
+                    }
+                    user.saveInBackground()
+                    
+                    let indexPath = NSIndexPath(forRow: ProfileTableSection.Bio.rawValue, inSection: 0)
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                }
+            }
+        }
+    }
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        picker.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // MARK: - LinkToWebCellDelegate
+    
+    func linkButtonPressed(sender: AnyObject, url: NSURL)
+    {
+        
+        if #available(iOS 9.0, *) {
+            let svc = SFSafariViewController(URL: url, entersReaderIfAvailable: false)
+            svc.delegate = self
+            self.presentViewController(svc, animated: true, completion: nil)
+            
+        } else {
+            // Fallback on earlier versions
+            UIApplication.sharedApplication().openURL(url)
+        }
+    }
+    
+    func editLinksButtonPressed(sender: AnyObject)
+    {
+        print("editLinksButtonPRessed")
+    }
+    
+    // MARK: - SFSafariViewControllerDelegate
+    
+    @available(iOS 9.0, *)
+    func safariViewControllerDidFinish(controller: SFSafariViewController) {
+        controller.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // MARK: - EditLinksDelegate
+    
+    func saveLinks(sender:AnyObject, facebook: String, linkedin: String, instagram: String, twitter: String, web: String)
+    {
+        sender.dismissViewControllerAnimated(true, completion: { () -> Void in
+            
+            // save the image
+            if let user = self.currentAd?[AdColumns.username.rawValue] as? PFObject
+            {
+                user[UserColumns.facebook.rawValue] = facebook
+                user[UserColumns.linkedin.rawValue] = linkedin
+                user[UserColumns.instagram.rawValue] = instagram
+                user[UserColumns.twitter.rawValue] = twitter
+                user[UserColumns.web.rawValue] = web
+                
+                user.saveInBackground()
+                
+                let indexPath = NSIndexPath(forRow: ProfileTableSection.Links.rawValue, inSection: 0)
+                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            }
+            
+        })
+    }
+    
+    func cancelEditLinks(sender: AnyObject)
+    {
         sender.dismissViewControllerAnimated(true, completion: nil)
     }
 }

@@ -140,7 +140,6 @@ class EditLookingForViewController: UIViewController, UINavigationControllerDele
         {
             let cameraAction: UIAlertAction = UIAlertAction(title: "Camera", style: .Default) { (action) -> Void in
                 // camera
-                // photo library
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
                 imagePicker.mediaTypes = [kUTTypeImage as String]
@@ -202,6 +201,7 @@ class EditLookingForViewController: UIViewController, UINavigationControllerDele
     }
 
     // MARK: - Custom
+    
     func getImageWithName(name: String, file: PFFile?, imageView: DesignableImageView) {
         file?.getDataInBackgroundWithBlock({ (imageData: NSData?, error: NSError?) -> Void in
             if error == nil {

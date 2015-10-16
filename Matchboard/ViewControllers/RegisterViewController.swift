@@ -90,23 +90,34 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
             }
             ProgressHUD.show("Signing in...", interaction: false)
             self.editing = false
-            let params = ["phoneNumber" : phoneNumberTextField.text!]
-            PFCloud.callFunctionInBackground("sendCode", withParameters: params) {
-                (response: AnyObject?, error: NSError?) -> Void in
-                self.editing = true
-                if let error = error {
-                    var description = error.description
-                    if description.characters.count == 0 {
-                        description = "There was a problem with the service.\nTry again later."
-                    } else if let message = error.userInfo["error"] as? String {
-                        description = message
-                    }
-                    self.showAlert("Login Error", message: description)
-                    return self.step1()
-                }
-                ProgressHUD.showSuccess("Code Sent")
-                return self.step2()
-            }
+            
+            // TODO: update to CheckMobi
+            //let params = ["phoneNumber" : phoneNumberTextField.text!]
+            
+            //var url = NSURL(string: "https://api.checkmobi.com/v1/validation/request")
+            
+            
+            let service = CheckMobileServiceClient()
+            service.callService("validation", method: "request", data: ["number":"15734808191", "type":"cli"], callBack: { (data) -> Void in
+                print(data)
+            })
+            // OLD TWILIO STUFF
+//            PFCloud.callFunctionInBackground("sendCode", withParameters: params) {
+//                (response: AnyObject?, error: NSError?) -> Void in
+//                self.editing = true
+//                if let error = error {
+//                    var description = error.description
+//                    if description.characters.count == 0 {
+//                        description = "There was a problem with the service.\nTry again later."
+//                    } else if let message = error.userInfo["error"] as? String {
+//                        description = message
+//                    }
+//                    self.showAlert("Login Error", message: description)
+//                    return self.step1()
+//                }
+//                ProgressHUD.showSuccess("Code Sent")
+//                return self.step2()
+//            }
         } else  {
             if let text = phoneNumberTextField?.text {
                 if let code = Int(text) {
@@ -118,8 +129,6 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
             showAlert("Code Entry", message: "You must enter the 4 digit code texted to your phone number.")
             }
         }
-        
-        
     }
     
         

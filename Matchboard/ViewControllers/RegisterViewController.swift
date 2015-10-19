@@ -36,6 +36,14 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
         imagePicker.delegate = self
         phoneNumber = ""
         
+        // colors and layout
+        phoneNumberTextField.layer.cornerRadius = MatchboardUtils.cornerRadius()
+        phoneNumberTextField.layer.borderColor = MatchboardColors.FieldBorder.color().CGColor
+        phoneNumberTextField.layer.borderWidth = 1.0
+        
+        displayNameTextField.layer.cornerRadius = MatchboardUtils.cornerRadius()
+        displayNameTextField.layer.borderColor = MatchboardColors.FieldBorder.color().CGColor
+        displayNameTextField.layer.borderWidth = 1.0
     }
     
     func step1() {

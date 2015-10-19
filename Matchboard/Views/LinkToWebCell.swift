@@ -55,6 +55,8 @@ class LinkToWebCell: UITableViewCell {
                 webUrl = NSURL(string: webUrlString)
             }
         }
+        
+        editLinksButton.hidden = !isMine
     }
 
 

@@ -14,6 +14,7 @@
 		4F357CE81BCD931400CA7D21 /* LinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F357CE71BCD931400CA7D21 /* LinkCell.swift */; settings = {ASSET_TAGS = (); }; };
 		4F357CEA1BCD942C00CA7D21 /* EditLinksTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F357CE91BCD942C00CA7D21 /* EditLinksTVC.swift */; settings = {ASSET_TAGS = (); }; };
 		4F37DB731BCC51C400F24A9D /* LinkToWebCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F37DB721BCC51C400F24A9D /* LinkToWebCell.swift */; settings = {ASSET_TAGS = (); }; };
+		4F3924BA1BD6FB200008A451 /* VerifyPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3924B91BD6FB200008A451 /* VerifyPhoneViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		4F5C548E1BBED9D6006E8096 /* EditAboutMeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5C548D1BBED9D6006E8096 /* EditAboutMeViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		4F5C54901BBF084A006E8096 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5C548F1BBF084A006E8096 /* EditProfileViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		4F6B2FA41BB2DE8000EAE7BE /* MatchboardColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6B2FA31BB2DE8000EAE7BE /* MatchboardColors.swift */; settings = {ASSET_TAGS = (); }; };
@@ -113,6 +114,7 @@
 		4F357CE71BCD931400CA7D21 /* LinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkCell.swift; sourceTree = "<group>"; };
 		4F357CE91BCD942C00CA7D21 /* EditLinksTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditLinksTVC.swift; sourceTree = "<group>"; };
 		4F37DB721BCC51C400F24A9D /* LinkToWebCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkToWebCell.swift; sourceTree = "<group>"; };
+		4F3924B91BD6FB200008A451 /* VerifyPhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyPhoneViewController.swift; sourceTree = "<group>"; };
 		4F5C548D1BBED9D6006E8096 /* EditAboutMeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditAboutMeViewController.swift; sourceTree = "<group>"; };
 		4F5C548F1BBF084A006E8096 /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		4F6B2FA31BB2DE8000EAE7BE /* MatchboardColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchboardColors.swift; sourceTree = "<group>"; };
@@ -291,6 +293,7 @@
 				4F6B2FAA1BB30AD800EAE7BE /* FavoritesViewController.swift */,
 				CE3FA5C31B2023E400762DA1 /* LoginViewController.swift */,
 				4F6B2FAB1BB30AD800EAE7BE /* RegisterViewController.swift */,
+				4F3924B91BD6FB200008A451 /* VerifyPhoneViewController.swift */,
 				4F6B2FAC1BB30AD800EAE7BE /* ViewController.swift */,
 				4F6B2FAD1BB30AD800EAE7BE /* WelcomeViewController.swift */,
 			);
@@ -682,6 +685,7 @@
 				4F6B2FB01BB30AD800EAE7BE /* FavoritesViewController.swift in Sources */,
 				CEC63FCE1B56052300B65C21 /* BlurView.swift in Sources */,
 				CEF8890E1B447CBA00F39692 /* CategoryTableViewCell.swift in Sources */,
+				4F3924BA1BD6FB200008A451 /* VerifyPhoneViewController.swift in Sources */,
 				CEAB271A1B0DBD2A00279889 /* AdTableViewCell.swift in Sources */,
 				CE6F72631B6EB5E200378C95 /* FavoritesCell.swift in Sources */,
 				CEC63FDD1B56052300B65C21 /* Spring.swift in Sources */,

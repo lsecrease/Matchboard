@@ -304,7 +304,7 @@
                                         </state>
                                         <connections>
                                             <action selector="phoneRegisterButtonTapped:" destination="XIb-JJ-eK0" eventType="touchUpInside" id="KHd-mZ-oYe"/>
-                                            <segue destination="NKe-hI-fNb" kind="show" identifier="phoneSegue" id="6fI-ux-gY2"/>
+                                            <segue destination="BKF-dG-3L5" kind="show" identifier="phoneSegue" id="6fI-ux-gY2"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -382,20 +382,6 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="14k-v9-z2N">
-                                <rect key="frame" x="0.0" y="15" width="20" height="22"/>
-                                <animations/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="22" id="Adv-9s-fu5"/>
-                                    <constraint firstAttribute="width" constant="20" id="u01-Su-vPq"/>
-                                </constraints>
-                                <state key="normal" image="BackArrow">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="backButtonTapped:" destination="NKe-hI-fNb" eventType="touchUpInside" id="xQg-Wx-7cv"/>
-                                </connections>
-                            </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Choose Display Name" minimumFontSize="16" translatesAutoresizingMaskIntoConstraints="NO" id="gsV-Eh-kt5">
                                 <rect key="frame" x="20" y="64" width="560" height="40"/>
                                 <animations/>
@@ -411,7 +397,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w0S-2i-rQM" customClass="DesignableButton" customModule="Matchboard" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w0S-2i-rQM" customClass="DesignableButton" customModule="Matchboard" customModuleProvider="target">
                                 <rect key="frame" x="20" y="339" width="560" height="50"/>
                                 <animations/>
                                 <color key="backgroundColor" red="0.24040308594703674" green="0.56713211536407471" blue="0.84130144119262695" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -420,7 +406,7 @@
                                     <constraint firstAttribute="height" constant="50" id="Rfm-yk-L6B"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="22"/>
-                                <state key="normal" title="Register">
+                                <state key="normal" title="Next">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -430,10 +416,10 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="registerButtonTapped:" destination="NKe-hI-fNb" eventType="touchUpInside" id="WwW-Qd-ZnI"/>
+                                    <segue destination="XPz-Ee-bBV" kind="show" identifier="VerifyPhoneSegue" id="Xve-4P-svu"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NXW-aw-BuQ">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NXW-aw-BuQ">
                                 <rect key="frame" x="20" y="190" width="125" height="125"/>
                                 <animations/>
                                 <constraints>
@@ -517,7 +503,6 @@
                             <constraint firstItem="fuF-iN-O2K" firstAttribute="leading" secondItem="l9p-0x-D1b" secondAttribute="leadingMargin" id="J0O-so-Lwe"/>
                             <constraint firstItem="nTQ-aA-t4d" firstAttribute="centerX" secondItem="l9p-0x-D1b" secondAttribute="centerX" id="NLO-0U-olr"/>
                             <constraint firstItem="904-9b-0Di" firstAttribute="top" secondItem="fYx-i2-XAi" secondAttribute="bottom" constant="27" id="POH-oe-GiD"/>
-                            <constraint firstItem="14k-v9-z2N" firstAttribute="top" secondItem="l9p-0x-D1b" secondAttribute="top" constant="15" id="Tmb-N2-nSC"/>
                             <constraint firstItem="gsV-Eh-kt5" firstAttribute="leading" secondItem="l9p-0x-D1b" secondAttribute="leadingMargin" id="Wam-IZ-I0A"/>
                             <constraint firstItem="NXW-aw-BuQ" firstAttribute="top" secondItem="fYx-i2-XAi" secondAttribute="bottom" constant="27" id="bQP-c4-SBb"/>
                             <constraint firstItem="gsV-Eh-kt5" firstAttribute="trailing" secondItem="l9p-0x-D1b" secondAttribute="trailingMargin" id="cfQ-tV-otU"/>
@@ -526,24 +511,49 @@
                             <constraint firstItem="Buz-kF-C8g" firstAttribute="leading" secondItem="l9p-0x-D1b" secondAttribute="leading" id="oo0-Nv-W1d"/>
                             <constraint firstItem="NXW-aw-BuQ" firstAttribute="leading" secondItem="l9p-0x-D1b" secondAttribute="leadingMargin" id="rKF-0l-VaX"/>
                             <constraint firstItem="fuF-iN-O2K" firstAttribute="top" secondItem="fYx-i2-XAi" secondAttribute="bottom" constant="27" id="sZN-K9-mSL"/>
-                            <constraint firstItem="14k-v9-z2N" firstAttribute="leading" secondItem="l9p-0x-D1b" secondAttribute="leading" id="sfj-Cu-bxI"/>
                             <constraint firstItem="Buz-kF-C8g" firstAttribute="top" secondItem="l9p-0x-D1b" secondAttribute="top" id="yw6-LN-dg4"/>
                             <constraint firstItem="udh-Ua-ksG" firstAttribute="top" secondItem="Buz-kF-C8g" secondAttribute="bottom" id="zVW-Pd-7gx"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="6It-IR-xuh">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="SiR-wH-4Mo">
+                            <connections>
+                                <action selector="cancelButtonPressed:" destination="NKe-hI-fNb" id="mjF-gm-7s9"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="displayNameTextField" destination="gsV-Eh-kt5" id="lSt-Lb-npw"/>
                         <outlet property="imageView" destination="fuF-iN-O2K" id="bUd-bA-2Tc"/>
                         <outlet property="navigationLabel" destination="nTQ-aA-t4d" id="aYc-d3-rhh"/>
+                        <outlet property="nextButton" destination="w0S-2i-rQM" id="5rR-Zk-bHO"/>
                         <outlet property="phoneNumberTextField" destination="fYx-i2-XAi" id="6p9-a3-CyO"/>
                         <outlet property="profilePhotoLabel" destination="904-9b-0Di" id="jw3-VN-SH8"/>
-                        <outlet property="registerButton" destination="w0S-2i-rQM" id="dQI-KU-xxg"/>
                         <segue destination="0Dc-Iv-A6g" kind="show" identifier="successSegue" id="VQT-Oi-CHd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JuI-Bt-Jte" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-309" y="1765"/>
+            <point key="canvasLocation" x="503" y="1765"/>
+        </scene>
+        <!--Verify Phone View Controller-->
+        <scene sceneID="fMp-uj-y5F">
+            <objects>
+                <viewController id="XPz-Ee-bBV" customClass="VerifyPhoneViewController" customModule="Matchboard" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jI8-bc-73m"/>
+                        <viewControllerLayoutGuide type="bottom" id="I4S-hG-Uq0"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="3i9-h0-MPd">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TcC-4d-2dH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1295" y="1765"/>
         </scene>
         <!--Ad Profile View Controller-->
         <scene sceneID="Pfk-Jf-iBZ">
@@ -882,7 +892,7 @@
                                                         </mask>
                                                     </variation>
                                                 </label>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" scrollEnabled="NO" editable="NO" text="Text" translatesAutoresizingMaskIntoConstraints="NO" id="wFK-X8-2Vc" customClass="AutoTextView" customModule="Matchboard" customModuleProvider="target">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Text" translatesAutoresizingMaskIntoConstraints="NO" id="wFK-X8-2Vc" customClass="AutoTextView" customModule="Matchboard" customModuleProvider="target">
                                                     <rect key="frame" x="8" y="51" width="584" height="70"/>
                                                     <animations/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -931,7 +941,7 @@
                                                         </mask>
                                                     </variation>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A6V-9A-KY3" customClass="DesignableImageView" customModule="Matchboard" customModuleProvider="target">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="A6V-9A-KY3" customClass="DesignableImageView" customModule="Matchboard" customModuleProvider="target">
                                                     <rect key="frame" x="213" y="129" width="190" height="190"/>
                                                     <animations/>
                                                     <color key="backgroundColor" white="0.69999999999999996" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
@@ -948,7 +958,7 @@
                                                         </mask>
                                                     </variation>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KMj-EZ-khq" customClass="DesignableImageView" customModule="Matchboard" customModuleProvider="target">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KMj-EZ-khq" customClass="DesignableImageView" customModule="Matchboard" customModuleProvider="target">
                                                     <rect key="frame" x="418" y="129" width="190" height="190"/>
                                                     <animations/>
                                                     <color key="backgroundColor" white="0.69999999999999996" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
@@ -965,7 +975,7 @@
                                                         </mask>
                                                     </variation>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tiu-hW-4bJ" customClass="DesignableImageView" customModule="Matchboard" customModuleProvider="target">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Tiu-hW-4bJ" customClass="DesignableImageView" customModule="Matchboard" customModuleProvider="target">
                                                     <rect key="frame" x="623" y="129" width="190" height="190"/>
                                                     <animations/>
                                                     <color key="backgroundColor" white="0.69999999999999996" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
@@ -982,7 +992,7 @@
                                                         </mask>
                                                     </variation>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hls-zR-cWJ" customClass="DesignableImageView" customModule="Matchboard" customModuleProvider="target">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hls-zR-cWJ" customClass="DesignableImageView" customModule="Matchboard" customModuleProvider="target">
                                                     <rect key="frame" x="8" y="129" width="190" height="190"/>
                                                     <animations/>
                                                     <color key="backgroundColor" white="0.69999999999999996" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
@@ -1700,7 +1710,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oNm-AI-hF2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1321" y="1529"/>
+            <point key="canvasLocation" x="2133" y="1529"/>
         </scene>
         <!--Edit Looking For View Controller-->
         <scene sceneID="Kid-rL-Sg1">
@@ -1989,7 +1999,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DXx-4P-jEX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2001" y="1529"/>
+            <point key="canvasLocation" x="2813" y="1529"/>
         </scene>
         <!--Edit About Me View Controller-->
         <scene sceneID="jXj-0N-Ubo">
@@ -2058,7 +2068,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ds0-Er-bL1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2709" y="1529"/>
+            <point key="canvasLocation" x="3521" y="1529"/>
         </scene>
         <!--Edit LinksTVC-->
         <scene sceneID="7Cy-tr-Epw">
@@ -2162,7 +2172,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E1h-as-NdZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3426" y="1529"/>
+            <point key="canvasLocation" x="4238" y="1529"/>
         </scene>
         <!--Welcome View Controller-->
         <scene sceneID="q2B-LA-Rr5">
@@ -2180,7 +2190,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <animations/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="What Are You Looking For?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aiq-Mr-VSx">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What Are You Looking For?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aiq-Mr-VSx">
                                 <rect key="frame" x="165" y="20" width="272" height="30"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="22"/>
@@ -2212,7 +2222,7 @@
                                 <color key="textColor" red="0.34114366769790649" green="0.3411974310874939" blue="0.34113192558288574" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="You can say things like:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WcO-Xl-zmJ">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can say things like:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WcO-Xl-zmJ">
                                 <rect key="frame" x="206" y="167" width="191" height="25"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="18"/>
@@ -2230,7 +2240,7 @@
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" text="• To sell a used couch. $50. Click for pics.                      " selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X0J-KY-SGB">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="• To sell a used couch. $50. Click for pics.                      " selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X0J-KY-SGB">
                                 <rect key="frame" x="9" y="276" width="357" height="55"/>
                                 <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -2241,7 +2251,7 @@
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" text="• To build my client base. Talented personal trainer here.                     " selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a9Y-OK-33q">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="• To build my client base. Talented personal trainer here.                     " selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a9Y-OK-33q">
                                 <rect key="frame" x="9" y="327" width="357" height="66"/>
                                 <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -2947,6 +2957,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pDD-PF-CEm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3426" y="855"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="cfk-eY-aYZ">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BKF-dG-3L5" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fpv-o8-9nI">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="NKe-hI-fNb" kind="relationship" relationship="rootViewController" id="T5F-fu-HyF"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="u01-tq-Aga" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-309" y="1765"/>
         </scene>
     </scenes>
     <resources>

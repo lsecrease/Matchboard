@@ -15,8 +15,7 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var displayNameTextField: DesignableTextField!
     
     @IBOutlet weak var profilePhotoLabel: UILabel!
-    @IBOutlet weak var registerButton: DesignableButton!
-    @IBOutlet weak var textLabel: UILabel!
+    @IBOutlet weak var nextButton: DesignableButton!
     @IBOutlet weak var imageView: UIImageView!
     
     
@@ -46,36 +45,62 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
         displayNameTextField.layer.borderWidth = 1.0
     }
     
-    func step1() {
-        phoneNumber = ""
-        textLabel.hidden = true
-        registerButton.enabled = true
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+        if identifier == "VerifyPhoneSegue"
+        {
+            // validation stuff
+            if phoneNumberTextField.text!.characters.count != 10 {
+                showAlert("Phone Login", message: "You must enter a 10-digit US phone number including area code.")
+                return false
+            }
+            
+            if displayNameTextField.text!.characters.count == 0 {
+                showAlert("Display Name", message: "You must enter a display name.")
+                return false
+            }
+        }
+        
+        return true
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "VerifyPhoneSegue"
+        {
+            if let verifyVC = segue.destinationViewController as? VerifyPhoneViewController
+            {
+                verifyVC.phoneNumber = phoneNumberTextField.text
+                verifyVC.displayName = displayNameTextField.text
+                verifyVC.userImage = imageView.image
+            }
+        }
+    }
+    
+    func step1() {
+        phoneNumber = ""
+        nextButton.enabled = true
+    }
+    
+    
+    // todo: refactor this
     func step2() {
         phoneNumber = phoneNumberTextField.text!
         phoneNumberTextField.text = ""
         phoneNumberTextField.placeholder = "1234"
         navigationLabel.text = "Registration Verification"
-        textLabel.hidden = false
         displayNameTextField.hidden = true
         profilePhotoLabel.hidden = true
         imageView.hidden = true
-        registerButton.enabled = true
-        registerButton.setTitle("Finish Registration", forState: .Normal)
+        nextButton.enabled = true
+        nextButton.setTitle("Finish Registration", forState: .Normal)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    @IBAction func backButtonTapped(sender: AnyObject) {
-        
-        if textLabel.hidden == false {
-            step1()
-        } else {
-        self.dismissViewControllerAnimated(true, completion: nil)
-        }
+
+    @IBAction func cancelButtonPressed(sender: AnyObject) {
+        navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func loadImageButtonTapped(sender: AnyObject) {
@@ -85,8 +110,6 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
         presentViewController(imagePicker, animated: true, completion: nil)
         
     }
-    
-   
     
     @IBAction func registerButtonTapped(sender: AnyObject) {
         
@@ -179,7 +202,7 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
     
     
     override func setEditing(editing: Bool, animated: Bool) {
-        registerButton.enabled = editing
+        nextButton.enabled = editing
         phoneNumberTextField.enabled = editing
         if editing {
             phoneNumberTextField.becomeFirstResponder()

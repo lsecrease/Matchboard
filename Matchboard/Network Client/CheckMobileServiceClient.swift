@@ -12,7 +12,7 @@ class CheckMobileServiceClient {
     var service : NSURLSession!
     let serviceUrl = "https://api.checkmobi.com/v1"
     init(){
-        let configuration = NSURLSessionConfiguration()
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.HTTPAdditionalHeaders = ["Authorization": "A2580AEC-670B-4809-B684-42A8BE811403", "Accept": "application/json"]
         service = NSURLSession(configuration: configuration)
         

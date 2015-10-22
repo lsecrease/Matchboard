@@ -111,96 +111,6 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
         
     }
     
-    @IBAction func registerButtonTapped(sender: AnyObject) {
-        
-        
-        if phoneNumber == "" {
-            if phoneNumberTextField.text!.characters.count != 10 {
-                showAlert("Phone Login", message: "You must enter a 10-digit US phone number including area code.")
-                return step1()
-            }
-            ProgressHUD.show("Signing in...", interaction: false)
-            self.editing = false
-            
-            // TODO: update to CheckMobi
-            //let params = ["phoneNumber" : phoneNumberTextField.text!]
-            
-            //var url = NSURL(string: "https://api.checkmobi.com/v1/validation/request")
-            
-            
-            let service = CheckMobileServiceClient()
-            service.callService("validation", method: "request", data: ["number":"15734808191", "type":"cli"], callBack: { (data) -> Void in
-                print(data)
-            })
-            // OLD TWILIO STUFF
-//            PFCloud.callFunctionInBackground("sendCode", withParameters: params) {
-//                (response: AnyObject?, error: NSError?) -> Void in
-//                self.editing = true
-//                if let error = error {
-//                    var description = error.description
-//                    if description.characters.count == 0 {
-//                        description = "There was a problem with the service.\nTry again later."
-//                    } else if let message = error.userInfo["error"] as? String {
-//                        description = message
-//                    }
-//                    self.showAlert("Login Error", message: description)
-//                    return self.step1()
-//                }
-//                ProgressHUD.showSuccess("Code Sent")
-//                return self.step2()
-//            }
-        } else  {
-            if let text = phoneNumberTextField?.text {
-                if let code = Int(text) {
-                if text.characters.count == 4 {
-                    return doLogin(phoneNumber, code: code)
-                }
-            }
-            
-            showAlert("Code Entry", message: "You must enter the 4 digit code texted to your phone number.")
-            }
-        }
-    }
-    
-        
-
-    
-    
-    
-    //*********************Login Function***********************//
-    func doLogin(phoneNumber: String, code: Int) {
-        self.editing = false
-        let params = ["phoneNumber": phoneNumber, "codeEntry": code] as [NSObject:AnyObject]
-        PFCloud.callFunctionInBackground("logIn", withParameters: params) {
-            (response: AnyObject?, error: NSError?) -> Void in
-            if let description = error?.description {
-                self.editing = true
-                return self.showAlert("Login Error", message: description)
-            }
-            if let token = response as? String {
-                PFUser.becomeInBackground(token) { (user: PFUser?, error: NSError?) -> Void in
-                    if let error = error {
-                        self.showAlert("Login Error", message: "Something happened while trying to log in.\nPlease try again.")
-                        self.editing = true
-                        return self.step1()
-                    }
-                    //**************Save Photo & Display Name*************//
-                    self.savePhoto()
-                    self.saveData()
-                    self.performSegueWithIdentifier("successSegue", sender: self)
-                    //return self.dismissViewControllerAnimated(true, completion: nil)
-                }
-            } else {
-                self.editing = true
-                self.showAlert("Login Error", message: "Something went wrong.  Please try again.")
-                return self.step1()
-            }
-        }
-    }
-    
-    
-    
-    
     override func setEditing(editing: Bool, animated: Bool) {
         nextButton.enabled = editing
         phoneNumberTextField.enabled = editing
@@ -209,41 +119,6 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
         }
     }
     
-    
-     //*********************Save Photo***********************//
-    func savePhoto() {
-        
-                let user = PFUser.currentUser()!
-               let profilePic = self.imageView.image!
-               let imageData = UIImagePNGRepresentation(profilePic)!
-                let profileImage = PFFile(name: "image.png", data: imageData)
-                 print("\(profileImage.name)")
-                user["profileImage"] = profileImage
-        
-                user.saveInBackgroundWithBlock({ (success, error) -> Void in
-                    if success == false{
-                        self.displayAlert("Could not Save User Image", error: "Please try again later")
-                    } else {
-                        print("ProfileImage has been saved successfully!")
-                    }
-                })
-        
-    }
-    
-    func saveData() {
-        let user = PFUser.currentUser()!
-        let name = self.displayNameTextField.text
-        print("\(name)")
-        user["name"] = name
-        
-        user.saveInBackgroundWithBlock({ (success, error) -> Void in
-            if success == false{
-                self.displayAlert("Could not Save name", error: "Please try again later")
-            } else {
-                print("Display Name has been saved successfully!")
-            }
-        })
-    }
     
     
     //**********************UI Alert**********************//

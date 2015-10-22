@@ -17,19 +17,23 @@ class CheckMobileServiceClient {
         service = NSURLSession(configuration: configuration)
         
     }
-    func callService(entity: String, method: String, data: Dictionary<String, AnyObject>, callBack:((data: NSDictionary) -> Void)!){
+    func callService(entity: String, method: String, data: Dictionary<String, AnyObject>?, httpMethod: String, callBack:((data: NSDictionary) -> Void)!){
         let url = NSURL(string: serviceUrl + "/" + entity + "/" + method)
         let errorPointer = NSErrorPointer()
         var serializedData : NSData?
         do {
-            serializedData = try NSJSONSerialization.dataWithJSONObject(data, options: NSJSONWritingOptions.PrettyPrinted)
+            if let data = data {
+                serializedData = try NSJSONSerialization.dataWithJSONObject(data, options: NSJSONWritingOptions.PrettyPrinted)
+            }
         } catch let error as NSError {
             print(error.debugDescription)
         }
         let request = NSMutableURLRequest(URL: url!)
         
-        request.HTTPMethod = "POST"
-        request.HTTPBody = serializedData
+        request.HTTPMethod = httpMethod
+        if let serializedData = serializedData {
+            request.HTTPBody = serializedData
+        }
         
         if serializedData != nil
         {

@@ -66,6 +66,8 @@ class VerifyPhoneViewController: UIViewController {
         if let url = NSURL(string: "tel://\(dialingNumber!)") {
             UIApplication.sharedApplication().openURL(url)
         }
+        
+        checkIfPhoneWasValidated()
     }
     
     func checkIfPhoneWasValidated() {
@@ -88,33 +90,52 @@ class VerifyPhoneViewController: UIViewController {
     //*********************Login Function***********************//
     func doLogin(phoneNumber: String, code: Int) {
         self.editing = false
-        let params = ["phoneNumber": phoneNumber, "codeEntry": code] as [NSObject:AnyObject]
-        PFCloud.callFunctionInBackground("logIn", withParameters: params) {
+        let params = ["phoneNumber": phoneNumber/*, "codeEntry": code*/] as [NSObject:AnyObject]
+        
+        // call the send code function first
+        PFCloud.callFunctionInBackground("sendCode", withParameters: params) {
             (response: AnyObject?, error: NSError?) -> Void in
-            if let description = error?.description {
-                self.editing = true
-                self.enableVerifyButton()
-                return self.showAlert("Login Error", message: description)
-            }
-            if let token = response as? String {
-                PFUser.becomeInBackground(token) { (user: PFUser?, error: NSError?) -> Void in
-                    if let _ = error {
-                        self.showAlert("Login Error", message: "Something happened while trying to log in.\nPlease try again.")
-                        self.enableVerifyButton()
-                        return
-                    }
-                    //**************Save Photo & Display Name*************//
-                    self.savePhoto()
-                    self.saveData()
-                    self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
-                    //self.performSegueWithIdentifier("successSegue", sender: self)
-                    //return self.dismissViewControllerAnimated(true, completion: nil)
-                }
-            } else {
+            
+            // get the login code
+            print(response)
+            
+            guard let code = response?["code"] as? Int else {
                 self.editing = true
                 self.showAlert("Login Error", message: "Something went wrong.  Please try again.")
                 self.enableVerifyButton()
                 return
+            }
+            
+            let params = ["phoneNumber": phoneNumber, "codeEntry": code] as [NSObject:AnyObject]
+            
+            
+            PFCloud.callFunctionInBackground("logIn", withParameters: params) {
+                (response: AnyObject?, error: NSError?) -> Void in
+                if let description = error?.description {
+                    self.editing = true
+                    self.enableVerifyButton()
+                    return self.showAlert("Login Error", message: description)
+                }
+                if let token = response as? String {
+                    PFUser.becomeInBackground(token) { (user: PFUser?, error: NSError?) -> Void in
+                        if let _ = error {
+                            self.showAlert("Login Error", message: "Something happened while trying to log in.\nPlease try again.")
+                            self.enableVerifyButton()
+                            return
+                        }
+                        //**************Save Photo & Display Name*************//
+                        self.savePhoto()
+                        self.saveData()
+                        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+                        //self.performSegueWithIdentifier("successSegue", sender: self)
+                        //return self.dismissViewControllerAnimated(true, completion: nil)
+                    }
+                } else {
+                    self.editing = true
+                    self.showAlert("Login Error", message: "Something went wrong.  Please try again.")
+                    self.enableVerifyButton()
+                    return
+                }
             }
         }
     }

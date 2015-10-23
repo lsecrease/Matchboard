@@ -16,7 +16,6 @@ class VerifyPhoneViewController: UIViewController {
     
     var validationId : String?
     var dialingNumber : String?
-    var validationProcess = false
     let service = CheckMobileServiceClient()
     
     var phoneNumber : String? {
@@ -46,21 +45,33 @@ class VerifyPhoneViewController: UIViewController {
     var userImage : UIImage?
     
     override func viewWillAppear(animated: Bool) {
-        if validationProcess == true
-        {
-            validationProcess = false
-            checkIfPhoneWasValidated()
+        
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserverForName("AppDidBecomeActive", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
+            
+            let defaults = NSUserDefaults.standardUserDefaults()
+            if let validationProcess = defaults.objectForKey("validationProcess") as? String
+            {
+                if validationProcess == "validating"
+                {
+                    defaults.setObject("", forKey: "validationProcess")
+                    defaults.synchronize()
+                    self.checkIfPhoneWasValidated()
+                }
+            }
         }
     }
     
     override func viewDidLoad() {
-        
     }
     
     @IBAction func verifyPressed(sender: AnyObject) {
-        validationProcess = true
         verifyActivityIndicator.startAnimating()
         verifyButton.enabled = false
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject("validating", forKey: "validationProcess")
+        defaults.synchronize()
         
         // make the phone call
         if let url = NSURL(string: "tel://\(dialingNumber!)") {

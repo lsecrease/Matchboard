@@ -54,6 +54,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        
         //searchBox.delegate = self
         
         //Pull to Refresh
@@ -62,6 +64,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         refreshControl.tintColor = UIColor.blueColor()
         tableView.addSubview(refreshControl)
         refreshControl?.addTarget(self, action: "pullToRefreshAds", forControlEvents: UIControlEvents.ValueChanged)
+        
+        mySegmentedControl.backgroundColor = MatchboardColors.NavBar.color()
         
         //Segment Control Appearance
         mySegmentedControl.setDividerImage(MatchboardUtils.getImageWithColor(MatchboardColors.DarkBackground.color(), size: CGSizeMake(1.0, 1.0)), forLeftSegmentState: UIControlState.Normal, rightSegmentState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)

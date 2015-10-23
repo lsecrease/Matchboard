@@ -104,6 +104,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
         originalSearchBarHeight = searchController.searchBar.frame.height
         
+        print(self.view.bounds)
+        
         //Loading Indicator
         if isFirstTime {
             refreshAds(nil)

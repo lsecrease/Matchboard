@@ -66,8 +66,6 @@ class VerifyPhoneViewController: UIViewController {
         if let url = NSURL(string: "tel://\(dialingNumber!)") {
             UIApplication.sharedApplication().openURL(url)
         }
-        
-        checkIfPhoneWasValidated()
     }
     
     func checkIfPhoneWasValidated() {
@@ -126,9 +124,7 @@ class VerifyPhoneViewController: UIViewController {
                         //**************Save Photo & Display Name*************//
                         self.savePhoto()
                         self.saveData()
-                        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
-                        //self.performSegueWithIdentifier("successSegue", sender: self)
-                        //return self.dismissViewControllerAnimated(true, completion: nil)
+                        self.performSegueWithIdentifier("welcomeSegue", sender: self)
                     }
                 } else {
                     self.editing = true

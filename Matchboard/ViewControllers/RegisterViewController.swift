@@ -21,20 +21,13 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
     
     let imagePicker = UIImagePickerController()
     
-    var phoneNumber: String
-    
-    
-    required init?(coder aDecoder: NSCoder) {
-        phoneNumber = ""
-        
-        super.init(coder: aDecoder)
-    }
+    var phoneNumber: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         imagePicker.delegate = self
         phoneNumber = ""
-        
+
         // colors and layout
         phoneNumberTextField.layer.cornerRadius = MatchboardUtils.cornerRadius()
         phoneNumberTextField.layer.borderColor = MatchboardColors.FieldBorder.color().CGColor
@@ -43,6 +36,11 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
         displayNameTextField.layer.cornerRadius = MatchboardUtils.cornerRadius()
         displayNameTextField.layer.borderColor = MatchboardColors.FieldBorder.color().CGColor
         displayNameTextField.layer.borderWidth = 1.0
+        
+        imageView.layer.cornerRadius = MatchboardUtils.cornerRadius()
+        imageView.layer.borderColor = MatchboardColors.FieldBorder.color().CGColor
+        imageView.layer.borderWidth = 1.0
+        imageView.layer.masksToBounds = true
     }
     
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
@@ -74,25 +72,6 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
             }
         }
     }
-    
-    func step1() {
-        phoneNumber = ""
-        nextButton.enabled = true
-    }
-    
-    
-    // todo: refactor this
-    func step2() {
-        phoneNumber = phoneNumberTextField.text!
-        phoneNumberTextField.text = ""
-        phoneNumberTextField.placeholder = "1234"
-        navigationLabel.text = "Registration Verification"
-        displayNameTextField.hidden = true
-        profilePhotoLabel.hidden = true
-        imageView.hidden = true
-        nextButton.enabled = true
-        nextButton.setTitle("Finish Registration", forState: .Normal)
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -104,7 +83,7 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     @IBAction func loadImageButtonTapped(sender: AnyObject) {
-        imagePicker.allowsEditing = false
+        imagePicker.allowsEditing = true
         imagePicker.sourceType = .PhotoLibrary
         
         presentViewController(imagePicker, animated: true, completion: nil)
@@ -146,7 +125,7 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
     
     //***********************UIImagePickerController Delegates***********//
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+        if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             imageView.contentMode = .ScaleAspectFit
             imageView.image = pickedImage
         }

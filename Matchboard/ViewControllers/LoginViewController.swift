@@ -26,7 +26,8 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
+        phoneNumberButton.layer.cornerRadius = MatchboardUtils.cornerRadius()
+        facebookButton.layer.cornerRadius = MatchboardUtils.cornerRadius()
     }
 
     override func didReceiveMemoryWarning() {

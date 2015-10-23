@@ -30,10 +30,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
         
-        UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
-        UINavigationBar.appearance().translucent = true
+        UINavigationBar.appearance().setBackgroundImage(MatchboardUtils.getImageWithColor(MatchboardColors.NavBar.color(), size: CGSizeMake(1.0, 1.0)), forBarMetrics: .Default)
+        UINavigationBar.appearance().backgroundColor = UIColor.clearColor()
+        UINavigationBar.appearance().translucent = false
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        
 
 
         return true
@@ -65,6 +67,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         FBSDKAppEvents.activateApp()
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        
+        notificationCenter.postNotificationName("AppDidBecomeActive", object: nil)
     }
 
     func applicationWillTerminate(application: UIApplication) {

@@ -33,14 +33,11 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
 
-       faveTableView.backgroundColor = UIColor.clearColor()
-        
+        faveTableView.backgroundColor = UIColor.clearColor()
         print("Favorites Array \(favoritesArray.count)")
-        
-        
+   
     }
 
-   
     //Passing Data - PrepareForSegue
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showProfile" {
@@ -90,19 +87,26 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         // Get image
         if let user = adClass[AdColumns.username.rawValue] as? PFUser
         {
-            let imageFile = user[UserColumns.profileImage.rawValue] as? PFFile
-            imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
-                if error == nil {
-                    if let imageData = imageData {
-                        cell.userProfileImage.image = UIImage(data:imageData)
-                    } } }
-            
+            // Make sure we have all the data before loading image.
+            user.fetchIfNeededInBackgroundWithBlock({
+                (object, error) in
+                if (error != nil) {
+                    NSLog("Error fetching user: \(user) with error \(error)")
+                    // throw?
+                }
+                if let tempUser = object {
+                    let imageFile = tempUser[UserColumns.profileImage.rawValue] as? PFFile
+                    imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
+                        if error == nil {
+                            if let imageData = imageData {
+                                cell.userProfileImage.image = UIImage(data:imageData)
+                            }
+                        }
+                    }
+                }
+            })
         }
-        
-
-        
         return cell
-    
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -116,10 +120,6 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
 //        }
         
     }
-    
-    
-    
-    
     
     //UITableViewDelagate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -154,7 +154,8 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                     if let objects = objects as? [PFObject] {
                         for object in objects {
                             self.favoritesArray.addObject(object)
-                        } }
+                        }
+                    }
                     // Show details (or reload a TableView)
                     self.faveTableView.reloadData()
                     
@@ -164,4 +165,5 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
             }
         }
     }
+    
 }

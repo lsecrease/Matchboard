@@ -80,5 +80,9 @@
 		<string>fbauth</string>
 		<string>fbauth2</string>
 	</array>
+    <key>NSLocationWhenInUseDescription</key>
+    <string>Location is required to find out where you are</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Location is required to find out where you are</string>
 </dict>
 </plist>

@@ -7,13 +7,10 @@
 //
 
 import UIKit
+import Foundation
+import CoreLocation
 
-
-//var AdsArray: [Ad] = []
-
-
-
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate, AdTableViewCellDelegate, LoginDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate, AdTableViewCellDelegate, LoginDelegate, CLLocationManagerDelegate {
 
     let searchController = UISearchController(searchResultsController: nil)
     
@@ -25,6 +22,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var settingsView: UIView!
    
     var isFirstTime = true
+    var locationManager: CLLocationManager!
     
     var adArray = NSMutableArray()
     var myAdArray = NSMutableArray()
@@ -46,6 +44,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var favoritesVC : FavoritesViewController?
     
+    
     //MARK: - Change Status Bar to White
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
@@ -57,6 +56,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
         //searchBox.delegate = self
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        if locationManager.respondsToSelector("RequestAlwaysAuthorization") {
+            locationManager.requestAlwaysAuthorization()
+        }
+        if #available(iOS 9.0, *) {
+            locationManager.requestLocation()
+            locationManager.startUpdatingLocation()
+        } else{
+            // Fallback on earlier versions
+            locationManager.startUpdatingLocation()
+        }
+    
+        var myAd = AvocarrotInstream.init(controller: self, minHeightForRow: 100, tableView: tableView)
+        myAd.apiKey = "229cd8a7babe7e0615b66a2ecb85f10c290ad303"
+        myAd.sandbox = true
+        myAd.setLogger(true, withLevel: "ALL")
+        
+        myAd.loadAdForPlacement("a18ed0973f0e4b84b5e845bc596ffe4f0d500e26")
         
         //Pull to Refresh
         refreshControl = UIRefreshControl()
@@ -101,30 +119,50 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.definesPresentationContext = false
     }
     
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    }
+   
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        NSLog("error: \(error)")
+    }
+    
     //Check to see if User is logged in; If not, head over to login
     override func viewDidAppear(animated: Bool) {
-
         self.storyboard?.instantiateViewControllerWithIdentifier("ViewController")
     
         originalSearchBarHeight = searchController.searchBar.frame.height
-        
-        print(self.view.bounds)
-        
+       
+        if let user = PFUser.currentUser() {
+            PFGeoPoint.geoPointForCurrentLocationInBackground {
+                (geoPoint: PFGeoPoint?, error: NSError?) in
+                if error == nil {
+                    print("geopoint is: \(geoPoint)")
+                    PFUser.currentUser()!.setObject(geoPoint!, forKey: "currentLocation")
+                    PFUser.currentUser()!.saveInBackground()
+                    self.refreshAds("")
+                }
+                else {
+                    NSLog("\(error)")
+                }
+            }
+        } else {
+            // No user found, show login page
+            //self.performSegueWithIdentifier("login", sender: self)
+        }
         //Loading Indicator
         if isFirstTime {
             refreshAds(nil)
             isFirstTime = false
         }
+        
     }
     
     // MARK: - Navigation
-    
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         if PFUser.currentUser() == nil && identifier == "showProfile" {
             performSegueWithIdentifier("login", sender: self)
             return false
         }
-        
         return true
     }
     
@@ -209,9 +247,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
         }
     }
-    
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        manager.distanceFilter = kCLDistanceFilterNone
+        if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
+            manager.startUpdatingLocation()
+        }
+    }
    
-    
     
     //UITableViewDataSource
     
@@ -249,29 +292,27 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 cell.questionLabel.text = "What are you looking for?"
                 cell.adLabel.text = "\(adClass[lookingForTitle]!)"
                 cell.nameLabel.text = "\(adClass[creatorTitle]!)"
+
+                
                 cell.distanceLabel.text = "10 miles"
                 cell.categoryLabel.setTitle("Paid Service", forState: UIControlState.Normal)
-                
                 
                 // Get image
                 if let user = adClass[AdColumns.username.rawValue] as? PFUser
                 {
+                    
                     let imageFile = user[UserColumns.profileImage.rawValue] as? PFFile
                     imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
                         if error == nil {
                             if let imageData = imageData {
                                 cell.profileImageView.image = UIImage(data:imageData)
-                            } } }
-                    
+                            }
+                        }
+                    }
                 }
                 cell.delegate = self
-                
                 return cell
-                
             } else {
-                
-
-                
                 cell.backgroundColor = UIColor.clearColor()
                 
                 var adClass = PFObject(className: "Ad")
@@ -284,13 +325,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 cell.questionLabel.text = "What are you looking for?"
                 cell.adLabel.text = "\(adClass[lookingForTitle]!)"
-                //cell.distanceLabel.text = ("\(adClass[distanceTitle]!)")
                 
+                let userGeoPoint = PFUser.currentUser()?.objectForKey("currentLocation") as! PFGeoPoint
+                let currentLocation = CLLocation(latitude: userGeoPoint.latitude, longitude: userGeoPoint.longitude)
                 
                 //cell.profileImageView.image = thisAd.image
                 cell.nameLabel.text = "\(adClass[creatorTitle]!)"
                 //cell.categoryLabel.setTitle(thisAd.category, forState: UIControlState.Normal)
-                
                 
                 //cell.profileImageView.image = UIImage(named: "profile1")
                 //cell.nameLabel.text = "Lawrence"
@@ -299,16 +340,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 cell.distanceLabel.text = "10 miles"
                 cell.categoryLabel.setTitle("Paid Service", forState: UIControlState.Normal)
                 
-                
                 // Get image
                 if let user = adClass[AdColumns.username.rawValue] as? PFUser
                 {
+                    let rowGeoPoint = user.objectForKey("currentLocation") as! PFGeoPoint
+                    let userLocation = CLLocation(latitude: rowGeoPoint.latitude, longitude: rowGeoPoint.longitude)
+                    cell.distanceLabel.text = "\(currentLocation.distanceFromLocation(userLocation)) meters"
                     let imageFile = user[UserColumns.profileImage.rawValue] as? PFFile
                     imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
                         if error == nil {
                             if let imageData = imageData {
                                 cell.profileImageView.image = UIImage(data:imageData)
-                            } } }
+                            }
+                        }
+                    }
                     
                 }
                 
@@ -321,6 +366,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return UITableViewCell()
     }
     
+    func setFields() {
+    }
 
 
     // MARK: - UITableViewDelegate
@@ -353,21 +400,28 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func pullToRefreshAds()
     {
+        // Update locations
+        if #available(iOS 9.0, *) {
+            locationManager.requestLocation()
+        } else {
+            // Fallback on earlier versions
+        }
         refreshAds(nil)
     }
     
-    func refreshAds(search: String?) {
-        
+    func refreshAds(var search: String?) {
         ProgressHUD.show("")
         
+        // Near current location or default location (where?)
         let query = PFQuery(className: "Ad")
-        
-        query.orderByAscending("updatedAt")
         query.limit = 30
-        query.includeKey("username")
         
+        let userQuery = PFQuery(className: "_User")
+        userQuery.whereKey("currentLocation", nearGeoPoint: PFUser.currentUser()?.objectForKey("currentLocation") as! PFGeoPoint)
+        query.whereKey("username", matchesQuery: userQuery)
+        query.includeKey("username")
+
         if let search = search {
-            
             if searchController.searchBar.selectedScopeButtonIndex == 0
             {
                 query.whereKey("lookingFor", containsString: search)
@@ -378,7 +432,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 query.whereKey("username", matchesQuery: aboutQuery)
             }
         }
-        
+       
         query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
             
             let myId = PFUser.currentUser()?.objectId
@@ -412,6 +466,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 ParseErrorHandlingController.handleParseError(error!)
             }
         }
+
     }
     
     func currentUser() {

@@ -16,6 +16,9 @@
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <AvocarrotSDK/AvocarrotInterstitial.h>
+#import <AvocarrotSDK/AvocarrotInstream.h>
+
 
 #import "../ThirdParty/ProgressHUD/ProgressHUD.h"
 #import "../ThirdParty/TPKeyboardAvoiding/TPKeyboardAvoidingScrollView.h"

@@ -15,6 +15,11 @@
 		4F357CEA1BCD942C00CA7D21 /* EditLinksTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F357CE91BCD942C00CA7D21 /* EditLinksTVC.swift */; };
 		4F37DB731BCC51C400F24A9D /* LinkToWebCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F37DB721BCC51C400F24A9D /* LinkToWebCell.swift */; };
 		4F3924BA1BD6FB200008A451 /* VerifyPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3924B91BD6FB200008A451 /* VerifyPhoneViewController.swift */; };
+		4F3CF1701BE9077E00AF37B8 /* ConversationListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3CF16D1BE9077E00AF37B8 /* ConversationListViewController.swift */; };
+		4F3CF1711BE9077E00AF37B8 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3CF16E1BE9077E00AF37B8 /* ConversationViewController.swift */; };
+		4F3CF1721BE9077E00AF37B8 /* ParticipantTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3CF16F1BE9077E00AF37B8 /* ParticipantTableViewController.swift */; };
+		4F3CF1741BE907E600AF37B8 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3CF1731BE907E600AF37B8 /* UserManager.swift */; };
+		4F3CF1761BE9086300AF37B8 /* PFUser+ATLParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3CF1751BE9086300AF37B8 /* PFUser+ATLParticipant.swift */; };
 		4F5C548E1BBED9D6006E8096 /* EditAboutMeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5C548D1BBED9D6006E8096 /* EditAboutMeViewController.swift */; };
 		4F5C54901BBF084A006E8096 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5C548F1BBF084A006E8096 /* EditProfileViewController.swift */; };
 		4F6B2FA41BB2DE8000EAE7BE /* MatchboardColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6B2FA31BB2DE8000EAE7BE /* MatchboardColors.swift */; };
@@ -120,6 +125,11 @@
 		4F357CE91BCD942C00CA7D21 /* EditLinksTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditLinksTVC.swift; sourceTree = "<group>"; };
 		4F37DB721BCC51C400F24A9D /* LinkToWebCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkToWebCell.swift; sourceTree = "<group>"; };
 		4F3924B91BD6FB200008A451 /* VerifyPhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyPhoneViewController.swift; sourceTree = "<group>"; };
+		4F3CF16D1BE9077E00AF37B8 /* ConversationListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListViewController.swift; sourceTree = "<group>"; };
+		4F3CF16E1BE9077E00AF37B8 /* ConversationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
+		4F3CF16F1BE9077E00AF37B8 /* ParticipantTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParticipantTableViewController.swift; sourceTree = "<group>"; };
+		4F3CF1731BE907E600AF37B8 /* UserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		4F3CF1751BE9086300AF37B8 /* PFUser+ATLParticipant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PFUser+ATLParticipant.swift"; sourceTree = "<group>"; };
 		4F5C548D1BBED9D6006E8096 /* EditAboutMeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditAboutMeViewController.swift; sourceTree = "<group>"; };
 		4F5C548F1BBF084A006E8096 /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		4F6B2FA31BB2DE8000EAE7BE /* MatchboardColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchboardColors.swift; sourceTree = "<group>"; };
@@ -267,6 +277,16 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		4F3CF16C1BE9075F00AF37B8 /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				4F3CF16D1BE9077E00AF37B8 /* ConversationListViewController.swift */,
+				4F3CF16E1BE9077E00AF37B8 /* ConversationViewController.swift */,
+				4F3CF16F1BE9077E00AF37B8 /* ParticipantTableViewController.swift */,
+			);
+			path = Messages;
+			sourceTree = "<group>";
+		};
 		4F5AD8031BA20838001F8CCB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -297,6 +317,7 @@
 			children = (
 				4F6B2FA31BB2DE8000EAE7BE /* MatchboardColors.swift */,
 				4F6B2FA51BB2DF7B00EAE7BE /* MatchboardUtils.swift */,
+				4F3CF1751BE9086300AF37B8 /* PFUser+ATLParticipant.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -304,6 +325,7 @@
 		4F6B2FA71BB30A5200EAE7BE /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				4F3CF16C1BE9075F00AF37B8 /* Messages */,
 				4F6B2FA81BB30AD800EAE7BE /* AdProfileViewController.swift */,
 				4F6B2FA91BB30AD800EAE7BE /* CategoryViewController.swift */,
 				4F5C548D1BBED9D6006E8096 /* EditAboutMeViewController.swift */,
@@ -455,6 +477,7 @@
 				CE672B041B54D45E0080A9E0 /* Ad.swift */,
 				CE7C5A0B1B4A27D100CE4AE0 /* Category.swift */,
 				CE7C5A0D1B4A283300CE4AE0 /* CategoryHeader.swift */,
+				4F3CF1731BE907E600AF37B8 /* UserManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -679,6 +702,7 @@
 				CEC63FE21B56052300B65C21 /* SpringTextField.swift in Sources */,
 				CE672B051B54D45E0080A9E0 /* Ad.swift in Sources */,
 				CEC63FD61B56052300B65C21 /* ImageLoader.swift in Sources */,
+				4F3CF1721BE9077E00AF37B8 /* ParticipantTableViewController.swift in Sources */,
 				CEC63FD21B56052300B65C21 /* DesignableTabBarController.swift in Sources */,
 				CEC63FD51B56052300B65C21 /* DesignableView.swift in Sources */,
 				CEC63FCC1B56052300B65C21 /* AsyncImageView.swift in Sources */,
@@ -703,10 +727,13 @@
 				4F6B2FB11BB30AD800EAE7BE /* RegisterViewController.swift in Sources */,
 				CEC63FE11B56052300B65C21 /* SpringLabel.swift in Sources */,
 				4F357CE81BCD931400CA7D21 /* LinkCell.swift in Sources */,
+				4F3CF1701BE9077E00AF37B8 /* ConversationListViewController.swift in Sources */,
 				4FFB10D31BA9C69D007D2CC6 /* BioCell.swift in Sources */,
 				CE7C5A0E1B4A283300CE4AE0 /* CategoryHeader.swift in Sources */,
 				4F6B2FBA1BB30D6500EAE7BE /* Checkbox.swift in Sources */,
+				4F3CF1761BE9086300AF37B8 /* PFUser+ATLParticipant.swift in Sources */,
 				4F702F111BA2110500A91046 /* ParseErrorHandlingController.swift in Sources */,
+				4F3CF1711BE9077E00AF37B8 /* ConversationViewController.swift in Sources */,
 				4FC2068F1BC3053500DFFCDD /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				CEC63FDB1B56052300B65C21 /* Misc.swift in Sources */,
 				CEC63FCF1B56052300B65C21 /* DesignableButton.swift in Sources */,
@@ -726,6 +753,7 @@
 				CE6F72631B6EB5E200378C95 /* FavoritesCell.swift in Sources */,
 				CEC63FDD1B56052300B65C21 /* Spring.swift in Sources */,
 				CEC63FD41B56052300B65C21 /* DesignableTextView.swift in Sources */,
+				4F3CF1741BE907E600AF37B8 /* UserManager.swift in Sources */,
 				4FD880861BD1A471008FD1FC /* CheckMobileServiceClient.swift in Sources */,
 				CEC63FD11B56052300B65C21 /* DesignableLabel.swift in Sources */,
 				CE7C5A0C1B4A27D100CE4AE0 /* Category.swift in Sources */,

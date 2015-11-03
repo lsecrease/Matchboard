@@ -9,9 +9,12 @@
 import UIKit
 import Foundation
 import CoreLocation
+import Atlas
+
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate, AdTableViewCellDelegate, LoginDelegate, CLLocationManagerDelegate {
 
+    var layerClient: LYRClient!
     let searchController = UISearchController(searchResultsController: nil)
     
     @IBOutlet weak var tableView: UITableView!
@@ -21,6 +24,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var categoriesView: UIView!
     @IBOutlet weak var settingsView: UIView!
    
+    
+    var messagesVC : ConversationListViewController?
+    
     var isFirstTime = true
     var locationManager: CLLocationManager!
     
@@ -52,6 +58,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            self.layerClient = appDelegate.layerClient
+            messagesVC?.layerClient = self.layerClient
+        }
         
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
@@ -137,14 +148,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 (geoPoint: PFGeoPoint?, error: NSError?) in
                 if error == nil {
                     print("geopoint is: \(geoPoint)")
-                    PFUser.currentUser()!.setObject(geoPoint!, forKey: "currentLocation")
-                    PFUser.currentUser()!.saveInBackground()
+                    user.setObject(geoPoint!, forKey: "currentLocation")
+                    user.saveInBackground()
                     self.refreshAds("")
                 }
                 else {
                     NSLog("\(error)")
                 }
             }
+        
+            self.loginLayer()
+            
         } else {
             // No user found, show login page
             //self.performSegueWithIdentifier("login", sender: self)
@@ -199,7 +213,27 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             {
                 favoritesVC = favVCObject
             }
+        } else if segue.identifier == "MessagesSegue" {
+            guard let safeMessagesVC = segue.destinationViewController as? ConversationListViewController else {
+                return
+            }
+            
+            messagesVC = safeMessagesVC
+            if self.layerClient != nil {
+                messagesVC?.layerClient = self.layerClient
+            }
         }
+    }
+    
+    func showMessageNavButtons() {
+        if let messagesVC = messagesVC, _ = PFUser.currentUser() {
+            let composeItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Compose, target: messagesVC, action: Selector("composeButtonTapped:"))
+            self.navigationItem.setRightBarButtonItem(composeItem, animated: false)
+        }
+    }
+    
+    func hideMessageNavButtons() {
+        self.navigationItem.rightBarButtonItem = nil
     }
     
     @IBAction func mySegmentedControlAction(sender: AnyObject) {
@@ -211,6 +245,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             categoriesView.hidden = true
             settingsView.hidden = true
             favoritesVC?.queryFavAds()
+            hideMessageNavButtons()
         }
         else if(mySegmentedControl.selectedSegmentIndex == 1)
         {
@@ -219,6 +254,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             favoritesView.hidden = true
             categoriesView.hidden = true
             settingsView.hidden = true
+            showMessageNavButtons()
+            
         }
         else if(mySegmentedControl.selectedSegmentIndex == 2)
         {
@@ -227,7 +264,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             messagesView.hidden = true
             categoriesView.hidden = true
             settingsView.hidden = true
-            
+            hideMessageNavButtons()
         }
         else if(mySegmentedControl.selectedSegmentIndex == 3)
         {
@@ -236,6 +273,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             favoritesView.hidden = true
             messagesView.hidden = true
             settingsView.hidden = true
+            hideMessageNavButtons()
         }
         else if(mySegmentedControl.selectedSegmentIndex == 4)
         {
@@ -244,7 +282,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             favoritesView.hidden = true
             messagesView.hidden = true
             categoriesView.hidden = true
-            
+            hideMessageNavButtons()
         }
     }
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
@@ -326,8 +364,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 cell.questionLabel.text = "What are you looking for?"
                 cell.adLabel.text = "\(adClass[lookingForTitle]!)"
                 
-                let userGeoPoint = PFUser.currentUser()?.objectForKey("currentLocation") as! PFGeoPoint
-                let currentLocation = CLLocation(latitude: userGeoPoint.latitude, longitude: userGeoPoint.longitude)
+                var currentLocation :CLLocation? = nil
+                if let currentUser = PFUser.currentUser() {
+                    let userGeoPoint = currentUser.objectForKey("currentLocation") as! PFGeoPoint
+                    currentLocation = CLLocation(latitude: userGeoPoint.latitude, longitude: userGeoPoint.longitude)
+                }
                 
                 //cell.profileImageView.image = thisAd.image
                 cell.nameLabel.text = "\(adClass[creatorTitle]!)"
@@ -343,9 +384,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 // Get image
                 if let user = adClass[AdColumns.username.rawValue] as? PFUser
                 {
-                    let rowGeoPoint = user.objectForKey("currentLocation") as! PFGeoPoint
-                    let userLocation = CLLocation(latitude: rowGeoPoint.latitude, longitude: rowGeoPoint.longitude)
-                    cell.distanceLabel.text = "\(currentLocation.distanceFromLocation(userLocation)) meters"
+                    if let rowGeoPoint = user.objectForKey("currentLocation") as? PFGeoPoint {
+                        let userLocation = CLLocation(latitude: rowGeoPoint.latitude, longitude: rowGeoPoint.longitude)
+                        if let currentLocation = currentLocation {
+                            cell.distanceLabel.text = "\(currentLocation.distanceFromLocation(userLocation)) meters"
+                        }
+                    }
                     let imageFile = user[UserColumns.profileImage.rawValue] as? PFFile
                     imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
                         if error == nil {
@@ -417,7 +461,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         query.limit = 30
         
         let userQuery = PFQuery(className: "_User")
-        userQuery.whereKey("currentLocation", nearGeoPoint: PFUser.currentUser()?.objectForKey("currentLocation") as! PFGeoPoint)
+        if let geoPoint = PFUser.currentUser()?.objectForKey("currentLocation") as? PFGeoPoint {
+            userQuery.whereKey("currentLocation", nearGeoPoint: geoPoint)
+        }
         query.whereKey("username", matchesQuery: userQuery)
         query.includeKey("username")
 
@@ -493,6 +539,108 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func userLoggedIn(sender: LoginViewController) {
         sender.dismissViewControllerAnimated(true) { () -> Void in
             self.refreshAds(nil)
+            
+            // log in to layer
+            self.loginLayer()
+        }
+    }
+    
+    // MARK: - Layer Log In
+    
+    func loginLayer() {
+        //SVProgressHUD.show()
+        
+        // Connect to Layer
+        // See "Quick Start - Connect" for more details
+        // https://developer.layer.com/docs/quick-start/ios#connect
+        self.layerClient.connectWithCompletion { success, error in
+            if (!success) {
+                print("Failed to connect to Layer: \(error)")
+            } else {
+                let userID: String = PFUser.currentUser()!.objectId!
+                // Once connected, authenticate user.
+                // Check Authenticate step for authenticateLayerWithUserID source
+                self.authenticateLayerWithUserID(userID, completion: { success, error in
+                    if (!success) {
+                        print("Failed Authenticating Layer Client with error:\(error)")
+                    } else {
+                        print("Authenticated")
+                        //self.presentConversationListViewController()
+                    }
+                })
+            }
+        }
+    }
+
+    
+    func authenticateLayerWithUserID(userID: NSString, completion: ((success: Bool , error: NSError!) -> Void)!) {
+        // Check to see if the layerClient is already authenticated.
+        if self.layerClient.authenticatedUserID != nil {
+            // If the layerClient is authenticated with the requested userID, complete the authentication process.
+            if self.layerClient.authenticatedUserID == userID {
+                print("Layer Authenticated as User \(self.layerClient.authenticatedUserID)")
+                if completion != nil {
+                    completion(success: true, error: nil)
+                }
+                return
+            } else {
+                //If the authenticated userID is different, then deauthenticate the current client and re-authenticate with the new userID.
+                self.layerClient.deauthenticateWithCompletion { (success: Bool, error: NSError!) in
+                    if error != nil {
+                        self.authenticationTokenWithUserId(userID, completion: { (success: Bool, error: NSError?) in
+                            if (completion != nil) {
+                                completion(success: success, error: error)
+                            }
+                        })
+                    } else {
+                        if completion != nil {
+                            completion(success: true, error: error)
+                        }
+                    }
+                }
+            }
+        } else {
+            // If the layerClient isn't already authenticated, then authenticate.
+            self.authenticationTokenWithUserId(userID, completion: { (success: Bool, error: NSError!) in
+                if completion != nil {
+                    completion(success: success, error: error)
+                }
+            })
+        }
+    }
+    
+    func authenticationTokenWithUserId(userID: NSString, completion:((success: Bool, error: NSError!) -> Void)!) {
+        /*
+        * 1. Request an authentication Nonce from Layer
+        */
+        self.layerClient.requestAuthenticationNonceWithCompletion { (nonce: String!, error: NSError!) in
+            if (nonce.isEmpty) {
+                if (completion != nil) {
+                    completion(success: false, error: error)
+                }
+                return
+            }
+            
+            /*
+            * 2. Acquire identity Token from Layer Identity Service
+            */
+            PFCloud.callFunctionInBackground("generateToken", withParameters: ["nonce": nonce, "userID": userID]) { (object:AnyObject?, error: NSError?) -> Void in
+                if error == nil {
+                    let identityToken = object as! String
+                    self.layerClient.authenticateWithIdentityToken(identityToken) { authenticatedUserID, error in
+                        if (!authenticatedUserID.isEmpty) {
+                            if (completion != nil) {
+                                completion(success: true, error: nil)
+                            }
+                            print("Layer Authenticated as User: \(authenticatedUserID)")
+                        } else {
+                            completion(success: false, error: error)
+                        }
+                    }
+                } else {
+                    print("Parse Cloud function failed to be called to generate token with error: \(error)")
+                }
+            }
         }
     }
 }

@@ -7,29 +7,35 @@
 //
 
 import UIKit
+import Parse
+import Atlas
+import SVProgressHUD
 import ParseFacebookUtilsV4
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
+    var layerClient: LYRClient!
+    
+    // MARK TODO: Before first launch, update LayerAppIDString, ParseAppIDString or ParseClientKeyString values
+    // TODO:If LayerAppIDString, ParseAppIDString or ParseClientKeyString are not set, this app will crash"
+    let LayerAppIDString: NSURL! = NSURL(string: "layer:///apps/staging/f80e0118-5774-11e5-9c56-e22600005d8e")
+    let ParseAppIDString: String = "lsaVahwTjwKvPegYQq9hubP8rj3PfuLSDmIgfpQm"
+    let ParseClientKeyString: String = "DFcnbl7hCbht7haLXjWFAmiuLKcvdwXfT3lOy353"
+    
+    //Please note, You must set `LYRConversation *conversation` as a property of the ViewController.
+    var conversation: LYRConversation!
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        setupParseAndFB(application, launchOptions: launchOptions)
+        setupLayer()
         
-        Parse.enableLocalDatastore()
-        Parse.setApplicationId("lsaVahwTjwKvPegYQq9hubP8rj3PfuLSDmIgfpQm", clientKey:"DFcnbl7hCbht7haLXjWFAmiuLKcvdwXfT3lOy353")
-        PFSession.getCurrentSessionInBackgroundWithBlock { (session, error) -> Void in
-            if let error = error
-            {
-                ParseErrorHandlingController.handleParseError(error)
-            }
-        }
+        // TODO: pass off the layer client somewhere
         
-        PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
-        
-        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        // Register for push
+        self.registerApplicationForPushNotifications(application)
         
         UINavigationBar.appearance().setBackgroundImage(MatchboardUtils.getImageWithColor(MatchboardColors.NavBar.color(), size: CGSizeMake(1.0, 1.0)), forBarMetrics: .Default)
         UINavigationBar.appearance().backgroundColor = UIColor.clearColor()
@@ -79,6 +85,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // Mark - Push Notification methods
     
+    func registerApplicationForPushNotifications(application: UIApplication) {
+        // Set up push notifications
+        // For more information about Push, check out:
+        // https://developer.layer.com/docs/guides/ios#push-notification
+        
+        // Register device for iOS8
+        let notificationSettings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Alert, UIUserNotificationType.Badge, UIUserNotificationType.Sound], categories: nil)
+        application.registerUserNotificationSettings(notificationSettings)
+        application.registerForRemoteNotifications()
+    }
+    
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         let installation = PFInstallation.currentInstallation()
         installation.setDeviceTokenFromData(deviceToken)
@@ -88,9 +105,112 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print(error)
             }
         }
+        
+        // Send device token to Layer so Layer can send pushes to this device.
+        // For more information about Push, check out:
+        // https://developer.layer.com/docs/ios/guides#push-notification
+        assert(self.layerClient != nil, "The Layer client has not been initialized!")
+        do {
+            try self.layerClient.updateRemoteNotificationDeviceToken(deviceToken)
+            print("Application did register for remote notifications: \(deviceToken)")
+        } catch let error as NSError {
+            print("Failed updating device token with error: \(error)")
+        }
+    }
+    
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        if userInfo["layer"] == nil {
+            PFPush.handlePush(userInfo)
+            completionHandler(UIBackgroundFetchResult.NewData)
+            return
+        }
+        
+        let userTappedRemoteNotification: Bool = application.applicationState == UIApplicationState.Inactive
+        var conversation: LYRConversation? = nil
+        if userTappedRemoteNotification {
+            SVProgressHUD.show()
+            conversation = self.conversationFromRemoteNotification(userInfo)
+            if conversation != nil {
+                self.navigateToViewForConversation(conversation!)
+            }
+        }
+        
+        let success: Bool = self.layerClient.synchronizeWithRemoteNotification(userInfo, completion: { (changes, error) in
+            completionHandler(self.getBackgroundFetchResult(changes, error: error))
+            
+            if userTappedRemoteNotification && conversation == nil {
+                // Try navigating once the synchronization completed
+                self.navigateToViewForConversation(self.conversationFromRemoteNotification(userInfo))
+            }
+        })
+        
+        if !success {
+            // This should not happen?
+            completionHandler(UIBackgroundFetchResult.NoData)
+        }
+    }
+    
+    func getBackgroundFetchResult(changes: [AnyObject]!, error: NSError!) -> UIBackgroundFetchResult {
+        if changes?.count > 0 {
+            return UIBackgroundFetchResult.NewData
+        }
+        return error != nil ? UIBackgroundFetchResult.Failed : UIBackgroundFetchResult.NoData
+    }
+    
+    func conversationFromRemoteNotification(remoteNotification: [NSObject : AnyObject]) -> LYRConversation {
+        let layerMap = remoteNotification["layer"] as! [String: String]
+        let conversationIdentifier = NSURL(string: layerMap["conversation_identifier"]!)
+        return self.existingConversationForIdentifier(conversationIdentifier!)!
+    }
+    
+    func navigateToViewForConversation(conversation: LYRConversation) {
+        // TODO: navigate to conversation view
+        print("TODO: navigate to conversation view")
+//        if self.controller.conversationListViewController != nil {
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
+//                SVProgressHUD.dismiss()
+//                if (self.controller.navigationController!.topViewController as? ConversationViewController)?.conversation != conversation {
+//                    self.controller.conversationListViewController.presentConversation(conversation)
+//                }
+//            });
+        //} else {
+            SVProgressHUD.dismiss()
+        //}
+    }
+    
+    func existingConversationForIdentifier(identifier: NSURL) -> LYRConversation? {
+        let query: LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
+        query.predicate = LYRPredicate(property: "identifier", predicateOperator: LYRPredicateOperator.IsEqualTo, value: identifier)
+        query.limit = 1
+        do {
+            return try self.layerClient.executeQuery(query).firstObject as? LYRConversation
+        } catch {
+            // This should never happen?
+            return nil
+        }
     }
 
+    // MARK: - Setup Methods
 
+    func setupLayer() {
+        layerClient = LYRClient(appID: LayerAppIDString)
+        layerClient.autodownloadMIMETypes = NSSet(objects: ATLMIMETypeImagePNG, ATLMIMETypeImageJPEG, ATLMIMETypeImageJPEGPreview, ATLMIMETypeImageGIF, ATLMIMETypeImageGIFPreview, ATLMIMETypeLocation) as! Set<NSObject>
+    }
+    
+    func setupParseAndFB(application: UIApplication, launchOptions: [NSObject: AnyObject]?) {
+        Parse.enableLocalDatastore()
+        Parse.setApplicationId(ParseAppIDString, clientKey:ParseClientKeyString)
+        PFSession.getCurrentSessionInBackgroundWithBlock { (session, error) -> Void in
+            if let error = error
+            {
+                ParseErrorHandlingController.handleParseError(error)
+            }
+        }
+        
+        PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
+        
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+    }
 
 }
 

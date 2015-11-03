@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import ParseFacebookUtilsV4
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,6 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 ParseErrorHandlingController.handleParseError(error)
             }
         }
+        
+        PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
         
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         

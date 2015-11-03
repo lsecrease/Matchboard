@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ParseFacebookUtilsV4
 
 protocol LoginDelegate {
     func userLoggedIn(sender: LoginViewController)

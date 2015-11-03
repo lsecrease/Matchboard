@@ -9,7 +9,7 @@
 #ifndef Bridging_Header_h
 #define Bridging_Header_h
 
-#import <FacebookSDK/FacebookSDK.h>
+//#import <FacebookSDK/FacebookSDK.h>
 #import <Parse/Parse.h>
 #import <Bolts/Bolts.h>
 //#import <ParseFacebookUtils/PFFacebookUtils.h>

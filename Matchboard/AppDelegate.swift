@@ -9,7 +9,6 @@
 import UIKit
 
 
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -28,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         UINavigationBar.appearance().setBackgroundImage(MatchboardUtils.getImageWithColor(MatchboardColors.NavBar.color(), size: CGSizeMake(1.0, 1.0)), forBarMetrics: .Default)
         UINavigationBar.appearance().backgroundColor = UIColor.clearColor()

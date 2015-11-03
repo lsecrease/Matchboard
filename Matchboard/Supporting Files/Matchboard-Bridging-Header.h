@@ -9,13 +9,16 @@
 #ifndef Bridging_Header_h
 #define Bridging_Header_h
 
-#import <FacebookSDK/FacebookSDK.h>
+//#import <FacebookSDK/FacebookSDK.h>
 #import <Parse/Parse.h>
 #import <Bolts/Bolts.h>
 //#import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <AvocarrotSDK/AvocarrotInterstitial.h>
+#import <AvocarrotSDK/AvocarrotInstream.h>
+
 
 #import "../ThirdParty/ProgressHUD/ProgressHUD.h"
 #import "../ThirdParty/TPKeyboardAvoiding/TPKeyboardAvoidingScrollView.h"

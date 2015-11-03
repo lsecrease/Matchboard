@@ -37,11 +37,6 @@ class WelcomeViewController: UIViewController, UITextViewDelegate, UIAlertViewDe
         
     }
 
-
-
-
-    
-
     @IBAction func nextButtonTapped(sender: AnyObject) {
         print("Next Button Tapped")
         
@@ -71,8 +66,6 @@ class WelcomeViewController: UIViewController, UITextViewDelegate, UIAlertViewDe
 //                println("Looking For has been saved successfully!")
 //            }
 //        })
-        
-        
     }
    
     @IBAction func skipButtonTapped(sender: AnyObject) {

@@ -7,14 +7,14 @@
 //
 
 import UIKit
+import Foundation
+import CoreLocation
+import Atlas
 
 
-//var AdsArray: [Ad] = []
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate, AdTableViewCellDelegate, LoginDelegate, CLLocationManagerDelegate {
 
-
-
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate, AdTableViewCellDelegate, LoginDelegate {
-
+    var layerClient: LYRClient!
     let searchController = UISearchController(searchResultsController: nil)
     
     @IBOutlet weak var tableView: UITableView!
@@ -24,7 +24,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var categoriesView: UIView!
     @IBOutlet weak var settingsView: UIView!
    
+    
+    var messagesVC : ConversationListViewController?
+    
     var isFirstTime = true
+    var locationManager: CLLocationManager!
     
     var adArray = NSMutableArray()
     var myAdArray = NSMutableArray()
@@ -46,6 +50,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var favoritesVC : FavoritesViewController?
     
+    
     //MARK: - Change Status Bar to White
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
@@ -54,9 +59,33 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            self.layerClient = appDelegate.layerClient
+            messagesVC?.layerClient = self.layerClient
+        }
+        
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
         //searchBox.delegate = self
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        if locationManager.respondsToSelector("RequestAlwaysAuthorization") {
+            locationManager.requestAlwaysAuthorization()
+        }
+        if #available(iOS 9.0, *) {
+            locationManager.requestLocation()
+            locationManager.startUpdatingLocation()
+        } else{
+            // Fallback on earlier versions
+            locationManager.startUpdatingLocation()
+        }
+    
+        var myAd = AvocarrotInstream.init(controller: self, minHeightForRow: 100, tableView: tableView)
+        myAd.apiKey = "229cd8a7babe7e0615b66a2ecb85f10c290ad303"
+        myAd.sandbox = true
+        myAd.setLogger(true, withLevel: "ALL")
+        
+        myAd.loadAdForPlacement("a18ed0973f0e4b84b5e845bc596ffe4f0d500e26")
         
         //Pull to Refresh
         refreshControl = UIRefreshControl()
@@ -101,30 +130,53 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.definesPresentationContext = false
     }
     
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    }
+   
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        NSLog("error: \(error)")
+    }
+    
     //Check to see if User is logged in; If not, head over to login
     override func viewDidAppear(animated: Bool) {
-
         self.storyboard?.instantiateViewControllerWithIdentifier("ViewController")
     
         originalSearchBarHeight = searchController.searchBar.frame.height
+       
+        if let user = PFUser.currentUser() {
+            PFGeoPoint.geoPointForCurrentLocationInBackground {
+                (geoPoint: PFGeoPoint?, error: NSError?) in
+                if error == nil {
+                    print("geopoint is: \(geoPoint)")
+                    user.setObject(geoPoint!, forKey: "currentLocation")
+                    user.saveInBackground()
+                    self.refreshAds("")
+                }
+                else {
+                    NSLog("\(error)")
+                }
+            }
         
-        print(self.view.bounds)
-        
+            self.loginLayer()
+            
+        } else {
+            // No user found, show login page
+            //self.performSegueWithIdentifier("login", sender: self)
+        }
         //Loading Indicator
         if isFirstTime {
             refreshAds(nil)
             isFirstTime = false
         }
+        
     }
     
     // MARK: - Navigation
-    
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         if PFUser.currentUser() == nil && identifier == "showProfile" {
             performSegueWithIdentifier("login", sender: self)
             return false
         }
-        
         return true
     }
     
@@ -161,7 +213,27 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             {
                 favoritesVC = favVCObject
             }
+        } else if segue.identifier == "MessagesSegue" {
+            guard let safeMessagesVC = segue.destinationViewController as? ConversationListViewController else {
+                return
+            }
+            
+            messagesVC = safeMessagesVC
+            if self.layerClient != nil {
+                messagesVC?.layerClient = self.layerClient
+            }
         }
+    }
+    
+    func showMessageNavButtons() {
+        if let messagesVC = messagesVC, _ = PFUser.currentUser() {
+            let composeItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Compose, target: messagesVC, action: Selector("composeButtonTapped:"))
+            self.navigationItem.setRightBarButtonItem(composeItem, animated: false)
+        }
+    }
+    
+    func hideMessageNavButtons() {
+        self.navigationItem.rightBarButtonItem = nil
     }
     
     @IBAction func mySegmentedControlAction(sender: AnyObject) {
@@ -173,6 +245,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             categoriesView.hidden = true
             settingsView.hidden = true
             favoritesVC?.queryFavAds()
+            hideMessageNavButtons()
         }
         else if(mySegmentedControl.selectedSegmentIndex == 1)
         {
@@ -181,6 +254,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             favoritesView.hidden = true
             categoriesView.hidden = true
             settingsView.hidden = true
+            showMessageNavButtons()
+            
         }
         else if(mySegmentedControl.selectedSegmentIndex == 2)
         {
@@ -189,7 +264,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             messagesView.hidden = true
             categoriesView.hidden = true
             settingsView.hidden = true
-            
+            hideMessageNavButtons()
         }
         else if(mySegmentedControl.selectedSegmentIndex == 3)
         {
@@ -198,6 +273,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             favoritesView.hidden = true
             messagesView.hidden = true
             settingsView.hidden = true
+            hideMessageNavButtons()
         }
         else if(mySegmentedControl.selectedSegmentIndex == 4)
         {
@@ -206,12 +282,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             favoritesView.hidden = true
             messagesView.hidden = true
             categoriesView.hidden = true
-            
+            hideMessageNavButtons()
         }
     }
-    
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        manager.distanceFilter = kCLDistanceFilterNone
+        if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
+            manager.startUpdatingLocation()
+        }
+    }
    
-    
     
     //UITableViewDataSource
     
@@ -249,29 +330,27 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 cell.questionLabel.text = "What are you looking for?"
                 cell.adLabel.text = "\(adClass[lookingForTitle]!)"
                 cell.nameLabel.text = "\(adClass[creatorTitle]!)"
+
+                
                 cell.distanceLabel.text = "10 miles"
                 cell.categoryLabel.setTitle("Paid Service", forState: UIControlState.Normal)
-                
                 
                 // Get image
                 if let user = adClass[AdColumns.username.rawValue] as? PFUser
                 {
+                    
                     let imageFile = user[UserColumns.profileImage.rawValue] as? PFFile
                     imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
                         if error == nil {
                             if let imageData = imageData {
                                 cell.profileImageView.image = UIImage(data:imageData)
-                            } } }
-                    
+                            }
+                        }
+                    }
                 }
                 cell.delegate = self
-                
                 return cell
-                
             } else {
-                
-
-                
                 cell.backgroundColor = UIColor.clearColor()
                 
                 var adClass = PFObject(className: "Ad")
@@ -284,13 +363,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 cell.questionLabel.text = "What are you looking for?"
                 cell.adLabel.text = "\(adClass[lookingForTitle]!)"
-                //cell.distanceLabel.text = ("\(adClass[distanceTitle]!)")
                 
+                var currentLocation :CLLocation? = nil
+                if let currentUser = PFUser.currentUser() {
+                    let userGeoPoint = currentUser.objectForKey("currentLocation") as! PFGeoPoint
+                    currentLocation = CLLocation(latitude: userGeoPoint.latitude, longitude: userGeoPoint.longitude)
+                }
                 
                 //cell.profileImageView.image = thisAd.image
                 cell.nameLabel.text = "\(adClass[creatorTitle]!)"
                 //cell.categoryLabel.setTitle(thisAd.category, forState: UIControlState.Normal)
-                
                 
                 //cell.profileImageView.image = UIImage(named: "profile1")
                 //cell.nameLabel.text = "Lawrence"
@@ -299,16 +381,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 cell.distanceLabel.text = "10 miles"
                 cell.categoryLabel.setTitle("Paid Service", forState: UIControlState.Normal)
                 
-                
                 // Get image
                 if let user = adClass[AdColumns.username.rawValue] as? PFUser
                 {
+                    if let rowGeoPoint = user.objectForKey("currentLocation") as? PFGeoPoint {
+                        let userLocation = CLLocation(latitude: rowGeoPoint.latitude, longitude: rowGeoPoint.longitude)
+                        if let currentLocation = currentLocation {
+                            cell.distanceLabel.text = "\(currentLocation.distanceFromLocation(userLocation)) meters"
+                        }
+                    }
                     let imageFile = user[UserColumns.profileImage.rawValue] as? PFFile
                     imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
                         if error == nil {
                             if let imageData = imageData {
                                 cell.profileImageView.image = UIImage(data:imageData)
-                            } } }
+                            }
+                        }
+                    }
                     
                 }
                 
@@ -321,6 +410,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return UITableViewCell()
     }
     
+    func setFields() {
+    }
 
 
     // MARK: - UITableViewDelegate
@@ -353,21 +444,30 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func pullToRefreshAds()
     {
+        // Update locations
+        if #available(iOS 9.0, *) {
+            locationManager.requestLocation()
+        } else {
+            // Fallback on earlier versions
+        }
         refreshAds(nil)
     }
     
-    func refreshAds(search: String?) {
-        
+    func refreshAds(var search: String?) {
         ProgressHUD.show("")
         
+        // Near current location or default location (where?)
         let query = PFQuery(className: "Ad")
-        
-        query.orderByAscending("updatedAt")
         query.limit = 30
-        query.includeKey("username")
         
+        let userQuery = PFQuery(className: "_User")
+        if let geoPoint = PFUser.currentUser()?.objectForKey("currentLocation") as? PFGeoPoint {
+            userQuery.whereKey("currentLocation", nearGeoPoint: geoPoint)
+        }
+        query.whereKey("username", matchesQuery: userQuery)
+        query.includeKey("username")
+
         if let search = search {
-            
             if searchController.searchBar.selectedScopeButtonIndex == 0
             {
                 query.whereKey("lookingFor", containsString: search)
@@ -378,7 +478,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 query.whereKey("username", matchesQuery: aboutQuery)
             }
         }
-        
+       
         query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
             
             let myId = PFUser.currentUser()?.objectId
@@ -412,6 +512,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 ParseErrorHandlingController.handleParseError(error!)
             }
         }
+
     }
     
     func currentUser() {
@@ -438,6 +539,108 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func userLoggedIn(sender: LoginViewController) {
         sender.dismissViewControllerAnimated(true) { () -> Void in
             self.refreshAds(nil)
+            
+            // log in to layer
+            self.loginLayer()
+        }
+    }
+    
+    // MARK: - Layer Log In
+    
+    func loginLayer() {
+        //SVProgressHUD.show()
+        
+        // Connect to Layer
+        // See "Quick Start - Connect" for more details
+        // https://developer.layer.com/docs/quick-start/ios#connect
+        self.layerClient.connectWithCompletion { success, error in
+            if (!success) {
+                print("Failed to connect to Layer: \(error)")
+            } else {
+                let userID: String = PFUser.currentUser()!.objectId!
+                // Once connected, authenticate user.
+                // Check Authenticate step for authenticateLayerWithUserID source
+                self.authenticateLayerWithUserID(userID, completion: { success, error in
+                    if (!success) {
+                        print("Failed Authenticating Layer Client with error:\(error)")
+                    } else {
+                        print("Authenticated")
+                        //self.presentConversationListViewController()
+                    }
+                })
+            }
+        }
+    }
+
+    
+    func authenticateLayerWithUserID(userID: NSString, completion: ((success: Bool , error: NSError!) -> Void)!) {
+        // Check to see if the layerClient is already authenticated.
+        if self.layerClient.authenticatedUserID != nil {
+            // If the layerClient is authenticated with the requested userID, complete the authentication process.
+            if self.layerClient.authenticatedUserID == userID {
+                print("Layer Authenticated as User \(self.layerClient.authenticatedUserID)")
+                if completion != nil {
+                    completion(success: true, error: nil)
+                }
+                return
+            } else {
+                //If the authenticated userID is different, then deauthenticate the current client and re-authenticate with the new userID.
+                self.layerClient.deauthenticateWithCompletion { (success: Bool, error: NSError!) in
+                    if error != nil {
+                        self.authenticationTokenWithUserId(userID, completion: { (success: Bool, error: NSError?) in
+                            if (completion != nil) {
+                                completion(success: success, error: error)
+                            }
+                        })
+                    } else {
+                        if completion != nil {
+                            completion(success: true, error: error)
+                        }
+                    }
+                }
+            }
+        } else {
+            // If the layerClient isn't already authenticated, then authenticate.
+            self.authenticationTokenWithUserId(userID, completion: { (success: Bool, error: NSError!) in
+                if completion != nil {
+                    completion(success: success, error: error)
+                }
+            })
+        }
+    }
+    
+    func authenticationTokenWithUserId(userID: NSString, completion:((success: Bool, error: NSError!) -> Void)!) {
+        /*
+        * 1. Request an authentication Nonce from Layer
+        */
+        self.layerClient.requestAuthenticationNonceWithCompletion { (nonce: String!, error: NSError!) in
+            if (nonce.isEmpty) {
+                if (completion != nil) {
+                    completion(success: false, error: error)
+                }
+                return
+            }
+            
+            /*
+            * 2. Acquire identity Token from Layer Identity Service
+            */
+            PFCloud.callFunctionInBackground("generateToken", withParameters: ["nonce": nonce, "userID": userID]) { (object:AnyObject?, error: NSError?) -> Void in
+                if error == nil {
+                    let identityToken = object as! String
+                    self.layerClient.authenticateWithIdentityToken(identityToken) { authenticatedUserID, error in
+                        if (!authenticatedUserID.isEmpty) {
+                            if (completion != nil) {
+                                completion(success: true, error: nil)
+                            }
+                            print("Layer Authenticated as User: \(authenticatedUserID)")
+                        } else {
+                            completion(success: false, error: error)
+                        }
+                    }
+                } else {
+                    print("Parse Cloud function failed to be called to generate token with error: \(error)")
+                }
+            }
         }
     }
 }

@@ -164,18 +164,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func navigateToViewForConversation(conversation: LYRConversation) {
-        // TODO: navigate to conversation view
-        print("TODO: navigate to conversation view")
-//        if self.controller.conversationListViewController != nil {
-//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
-//                SVProgressHUD.dismiss()
-//                if (self.controller.navigationController!.topViewController as? ConversationViewController)?.conversation != conversation {
-//                    self.controller.conversationListViewController.presentConversation(conversation)
-//                }
-//            });
-        //} else {
-            SVProgressHUD.dismiss()
-        //}
+        // navigate to conversation view
+        
+        print("navigate to conversation view")
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
+        let navVC = appDelegate?.window!.rootViewController as? UINavigationController
+        if navVC?.viewControllers.count > 1 {
+            navVC?.popToRootViewControllerAnimated(true)
+        }
+        
+        if let viewController = navVC?.viewControllers[0] as? ViewController {
+            if viewController.messagesVC != nil {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
+                    SVProgressHUD.dismiss()
+                    
+                    if (viewController.navigationController!.topViewController as? ConversationViewController)?.conversation != conversation {
+                        viewController.messagesVC?.presentConversation(conversation)
+                    }
+                });
+            } else {
+                SVProgressHUD.dismiss()
+            }
+        }
     }
     
     func existingConversationForIdentifier(identifier: NSURL) -> LYRConversation? {

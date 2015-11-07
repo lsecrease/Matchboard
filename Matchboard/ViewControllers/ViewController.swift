@@ -12,7 +12,7 @@ import CoreLocation
 import Atlas
 
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate, AdTableViewCellDelegate, LoginDelegate, CLLocationManagerDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate, AdTableViewCellDelegate, LoginDelegate {
 
     var layerClient: LYRClient!
     let searchController = UISearchController(searchResultsController: nil)
@@ -24,11 +24,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var categoriesView: UIView!
     @IBOutlet weak var settingsView: UIView!
    
-    
     var messagesVC : ConversationListViewController?
     
     var isFirstTime = true
     var locationManager: CLLocationManager!
+    
+    var currentLocation: PFGeoPoint?
     
     var adArray = NSMutableArray()
     var myAdArray = NSMutableArray()
@@ -67,25 +68,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
         //searchBox.delegate = self
+        /*
         locationManager = CLLocationManager()
         locationManager.delegate = self
         if locationManager.respondsToSelector("RequestAlwaysAuthorization") {
             locationManager.requestAlwaysAuthorization()
         }
+        
         if #available(iOS 9.0, *) {
             locationManager.requestLocation()
-            locationManager.startUpdatingLocation()
-        } else{
+        } else {
             // Fallback on earlier versions
-            locationManager.startUpdatingLocation()
         }
-    
+    */
         var myAd = AvocarrotInstream.init(controller: self, minHeightForRow: 100, tableView: tableView)
         myAd.apiKey = "229cd8a7babe7e0615b66a2ecb85f10c290ad303"
-        myAd.sandbox = true
+        myAd.sandbox = false
         myAd.setLogger(true, withLevel: "ALL")
         
-        myAd.loadAdForPlacement("a18ed0973f0e4b84b5e845bc596ffe4f0d500e26")
+        //myAd.loadAdForPlacement("a18ed0973f0e4b84b5e845bc596ffe4f0d500e26")
         
         //Pull to Refresh
         refreshControl = UIRefreshControl()
@@ -128,15 +129,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchController.searchResultsUpdater = self
         
         self.definesPresentationContext = false
+        
+        //Set timer for location refresh
+        
+        
     }
     
+    /*
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.first {
+            currentLocation = PFGeoPoint(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        }
     }
    
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        NSLog("error: \(error)")
+        NSLog("Location manager failed with error: \(error)")
     }
     
+*/
     //Check to see if User is logged in; If not, head over to login
     override func viewDidAppear(animated: Bool) {
         self.storyboard?.instantiateViewControllerWithIdentifier("ViewController")
@@ -144,21 +154,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         originalSearchBarHeight = searchController.searchBar.frame.height
        
         if let user = PFUser.currentUser() {
-            PFGeoPoint.geoPointForCurrentLocationInBackground {
-                (geoPoint: PFGeoPoint?, error: NSError?) in
-                if error == nil {
-                    print("geopoint is: \(geoPoint)")
-                    user.setObject(geoPoint!, forKey: "currentLocation")
-                    user.saveInBackground()
-                    self.refreshAds("")
-                }
-                else {
-                    NSLog("\(error)")
-                }
-            }
-        
             self.loginLayer()
-            
         } else {
             // No user found, show login page
             //self.performSegueWithIdentifier("login", sender: self)
@@ -285,11 +281,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             hideMessageNavButtons()
         }
     }
+    
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         manager.distanceFilter = kCLDistanceFilterNone
         if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
-            manager.startUpdatingLocation()
+            if #available(iOS 9.0, *) {
+                locationManager.requestLocation()
+            } else {
+                // Fallback on earlier versions
+            }
         }
     }
    
@@ -364,10 +365,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 cell.questionLabel.text = "What are you looking for?"
                 cell.adLabel.text = "\(adClass[lookingForTitle]!)"
                 
-                var currentLocation :CLLocation? = nil
-                if let currentUser = PFUser.currentUser() {
-                    let userGeoPoint = currentUser.objectForKey("currentLocation") as! PFGeoPoint
-                    currentLocation = CLLocation(latitude: userGeoPoint.latitude, longitude: userGeoPoint.longitude)
+                var currentCLLocation :CLLocation? = nil
+                if let currentLocation = currentLocation {
+                    currentCLLocation = CLLocation(latitude: currentLocation.latitude, longitude: currentLocation.longitude)
                 }
                 
                 //cell.profileImageView.image = thisAd.image
@@ -386,8 +386,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 {
                     if let rowGeoPoint = user.objectForKey("currentLocation") as? PFGeoPoint {
                         let userLocation = CLLocation(latitude: rowGeoPoint.latitude, longitude: rowGeoPoint.longitude)
-                        if let currentLocation = currentLocation {
-                            cell.distanceLabel.text = "\(currentLocation.distanceFromLocation(userLocation)) meters"
+                        if let currentCLLocation = currentCLLocation {
+                            cell.distanceLabel.text = String(format: "%0.1fmi", currentCLLocation.distanceFromLocation(userLocation)/1609.344)
                         }
                     }
                     let imageFile = user[UserColumns.profileImage.rawValue] as? PFFile
@@ -408,9 +408,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
         return UITableViewCell()
-    }
-    
-    func setFields() {
     }
 
 
@@ -444,77 +441,98 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func pullToRefreshAds()
     {
+        /*
         // Update locations
         if #available(iOS 9.0, *) {
             locationManager.requestLocation()
         } else {
             // Fallback on earlier versions
         }
+*/
         refreshAds(nil)
     }
     
     func refreshAds(var search: String?) {
         ProgressHUD.show("")
-        
         // Near current location or default location (where?)
-        let query = PFQuery(className: "Ad")
-        query.limit = 30
-        
-        let userQuery = PFQuery(className: "_User")
-        if let geoPoint = PFUser.currentUser()?.objectForKey("currentLocation") as? PFGeoPoint {
-            userQuery.whereKey("currentLocation", nearGeoPoint: geoPoint)
-        }
-        query.whereKey("username", matchesQuery: userQuery)
-        query.includeKey("username")
-
-        if let search = search {
-            if searchController.searchBar.selectedScopeButtonIndex == 0
-            {
-                query.whereKey("lookingFor", containsString: search)
-            } else if searchController.searchBar.selectedScopeButtonIndex == 1
-            {
-                let aboutQuery = PFQuery(className: "_User")
-                aboutQuery.whereKey("aboutMe", containsString: search)
-                query.whereKey("username", matchesQuery: aboutQuery)
-            }
-        }
-       
-        query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
-            
-            let myId = PFUser.currentUser()?.objectId
-            
+        PFGeoPoint.geoPointForCurrentLocationInBackground {
+            (geoPoint: PFGeoPoint?, error: NSError?) in
             if error == nil {
+                NSLog("currentLocation: \(geoPoint)")
+                self.currentLocation = geoPoint
+                if let user = PFUser.currentUser() {
+                    user.setObject(geoPoint!, forKey: "currentLocation")
+                    user.saveInBackground()
+                }
+            }
+            else {
+                NSLog("\(error)")
+            }
+            
+            let query = PFQuery(className: "Ad")
+            query.limit = 30
+            
+            let userQuery = PFQuery(className: "_User")
+            if let currentLocation = self.currentLocation {
+                userQuery.whereKey("currentLocation", nearGeoPoint: currentLocation)
+            }
+            
+            query.whereKey("username", matchesQuery: userQuery)
+            
+            query.includeKey("username")
+            
+            if let search = search {
+                if self.searchController.searchBar.selectedScopeButtonIndex == 0
+                {
+                    query.whereKey("lookingFor", containsString: search)
+                } else if self.searchController.searchBar.selectedScopeButtonIndex == 1
+                {
+                    let aboutQuery = PFQuery(className: "_User")
+                    aboutQuery.whereKey("aboutMe", containsString: search)
+                    query.whereKey("username", matchesQuery: aboutQuery)
+                }
+            }
+            
+            query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
                 
-                self.adArray.removeAllObjects()
-                self.myAdArray.removeAllObjects()
+                let myId = PFUser.currentUser()?.objectId
                 
-                if let objects = objects as? [PFObject] {
-                    for object in objects {
-                        
-                        if let user = object["username"] as? PFUser
-                        {
-                            if user.objectId == myId
+                if error == nil {
+                    
+                    self.adArray.removeAllObjects()
+                    self.myAdArray.removeAllObjects()
+                    
+                    if let objects = objects as? [PFObject] {
+                        for object in objects {
+                            
+                            if let user = object["username"] as? PFUser
                             {
-                                self.myAdArray.addObject(object)
-                            } else {
-                                
-                                self.adArray.addObject(object)
+                                if user.objectId == myId
+                                {
+                                    self.myAdArray.addObject(object)
+                                } else {
+                                    
+                                    self.adArray.addObject(object)
+                                }
                             }
                         }
-                    } }
-                // Go to Browse Ads VC
-                print("\(self.adArray.count)")
-                self.tableView.reloadData()
-                ProgressHUD.dismiss()
-                self.refreshControl?.endRefreshing()
-                
-            } else {
-                ParseErrorHandlingController.handleParseError(error!)
+                    }
+                    // Go to Browse Ads VC
+                    print("\(self.adArray.count)")
+                    self.tableView.reloadData()
+                    ProgressHUD.dismiss()
+                    self.refreshControl?.endRefreshing()
+                    
+                } else {
+                    ParseErrorHandlingController.handleParseError(error!)
+                }
             }
-        }
 
+        }
+        
+       
     }
-    
+
     func currentUser() {
         adArray.removeAllObjects()
         let query = PFQuery(className: "Ad")

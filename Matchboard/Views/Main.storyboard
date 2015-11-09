@@ -2879,7 +2879,6 @@
         <!--Messages VC-->
         <scene sceneID="Hrt-CA-JAK">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="WU9-kf-1ai" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="No2-Kt-MTf" userLabel="Messages VC" customClass="ConversationListViewController" customModule="Matchboard" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="oFw-KN-hb8"/>
@@ -2893,6 +2892,7 @@
                     </view>
                     <toolbarItems/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WU9-kf-1ai" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2877" y="-54.5"/>
         </scene>

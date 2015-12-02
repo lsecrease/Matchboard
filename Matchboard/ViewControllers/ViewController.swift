@@ -126,7 +126,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchController.searchBar.setBackgroundImage(MatchboardUtils.getImageWithColor(UIColor.whiteColor(), size: CGSizeMake(1.0, 1.0)), forBarPosition: UIBarPosition.Any, barMetrics: UIBarMetrics.Default)
         searchController.searchBar.scopeBarBackgroundImage = UIImage()
         searchController.searchBar.scopeButtonTitles = ["Ad Search", "Profile Search"]
-        searchController.hidesNavigationBarDuringPresentation = true
         searchController.searchResultsUpdater = self
         
         self.definesPresentationContext = false

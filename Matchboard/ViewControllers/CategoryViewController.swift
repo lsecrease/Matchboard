@@ -8,60 +8,46 @@
 
 import UIKit
 
-class CategoryViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CategoryTableViewCellDelegate {
+class CategoryViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CategoryTableViewCellDelegate, SectionHeaderViewDelegate {
 
-     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
     
-
-    var categoryArray: [String] = [] // should probably be some kind of set
+    let SectionHeaderViewIdentifier = "SectionHeaderViewIdentifier"
     var categorySet: Set<String> = Set<String>()
     
     //MARK - Data Source
-    //Initialize a data source to be ProductLines
-    
     lazy var categoryHeaders: [CategoryHeader] = {
         return CategoryHeader.categoryHeaders()
         }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-//        if self.expandedSections == nil{
-//            expandedSections = NSMutableIndexSet() as NSMutableIndexSet;
-//        } 
+        let sectionHeaderNib: UINib = UINib(nibName: "SectionHeaderView", bundle: nil)
+        self.tableView.registerNib(sectionHeaderNib, forHeaderFooterViewReuseIdentifier: SectionHeaderViewIdentifier)
         
         tableView.backgroundColor = UIColor.clearColor()
         
-        // load set from parse
+        // load categories from parse
         let array = PFUser.currentUser()?.valueForKey("Category") as! NSArray
         let categoryArray: [String] = array as! [String]
         categorySet = Set(categoryArray)
+        
     }
 
-    
-    //UITableViewDataSource
-//    func tableView(tableView:UITableView,canCollapseSection section:NSInteger) -> Bool{
-//        if section >= 0{
-//            return true;
-//        }
-//        else{
-//            return false;
-//        }
-//    }
-    
-    
-    
     
     //Title of the Section Headers  DONE
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let categoryHeader = categoryHeaders[section]
         return categoryHeader.name
     }
+    
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Header") as! CustomHeaderCell
-        let categoryHeader = categoryHeaders[section]
-        cell.categoryHeaderLabel.text = categoryHeader.name
-        return cell
+        let sectionHeaderView: SectionHeaderView! = self.tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderViewIdentifier) as! SectionHeaderView
+        let sectionInfo = categoryHeaders[section]
+        sectionHeaderView.titleLabel.text = sectionInfo.name
+        sectionHeaderView.section = section
+        sectionHeaderView.delegate = self
+        return sectionHeaderView
         
     }
     
@@ -74,11 +60,15 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         return categoryHeaders.count
     }
     
-    
     //Number of Rows in each section DONE
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let categoryHeader = categoryHeaders[section]
-        return categoryHeader.category.count
+        if self.categoryHeaders.count > 0 {
+            let sectionInfo = categoryHeaders[section]
+            if sectionInfo.open {
+                return sectionInfo.open ? sectionInfo.category.count : 0
+            }
+        }
+        return 0
     }
     
     //What goes in each Table View Cell  DONE
@@ -108,7 +98,6 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    
     //Display of the cells DONE
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         let backView = UIImageView(frame: CGRectMake(0, 0, cell.frame.width, cell.frame.height))
@@ -137,5 +126,30 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
        
+    }
+    
+    func sectionHeaderView(sectionHeaderView: SectionHeaderView, sectionOpened: Int) {
+        let sectionInfo = categoryHeaders[sectionOpened]
+        let countOfRowsToInsert = sectionInfo.category.count
+        sectionInfo.open = true
+        
+        var indexPathToInsert:[NSIndexPath] = []
+        for i in 0..<countOfRowsToInsert {
+            indexPathToInsert.append(NSIndexPath(forRow: i, inSection: sectionOpened))
+        }
+        self.tableView.insertRowsAtIndexPaths(indexPathToInsert, withRowAnimation: .Top)
+    }
+    
+    func sectionHeaderView(sectionHeaderView: SectionHeaderView, sectionClosed: Int) {
+        let sectionInfo = categoryHeaders[sectionClosed]
+        let countOfRowsToDelete = sectionInfo.category.count
+        sectionInfo.open = false
+        if countOfRowsToDelete > 0 {
+            var indexPathToDelete:[NSIndexPath] = []
+            for i in 0..<countOfRowsToDelete {
+                indexPathToDelete.append(NSIndexPath(forRow: i, inSection: sectionClosed))
+            }
+            self.tableView.deleteRowsAtIndexPaths(indexPathToDelete, withRowAnimation: .Top)
+        }
     }
 }

@@ -38,6 +38,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var distanceTitle = "distance"
     var nameTitle = "name"
     var creatorTitle = "first_name"
+    let categoryTitle = "category"
     
     var originalSearchBarHeight : CGFloat!
     
@@ -373,14 +374,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 //cell.profileImageView.image = thisAd.image
                 cell.nameLabel.text = "\(adClass[creatorTitle]!)"
-                //cell.categoryLabel.setTitle(thisAd.category, forState: UIControlState.Normal)
+                
+                // Set categories
+                let categories = adClass[categoryTitle] as! NSMutableArray
+                var categoriesString = ""
+                if let swiftCategories = categories as NSArray as? [String] {
+                    categoriesString = swiftCategories.reduce("", combine: {$0 == "" ? $1 : $0! + ", " + $1 })!
+                }
+                cell.categoryLabel.setTitle(categoriesString, forState: UIControlState.Normal)
                 
                 //cell.profileImageView.image = UIImage(named: "profile1")
                 //cell.nameLabel.text = "Lawrence"
                 //cell.questionLabel.text = "What are you looking for?"
                 //cell.adLabel.text = "Looking for help moving next week!"
-                cell.distanceLabel.text = "10 miles"
-                cell.categoryLabel.setTitle("Paid Service", forState: UIControlState.Normal)
+                cell.distanceLabel.text = "n/a"
                 
                 // Get image
                 if let user = adClass[AdColumns.username.rawValue] as? PFUser
@@ -469,6 +476,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let query = PFQuery(className: "Ad")
             query.limit = 30
             query.whereKey("username", matchesQuery: userQuery)
+            if let user = PFUser.currentUser() {
+                query.whereKey("category", containedIn: user.valueForKey("Category") as! [AnyObject])
+            }
             
             query.includeKey("username")
             
@@ -485,13 +495,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
             
             query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
-                
                 let myId = PFUser.currentUser()?.objectId
                 
                 if error == nil {
                     self.adArray.removeAll(keepCapacity: true)
-                    //self.adArray.removeAllObjects()
-                    //self.myAdArray.removeAllObjects()
                     
                     if let objects = objects as? [PFObject] {
                         for object in objects {
@@ -537,8 +544,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
 
         }
-        
-       
     }
 
     func currentUser() {

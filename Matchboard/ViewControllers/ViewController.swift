@@ -1,4 +1,4 @@
-//
+    //
 //  ViewController.swift
 //  Matchboard
 //
@@ -31,8 +31,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var currentLocation: PFGeoPoint?
     
-    var adArray = NSMutableArray()
-    var myAdArray = NSMutableArray()
+    var adArray: [PFObject] = []
+    var myAdArray = []
     
     var lookingForTitle = "lookingFor"
     var distanceTitle = "distance"
@@ -50,6 +50,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let transitionManager = TransitionManager()
     
     var favoritesVC : FavoritesViewController?
+    var categoriesVC: CategoryViewController?
     
     
     //MARK: - Change Status Bar to White
@@ -83,7 +84,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     */
         var myAd = AvocarrotInstream.init(controller: self, minHeightForRow: 100, tableView: tableView)
         myAd.apiKey = "229cd8a7babe7e0615b66a2ecb85f10c290ad303"
-        myAd.sandbox = false
+        myAd.sandbox = true
         myAd.setLogger(true, withLevel: "ALL")
         
         //myAd.loadAdForPlacement("a18ed0973f0e4b84b5e845bc596ffe4f0d500e26")
@@ -125,7 +126,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchController.searchBar.setBackgroundImage(MatchboardUtils.getImageWithColor(UIColor.whiteColor(), size: CGSizeMake(1.0, 1.0)), forBarPosition: UIBarPosition.Any, barMetrics: UIBarMetrics.Default)
         searchController.searchBar.scopeBarBackgroundImage = UIImage()
         searchController.searchBar.scopeButtonTitles = ["Ad Search", "Profile Search"]
-        searchController.hidesNavigationBarDuringPresentation = true
         searchController.searchResultsUpdater = self
         
         self.definesPresentationContext = false
@@ -192,7 +192,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                             adClass = adArray[indexPath.row] as! PFObject
                         }
                         
-                        
                         adVC.adProfileModel = adClass.objectId!
                         adVC.mainVC = self
                         adVC.transitioningDelegate = transitionManager
@@ -218,6 +217,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             if self.layerClient != nil {
                 messagesVC?.layerClient = self.layerClient
             }
+        } else if segue.identifier == "CategorySegue" {
+            categoriesVC = segue.destinationViewController as? CategoryViewController
         }
     }
     
@@ -441,14 +442,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func pullToRefreshAds()
     {
-        /*
-        // Update locations
-        if #available(iOS 9.0, *) {
-            locationManager.requestLocation()
-        } else {
-            // Fallback on earlier versions
-        }
-*/
         refreshAds(nil)
     }
     
@@ -469,14 +462,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 NSLog("\(error)")
             }
             
-            let query = PFQuery(className: "Ad")
-            query.limit = 30
-            
             let userQuery = PFQuery(className: "_User")
             if let currentLocation = self.currentLocation {
                 userQuery.whereKey("currentLocation", nearGeoPoint: currentLocation)
             }
-            
+            let query = PFQuery(className: "Ad")
+            query.limit = 30
             query.whereKey("username", matchesQuery: userQuery)
             
             query.includeKey("username")
@@ -498,24 +489,41 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 let myId = PFUser.currentUser()?.objectId
                 
                 if error == nil {
-                    
-                    self.adArray.removeAllObjects()
-                    self.myAdArray.removeAllObjects()
+                    self.adArray.removeAll(keepCapacity: true)
+                    //self.adArray.removeAllObjects()
+                    //self.myAdArray.removeAllObjects()
                     
                     if let objects = objects as? [PFObject] {
                         for object in objects {
-                            
                             if let user = object["username"] as? PFUser
                             {
                                 if user.objectId == myId
                                 {
-                                    self.myAdArray.addObject(object)
+                                   // self.myAdArray.addObject(object)
                                 } else {
-                                    
-                                    self.adArray.addObject(object)
+                                    self.adArray.append(object)
+                                    //self.adArray.addObject(object)
                                 }
                             }
                         }
+                    }
+                    
+                    self.adArray.sortInPlace{(left, right) in
+                        var leftDistance: Double = 0.0
+                        var rightDistance: Double = 0.0
+                        if let leftUser = left["username"] as? PFUser {
+                            if let leftLocation = leftUser["currentLocation"] as? PFGeoPoint {
+                                leftDistance = self.currentLocation!.distanceInMilesTo(leftLocation)
+                            }
+                        }
+                        
+                        if let rightUser = right["username"] as? PFUser {
+                            if let rightLocation = rightUser["currentLocation"] as? PFGeoPoint {
+                                rightDistance = self.currentLocation!.distanceInMilesTo(rightLocation)
+                            }
+                        }
+                        
+                        return leftDistance < rightDistance
                     }
                     // Go to Browse Ads VC
                     print("\(self.adArray.count)")
@@ -534,15 +542,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     func currentUser() {
-        adArray.removeAllObjects()
+        adArray.removeAll(keepCapacity: true)
+        //adArray.removeAllObjects()
         let query = PFQuery(className: "Ad")
         query.whereKey("username", equalTo: PFUser.currentUser()!)
         //query.orderByDescending(CLASSIF_UPDATED_AT)
         query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
             if error == nil {
                 if let objects = objects as? [PFObject] {
-                    for object in objects {
-                        self.adArray.addObject(object)
+                    for object in objects as! [Ad] {
+                        self.adArray.append(object)
+                        //self.adArray.addObject(object)
                     } }
                 // Pupolate the TableView
                 self.tableView.reloadData()

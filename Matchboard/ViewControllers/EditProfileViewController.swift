@@ -2,7 +2,7 @@
 //  EditProfileViewController.swift
 //  Matchboard
 //
-//  Created by Seth Hein on 10/2/15.
+// 
 //  Copyright © 2015 ImagineME. All rights reserved.
 //
 

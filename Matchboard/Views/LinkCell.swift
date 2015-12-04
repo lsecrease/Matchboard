@@ -2,7 +2,7 @@
 //  LinkCell.swift
 //  Matchboard
 //
-//  Created by Seth Hein on 10/13/15.
+//  
 //  Copyright © 2015 ImagineME. All rights reserved.
 //
 

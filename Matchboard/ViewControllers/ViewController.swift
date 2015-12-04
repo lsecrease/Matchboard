@@ -177,6 +177,58 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return true
     }
     
+    func newMessage(toUserId: String, sender: AnyObject?) {
+        
+        if let navVC = sender as? UINavigationController {
+            navVC.dismissViewControllerAnimated(true, completion: { () -> Void in
+                self.prepareMessageForUser(toUserId)
+            })
+        } else {
+            prepareMessageForUser(toUserId)
+        }
+    }
+    
+    func prepareMessageForUser(userId: String) {
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate, layerClient = appDelegate.layerClient {
+            
+            print(userId)
+            
+            if let conversation = getOrNewConversationForUserId(userId, layerClient: layerClient)
+            {
+                mySegmentedControl.selectedSegmentIndex = 1
+                showMessagesVC()
+                
+                self.messagesVC?.presentConversation(conversation)
+            }
+        }
+    }
+    
+    func getOrNewConversationForUserId(userId:String, layerClient : LYRClient) -> LYRConversation? {
+        
+        let query = LYRQuery(queryableClass: LYRConversation.self)
+
+        let participantsSet = Set(arrayLiteral: userId)
+
+        query.predicate = LYRPredicate(property: "participants", predicateOperator: .IsEqualTo, value: participantsSet)
+        
+        guard let conversations = try? layerClient.executeQuery(query) where conversations.count > 0 else {
+            
+            guard let conversation = try? layerClient.newConversationWithParticipants(Set(arrayLiteral:userId), options:nil) else {
+                return nil
+            }
+            
+            return conversation
+        }
+        
+        for conversation in conversations {
+            if let safeConversation = conversation as? LYRConversation {
+                return safeConversation
+            }
+        }
+
+        return nil
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showProfile" {
             var adClass = PFObject(className: "Ad")
@@ -230,6 +282,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    func showMessagesVC() {
+        print("Messages Segment Selected");
+        messagesView.hidden = false
+        favoritesView.hidden = true
+        categoriesView.hidden = true
+        settingsView.hidden = true
+        showMessageNavButtons()
+    }
+    
     func hideMessageNavButtons() {
         self.navigationItem.rightBarButtonItem = nil
     }
@@ -247,13 +308,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         else if(mySegmentedControl.selectedSegmentIndex == 1)
         {
-            print("Messages Segment Selected");
-            messagesView.hidden = false
-            favoritesView.hidden = true
-            categoriesView.hidden = true
-            settingsView.hidden = true
-            showMessageNavButtons()
-            
+            showMessagesVC()
         }
         else if(mySegmentedControl.selectedSegmentIndex == 2)
         {
@@ -376,12 +431,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 cell.nameLabel.text = "\(adClass[creatorTitle]!)"
                 
                 // Set categories
-                let categories = adClass[categoryTitle] as! NSMutableArray
-                var categoriesString = ""
-                if let swiftCategories = categories as NSArray as? [String] {
-                    categoriesString = swiftCategories.reduce("", combine: {$0 == "" ? $1 : $0! + ", " + $1 })!
+                if let categories = adClass[categoryTitle] as? NSMutableArray {
+                    var categoriesString = ""
+                    if let swiftCategories = categories as NSArray as? [String] {
+                        categoriesString = swiftCategories.reduce("", combine: {$0 == "" ? $1 : $0! + ", " + $1 })!
+                    }
+                    cell.categoryLabel.setTitle(categoriesString, forState: UIControlState.Normal)
                 }
-                cell.categoryLabel.setTitle(categoriesString, forState: UIControlState.Normal)
                 
                 //cell.profileImageView.image = UIImage(named: "profile1")
                 //cell.nameLabel.text = "Lawrence"
@@ -476,8 +532,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let query = PFQuery(className: "Ad")
             query.limit = 30
             query.whereKey("username", matchesQuery: userQuery)
-            if let user = PFUser.currentUser() {
-                query.whereKey("category", containedIn: user.valueForKey("Category") as! [AnyObject])
+            if let user = PFUser.currentUser(), categories = user.valueForKey("Category") as? [AnyObject] {
+                query.whereKey("category", containedIn: categories)
             }
             
             query.includeKey("username")

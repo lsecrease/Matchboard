@@ -10,6 +10,7 @@ import UIKit
 import Foundation
 import MobileCoreServices
 import SafariServices
+import Atlas
 
 enum ProfileTableSection : Int {
     case Bio
@@ -463,6 +464,11 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     func messageButtonPressed(sender:AnyObject)
     {
         print("Message button Tapped")
+        // create a new message here
+
+        if let user = currentAd?[AdColumns.username.rawValue] as? PFObject, userId = user.objectId {
+            mainVC.newMessage(userId, sender: navigationController)
+        }
     }
     
     func favoriteButtonPressed(sender:AnyObject)

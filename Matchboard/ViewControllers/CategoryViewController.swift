@@ -28,9 +28,11 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.backgroundColor = UIColor.clearColor()
         
         // load categories from parse
-        let array = PFUser.currentUser()?.valueForKey("Category") as! NSArray
-        let categoryArray: [String] = array as! [String]
-        categorySet = Set(categoryArray)
+        if let array = PFUser.currentUser()?.valueForKey("Category") as? NSArray
+        {
+            let categoryArray: [String] = array as! [String]
+            categorySet = Set(categoryArray)
+        }
         
     }
 

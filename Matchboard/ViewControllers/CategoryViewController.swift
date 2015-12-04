@@ -11,11 +11,10 @@ import UIKit
 class CategoryViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CategoryTableViewCellDelegate {
 
      @IBOutlet weak var tableView: UITableView!
-    //var expandedSections: NSMutableIndexSet! = nil;
     
 
-    var categoryArray: [String] = []
-    
+    var categoryArray: [String] = [] // should probably be some kind of set
+    var categorySet: Set<String> = Set<String>()
     
     //MARK - Data Source
     //Initialize a data source to be ProductLines
@@ -25,20 +24,22 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         }()
     
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 //        if self.expandedSections == nil{
 //            expandedSections = NSMutableIndexSet() as NSMutableIndexSet;
-//        }
-
+//        } 
+        
         tableView.backgroundColor = UIColor.clearColor()
-
+        
+        // load set from parse
+        let array = PFUser.currentUser()?.valueForKey("Category") as! NSArray
+        let categoryArray: [String] = array as! [String]
+        categorySet = Set(categoryArray)
     }
 
     
     //UITableViewDataSource
-    
 //    func tableView(tableView:UITableView,canCollapseSection section:NSInteger) -> Bool{
 //        if section >= 0{
 //            return true;
@@ -87,43 +88,25 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         let categoryHeader = categoryHeaders[indexPath.section]
         let category = categoryHeader.category[indexPath.row]
         cell.categoryLabel.text = category.title
-        cell.checkbox.isChecked = false
+        cell.checkbox.isChecked = categorySet.contains(category.title)
                
         cell.delegate = self
     
-        
         return cell
     }
+
     
-    
-    
-    
-    
-//    //??????
-//    func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-//        var cell: CategoryTableViewCell = tableView.dequeueReusableCellWithIdentifier("Category") as CategoryTableViewCell
-//        cell.selectionStyle = UITableViewCellSelectionStyle.None
-//        return indexPath == tableView.indexPathForSelectedRow() ? nil : indexPath
-//    }
-    
-    
-    //?????????
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        //println("Selected")
-        var cell: CategoryTableViewCell = tableView.dequeueReusableCellWithIdentifier("Category") as! CategoryTableViewCell
+        var cell: CategoryTableViewCell = tableView.cellForRowAtIndexPath(indexPath) as! CategoryTableViewCell
         let categoryHeader = categoryHeaders[indexPath.section]
         let category = categoryHeader.category[indexPath.row]
-        //cell.checkbox.isChecked = true
-        print("\(category.title) Selected")
-        categoryArray.append(category.title)
-        print(categoryArray)
+        cell.checkbox.toggleCheckbox()
+        if cell.checkbox.isChecked {
+            categorySet.insert(category.title)
+        } else {
+            categorySet.remove(category.title)
+        }
     }
-    
-    
-    
-    
-    
-    
     
     
     //Display of the cells DONE
@@ -133,8 +116,6 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.backgroundView = backView
     }
     
-    
-    
     //Back Button
     @IBAction func backButtonTapped(sender: AnyObject) {
         //dismissViewControllerAnimated(true, completion: nil)
@@ -143,23 +124,18 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     //Done Button
     @IBAction func doneButtonTapped(sender: AnyObject) {
         
-        
+        let categoryArray = NSArray(array: Array(categorySet))
+        PFUser.currentUser()?.setValue(categoryArray, forKey: "Category")
+        PFUser.currentUser()?.saveInBackground()
     }
     
     func categoryTableViewCellDidTouchCheckbox(cell: CategoryTableViewCell, sender: AnyObject) {
-        // TODO: Implement Checkbox
-       let cell: CategoryTableViewCell = tableView.dequeueReusableCellWithIdentifier("Category") as! CategoryTableViewCell
-        var catArray: [String] = []
-        
-        if cell.checkbox.isChecked == false {
-            catArray.append(cell.categoryLabel.text!)
+        if cell.checkbox.isChecked {
+            categorySet.insert(cell.categoryLabel.text!)
+        } else {
+            categorySet.remove(cell.categoryLabel.text!)
         }
+        
        
-        print("\(cell.categoryArray)")
-        print("Delegate implemented")
-        
-        
-        
-        
     }
 }

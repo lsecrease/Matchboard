@@ -2,7 +2,7 @@
 //  LookingForCell.swift
 //  Matchboard
 //
-//  Created by Seth Hein on 9/17/15.
+//  
 //  Copyright © 2015 ImagineME. All rights reserved.
 //
 

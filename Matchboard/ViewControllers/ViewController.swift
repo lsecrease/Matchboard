@@ -176,6 +176,62 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return true
     }
     
+    
+    
+    func newMessage(toUserId: String, sender: AnyObject?) {
+        
+        if let navVC = sender as? UINavigationController {
+            navVC.dismissViewControllerAnimated(true, completion: { () -> Void in
+                self.prepareMessageForUser(toUserId)
+            })
+        } else {
+            prepareMessageForUser(toUserId)
+        }
+    }
+    
+    func prepareMessageForUser(userId: String) {
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate, layerClient = appDelegate.layerClient {
+            
+            print(userId)
+            
+            if let conversation = getOrNewConversationForUserId(userId, layerClient: layerClient)
+            {
+                mySegmentedControl.selectedSegmentIndex = 1
+                showMessagesVC()
+                
+                self.messagesVC?.presentConversation(conversation)
+            }
+        }
+    }
+    
+    func getOrNewConversationForUserId(userId:String, layerClient : LYRClient) -> LYRConversation? {
+        
+        let query = LYRQuery(queryableClass: LYRConversation.self)
+        
+        let participantsSet = Set(arrayLiteral: userId)
+        
+        query.predicate = LYRPredicate(property: "participants", predicateOperator: .IsEqualTo, value: participantsSet)
+        
+        guard let conversations = try? layerClient.executeQuery(query) where conversations.count > 0 else {
+            
+            guard let conversation = try? layerClient.newConversationWithParticipants(Set(arrayLiteral:userId), options:nil) else {
+                return nil
+            }
+            
+            return conversation
+        }
+        
+        for conversation in conversations {
+            if let safeConversation = conversation as? LYRConversation {
+                return safeConversation
+            }
+        }
+        
+        return nil
+    }
+
+    
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showProfile" {
             var adClass = PFObject(className: "Ad")
@@ -228,6 +284,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.navigationItem.setRightBarButtonItem(composeItem, animated: false)
         }
     }
+    
+    func showMessagesVC() {
+        print("Messages Segment Selected");
+        messagesView.hidden = false
+        favoritesView.hidden = true
+        categoriesView.hidden = true
+        settingsView.hidden = true
+        showMessageNavButtons()
+    }
+
     
     func hideMessageNavButtons() {
         self.navigationItem.rightBarButtonItem = nil

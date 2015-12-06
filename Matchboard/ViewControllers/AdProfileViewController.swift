@@ -463,6 +463,12 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     func messageButtonPressed(sender:AnyObject)
     {
         print("Message button Tapped")
+        
+        
+        if let user = currentAd?[AdColumns.username.rawValue] as? PFObject, userId = user.objectId {
+            mainVC.newMessage(userId, sender: navigationController)
+        }
+
     }
     
     func favoriteButtonPressed(sender:AnyObject)

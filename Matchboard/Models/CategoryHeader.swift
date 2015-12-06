@@ -12,7 +12,6 @@ import Foundation
 class CategoryHeader
 {
     // Variables
-    var open: Bool = true
     var name: String            // name of the category Header
     var category: [Category]     // all products in the line
 

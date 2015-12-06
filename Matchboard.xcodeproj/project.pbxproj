@@ -42,10 +42,6 @@
 		4FC206941BC309D200DFFCDD /* EditLookingForViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC206931BC309D200DFFCDD /* EditLookingForViewController.swift */; };
 		4FD880861BD1A471008FD1FC /* CheckMobileServiceClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD880851BD1A471008FD1FC /* CheckMobileServiceClient.swift */; };
 		4FFB10D31BA9C69D007D2CC6 /* BioCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB10D21BA9C69D007D2CC6 /* BioCell.swift */; };
-		A7962EAE1C111D6E00AE5A75 /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7962EAD1C111D6E00AE5A75 /* SectionHeaderView.swift */; };
-		A7962EB21C11278500AE5A75 /* SectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A7962EB11C11278500AE5A75 /* SectionHeaderView.xib */; };
-		A7962EB51C11279900AE5A75 /* carat-open.png in Resources */ = {isa = PBXBuildFile; fileRef = A7962EB31C11279900AE5A75 /* carat-open.png */; };
-		A7962EB61C11279900AE5A75 /* carat.png in Resources */ = {isa = PBXBuildFile; fileRef = A7962EB41C11279900AE5A75 /* carat.png */; };
 		A7FE846D1BE1A1A40003B52B /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7FE846C1BE1A1A40003B52B /* AdSupport.framework */; };
 		A7FE846F1BE1A1AE0003B52B /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7FE846E1BE1A1AE0003B52B /* CoreTelephony.framework */; };
 		A7FE84801BE1A31E0003B52B /* AvocarrotSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7FE847F1BE1A31E0003B52B /* AvocarrotSDK.framework */; };
@@ -162,10 +158,6 @@
 		4FFB10D21BA9C69D007D2CC6 /* BioCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BioCell.swift; sourceTree = "<group>"; };
 		7558752A677350BDA478709D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		82E20753C9B0EF862C65B83F /* Pods-Matchboard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Matchboard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Matchboard/Pods-Matchboard.debug.xcconfig"; sourceTree = "<group>"; };
-		A7962EAD1C111D6E00AE5A75 /* SectionHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
-		A7962EB11C11278500AE5A75 /* SectionHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SectionHeaderView.xib; sourceTree = "<group>"; };
-		A7962EB31C11279900AE5A75 /* carat-open.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "carat-open.png"; sourceTree = "<group>"; };
-		A7962EB41C11279900AE5A75 /* carat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = carat.png; sourceTree = "<group>"; };
 		A7FE846C1BE1A1A40003B52B /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A7FE846E1BE1A1AE0003B52B /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		A7FE847F1BE1A31E0003B52B /* AvocarrotSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AvocarrotSDK.framework; path = "Matchboard/Avocarrot-iOS-sdk/AvocarrotSDK.framework"; sourceTree = SOURCE_ROOT; };
@@ -400,8 +392,6 @@
 				4F37DB721BCC51C400F24A9D /* LinkToWebCell.swift */,
 				4F0D56511BAB1704007D9E1F /* LookingForCell.swift */,
 				4F6B2FB51BB30C0100EAE7BE /* Main.storyboard */,
-				A7962EAD1C111D6E00AE5A75 /* SectionHeaderView.swift */,
-				A7962EB11C11278500AE5A75 /* SectionHeaderView.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -453,8 +443,6 @@
 		CE735D3F1AC7D1FD00CD18D8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				A7962EB31C11279900AE5A75 /* carat-open.png */,
-				A7962EB41C11279900AE5A75 /* carat.png */,
 				4F6B2FBC1BB30DDA00EAE7BE /* Images.xcassets */,
 				CE735D401AC7D1FD00CD18D8 /* Info.plist */,
 				CEF7DA7E1B1E2BDE00917B53 /* Matchboard-Bridging-Header.h */,
@@ -629,16 +617,13 @@
 				CEC948DC1AD7715C000E95F2 /* Nav Bar iphone 5.png in Resources */,
 				4F6B2FBD1BB30DDA00EAE7BE /* Images.xcassets in Resources */,
 				4F6B2FB71BB30C0100EAE7BE /* Main.storyboard in Resources */,
-				A7962EB21C11278500AE5A75 /* SectionHeaderView.xib in Resources */,
 				CEC948DD1AD7715C000E95F2 /* Nav Bar iphone 6 Plus.png in Resources */,
 				CEC63FD71B56052300B65C21 /* Info.plist in Resources */,
 				CE735D621AC7D29800CD18D8 /* splash.png in Resources */,
 				CEC948DE1AD7715C000E95F2 /* Nav Bar iphone 6.png in Resources */,
 				CEC0632F1B276FE5002A28C6 /* ProgressHUD.bundle in Resources */,
 				4F6B2FB61BB30C0100EAE7BE /* LaunchScreen.xib in Resources */,
-				A7962EB61C11279900AE5A75 /* carat.png in Resources */,
 				CEC63FDA1B56052300B65C21 /* LoadingView.xib in Resources */,
-				A7962EB51C11279900AE5A75 /* carat-open.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -759,7 +744,6 @@
 				CEC63FCD1B56052300B65C21 /* AutoTextView.swift in Sources */,
 				4F6B2FB31BB30AD800EAE7BE /* WelcomeViewController.swift in Sources */,
 				CE3FA5C41B2023E400762DA1 /* LoginViewController.swift in Sources */,
-				A7962EAE1C111D6E00AE5A75 /* SectionHeaderView.swift in Sources */,
 				CEC063301B276FE5002A28C6 /* ProgressHUD.m in Sources */,
 				4F6B2FB01BB30AD800EAE7BE /* FavoritesViewController.swift in Sources */,
 				CEC63FCE1B56052300B65C21 /* BlurView.swift in Sources */,

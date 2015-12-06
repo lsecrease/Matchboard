@@ -24,19 +24,20 @@ class Checkbox: UIButton {
         }
     }
     
-    func toggleCheckbox() {
-        isChecked = !isChecked
-    }
-    
     //Called when the button is clicked
     override func awakeFromNib() {
-        //self.addTarget(self, action: "buttonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.addTarget(self, action: "buttonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
         self.isChecked = false
     }
     
     func buttonClicked(sender:UIButton){
         if(sender == self){
-            toggleCheckbox()
+            if isChecked == true{
+                isChecked = false
+            }else
+            {
+                isChecked = true
+            }
         }
     }
     

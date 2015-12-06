@@ -16,19 +16,14 @@ class CategoryTableViewCell: UITableViewCell {
 
     @IBOutlet weak var checkbox: Checkbox!
     @IBOutlet weak var categoryLabel: UILabel!
-   
     
     weak var delegate: CategoryTableViewCellDelegate?
-    
-    
-    var categoryArray: [String] = []
+
     var filter: [String] = []
-    
     
 
     @IBAction func checkboxTapped(sender: UIButton) {
-        
-
+        self.checkbox.toggleCheckbox()
         if self.checkbox.isChecked == false {
             print("Checkbox checked")
             print("\(categoryLabel.text!)")
@@ -44,8 +39,6 @@ class CategoryTableViewCell: UITableViewCell {
             //println(categoryArray)
             //delegate?.categoryTableViewCellDidTouchCheckbox(self, sender: sender)
         }
-        
-      
         
         delegate?.categoryTableViewCellDidTouchCheckbox(self, sender: sender)
     }

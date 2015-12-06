@@ -83,7 +83,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             // Fallback on earlier versions
         }
     */
-        var myAd = AvocarrotInstream.init(controller: self, minHeightForRow: 100, tableView: tableView)
+        let myAd = AvocarrotInstream.init(controller: self, minHeightForRow: 100, tableView: tableView)
         myAd.apiKey = "229cd8a7babe7e0615b66a2ecb85f10c290ad303"
         myAd.sandbox = true
         myAd.setLogger(true, withLevel: "ALL")

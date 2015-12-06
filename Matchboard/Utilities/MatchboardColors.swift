@@ -2,7 +2,7 @@
 //  MatchboardColors.swift
 //  Matchboard
 //
-//  Created by Seth Hein on 9/23/15.
+// 
 //  Copyright © 2015 ImagineME. All rights reserved.
 //
 

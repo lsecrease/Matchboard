@@ -2,7 +2,7 @@
 //  BioCell.swift
 //  Matchboard
 //
-//  Created by Seth Hein on 9/16/15.
+//  
 //  Copyright © 2015 ImagineME. All rights reserved.
 //
 

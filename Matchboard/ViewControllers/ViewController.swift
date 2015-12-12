@@ -32,7 +32,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var currentLocation: PFGeoPoint?
     
     var adArray: [PFObject] = []
-    var myAdArray = []
+    var myAdArray : [PFObject] = []
     
     var lookingForTitle = "lookingFor"
     var distanceTitle = "distance"
@@ -263,6 +263,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             if let favVCObject = segue.destinationViewController as? FavoritesViewController
             {
                 favoritesVC = favVCObject
+                favoritesVC?.mainVC = self
             }
         } else if segue.identifier == "MessagesSegue" {
             guard let safeMessagesVC = segue.destinationViewController as? ConversationListViewController else {
@@ -556,8 +557,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 if error == nil {
                     self.adArray.removeAll(keepCapacity: true)
-                    //self.adArray.removeAllObjects()
-                    //self.myAdArray.removeAllObjects()
+                    self.myAdArray.removeAll(keepCapacity: true)
                     
                     if let objects = objects as? [PFObject] {
                         for object in objects {
@@ -565,10 +565,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                             {
                                 if user.objectId == myId
                                 {
-                                   // self.myAdArray.addObject(object)
+                                   self.myAdArray.append(object)
                                 } else {
                                     self.adArray.append(object)
-                                    //self.adArray.addObject(object)
                                 }
                             }
                         }

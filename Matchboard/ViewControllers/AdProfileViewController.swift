@@ -62,7 +62,7 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     var image03 : UIImage?
     var image04 : UIImage?
     
-    var mainVC: ViewController!
+    var mainVC: ViewController?
     var faveVC: FavoritesViewController!
     
     var favArray = NSMutableArray()
@@ -466,9 +466,8 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
         
         
         if let user = currentAd?[AdColumns.username.rawValue] as? PFObject, userId = user.objectId {
-            mainVC.newMessage(userId, sender: navigationController)
+            mainVC?.newMessage(userId, sender: navigationController)
         }
-
     }
     
     func favoriteButtonPressed(sender:AnyObject)

@@ -17,6 +17,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     var usernameTitle = "createdBy"
     var lookingForTitle = "lookingFor"
     var profileImageTitle = "profileImage"
+    var mainVC: ViewController?
     
     override func viewWillAppear(animated: Bool) {
         if PFUser.currentUser() != nil {
@@ -55,6 +56,8 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                     {
                         adVC.adProfileModel = adObject.objectId!
                     }
+                    
+                    adVC.mainVC = self.mainVC
                 }
             }
         }

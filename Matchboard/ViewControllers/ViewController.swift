@@ -535,7 +535,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
             let query = PFQuery(className: "Ad")
             query.limit = 30
-            //query.whereKey("username", matchesQuery: userQuery)
+            query.whereKey("username", matchesQuery: userQuery)
             
             query.includeKey("username")
             

@@ -54,6 +54,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var favoritesVC : FavoritesViewController?
     var categoriesVC: CategoryViewController?
     
+    var shouldSaveCategories = false
+    
     
     //MARK: - Change Status Bar to White
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -148,7 +150,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         NSLog("Location manager failed with error: \(error)")
     }
     
-*/
+    */
     //Check to see if User is logged in; If not, head over to login
     override func viewDidAppear(animated: Bool) {
         self.storyboard?.instantiateViewControllerWithIdentifier("ViewController")
@@ -303,6 +305,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     @IBAction func mySegmentedControlAction(sender: AnyObject) {
+        if shouldSaveCategories {
+            if let vc = categoriesVC, let user = PFUser.currentUser() {
+                vc.saveCategories(forUser: user)
+            }
+            shouldSaveCategories = false
+        }
+        
         if(mySegmentedControl.selectedSegmentIndex == 0)
         {
             print("Fave Segment Selected");
@@ -335,6 +344,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         else if(mySegmentedControl.selectedSegmentIndex == 3)
         {
             print("Categories Segment Selected")
+            shouldSaveCategories = true // NB: should only use if changes are detected
             categoriesView.hidden = false
             favoritesView.hidden = true
             messagesView.hidden = true
@@ -350,6 +360,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             categoriesView.hidden = true
             hideMessageNavButtons()
         }
+        
     }
     
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
@@ -441,7 +452,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
                 
                 //cell.profileImageView.image = thisAd.image
-                cell.nameLabel.text = "\(adClass[creatorTitle]!)"
+                cell.nameLabel.text = adClass[creatorTitle] as? String ?? "n/a" // added to guard against users with no first_name
                 //cell.categoryLabel.setTitle(thisAd.category, forState: UIControlState.Normal)
                 
                 //cell.profileImageView.image = UIImage(named: "profile1")
@@ -566,7 +577,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
             
             query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
-                
                 let myId = PFUser.currentUser()?.objectId
                 
                 if error == nil {

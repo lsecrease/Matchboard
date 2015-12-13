@@ -9,23 +9,17 @@
 import UIKit
 
 class CategoryViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CategoryTableViewCellDelegate, SectionHeaderViewDelegate {
-
     @IBOutlet weak var tableView: UITableView!
     
     let SectionHeaderViewIdentifier = "SectionHeaderViewIdentifier"
     var categorySet: Set<String> = Set<String>()
 
     var categoryArray: [String] = []
-    
-    
+
     //MARK - Data Source
-    //Initialize a data source to be ProductLines
-    
     lazy var categoryHeaders: [CategoryHeader] = {
         return CategoryHeader.categoryHeaders()
         }()
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,21 +36,6 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.backgroundColor = UIColor.clearColor()
 
     }
-
-    
-    //UITableViewDataSource
-    
-//    func tableView(tableView:UITableView,canCollapseSection section:NSInteger) -> Bool{
-//        if section >= 0{
-//            return true;
-//        }
-//        else{
-//            return false;
-//        }
-//    }
-    
-    
-    
     
     //Title of the Section Headers  DONE
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -144,19 +123,10 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.backgroundView = backView
     }
     
-    
-    
-    //Back Button
-    @IBAction func backButtonTapped(sender: AnyObject) {
-        //dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    //Done Button
-    @IBAction func doneButtonTapped(sender: AnyObject) {
+    func saveCategories(forUser user: PFUser) {
         let categoryArray = NSArray(array: Array(categorySet))
-        PFUser.currentUser()?.setValue(categoryArray, forKey: "Category")
-        PFUser.currentUser()?.saveInBackground()
-
+        user.setValue(categoryArray, forKey: "Category")
+        user.saveInBackground()
     }
     
     func categoryTableViewCellDidTouchCheckbox(cell: CategoryTableViewCell, sender: AnyObject) {

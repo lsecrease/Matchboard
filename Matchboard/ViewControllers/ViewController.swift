@@ -38,6 +38,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var distanceTitle = "distance"
     var nameTitle = "name"
     var creatorTitle = "first_name"
+    let categoryTitle = "category"
+
     
     var originalSearchBarHeight : CGFloat!
     
@@ -87,7 +89,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         myAd.sandbox = true
         myAd.setLogger(true, withLevel: "ALL")
         
-        //myAd.loadAdForPlacement("a18ed0973f0e4b84b5e845bc596ffe4f0d500e26")
+        myAd.loadAdForPlacement("a18ed0973f0e4b84b5e845bc596ffe4f0d500e26")
         
         //Pull to Refresh
         refreshControl = UIRefreshControl()
@@ -446,8 +448,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 //cell.nameLabel.text = "Lawrence"
                 //cell.questionLabel.text = "What are you looking for?"
                 //cell.adLabel.text = "Looking for help moving next week!"
-                cell.distanceLabel.text = "10 miles"
-                cell.categoryLabel.setTitle("Paid Service", forState: UIControlState.Normal)
+                cell.distanceLabel.text = "n/a"
+                
+                // Set categories
+                if let categories = adClass[categoryTitle] as? NSMutableArray {
+                    var categoriesString = ""
+                    if let swiftCategories = categories as NSArray as? [String] {
+                        categoriesString = swiftCategories.reduce("", combine: {$0 == "" ? $1 : $0! + ", " + $1 })!
+                    }
+                    cell.categoryLabel.setTitle(categoriesString, forState: UIControlState.Normal)
+                }
+
                 
                 // Get image
                 if let user = adClass[AdColumns.username.rawValue] as? PFUser
@@ -533,12 +544,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             if let currentLocation = self.currentLocation {
                 userQuery.whereKey("currentLocation", nearGeoPoint: currentLocation)
             }
+            
             let query = PFQuery(className: "Ad")
             query.limit = 30
             query.whereKey("username", matchesQuery: userQuery)
             
             query.includeKey("username")
-            
+            if let user = PFUser.currentUser(), categories = user.valueForKey("Category") as? [AnyObject] {
+                query.whereKey("category", containedIn: categories)
+            }
             if let search = search {
                 if self.searchController.searchBar.selectedScopeButtonIndex == 0
                 {

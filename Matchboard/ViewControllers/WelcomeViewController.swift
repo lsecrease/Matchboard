@@ -46,7 +46,7 @@ class WelcomeViewController: UIViewController, UITextViewDelegate, UIAlertViewDe
         lookingFor["username"] = PFUser.currentUser()
         lookingFor["createdBy"] = PFUser.currentUser()!.username
         lookingFor["profileImage"] = user["profileImage"]
-        lookingFor["first_name"] = user["name"]
+        //lookingFor["first_name"] = user["name"]
         lookingFor.saveInBackgroundWithBlock {
             (success: Bool, error: NSError?) -> Void in
             if (success) {

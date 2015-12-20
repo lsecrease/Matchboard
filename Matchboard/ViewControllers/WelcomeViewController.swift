@@ -44,9 +44,15 @@ class WelcomeViewController: UIViewController, UITextViewDelegate, UIAlertViewDe
         let user = PFUser.currentUser()!
         lookingFor["lookingFor"] = adTextView.text
         lookingFor["username"] = PFUser.currentUser()
-        lookingFor["createdBy"] = PFUser.currentUser()!.username
+        if let fullname = PFUser.currentUser()!.username {
+            lookingFor["createdBy"] = fullname
+            
+            // get first name of user
+            let fullname_arr = fullname.componentsSeparatedByString(" ")
+            lookingFor["first_name"] = fullname_arr.first ?? "n/a"
+        }
+        
         lookingFor["profileImage"] = user["profileImage"]
-        //lookingFor["first_name"] = user["name"]
         lookingFor.saveInBackgroundWithBlock {
             (success: Bool, error: NSError?) -> Void in
             if (success) {

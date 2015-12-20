@@ -310,6 +310,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 vc.saveCategories(forUser: user)
             }
             shouldSaveCategories = false
+            refreshAds(nil)
         }
         
         if(mySegmentedControl.selectedSegmentIndex == 0)

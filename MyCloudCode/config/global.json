@@ -1,0 +1,14 @@
+{
+  "global": {
+    "parseVersion": "1.4.2"
+  },
+  "applications": {
+    "MatchBoard": {
+      "applicationId": "lsaVahwTjwKvPegYQq9hubP8rj3PfuLSDmIgfpQm",
+      "masterKey": "Wl9Q7fgjmgTDcoFqdv5MS48M3VAXRFU9fTLYkcUI"
+    },
+    "_default": {
+      "link": "MatchBoard"
+    }
+  }
+}

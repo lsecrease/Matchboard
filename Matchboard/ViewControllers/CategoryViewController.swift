@@ -14,6 +14,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     let SectionHeaderViewIdentifier = "SectionHeaderViewIdentifier"
     var categorySet: Set<String> = Set<String>()
 
+    var fromWelcomeVC: Bool = false
     var categoryArray: [String] = []
 
     //MARK - Data Source
@@ -26,8 +27,12 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         let sectionHeaderNib: UINib = UINib(nibName: "SectionHeaderView", bundle: nil)
         self.tableView.registerNib(sectionHeaderNib, forHeaderFooterViewReuseIdentifier: SectionHeaderViewIdentifier)
 
-        // load categories from parse
-        if let array = PFUser.currentUser()?.valueForKey("Category") as? NSArray
+        // load
+        if fromWelcomeVC {
+            let doneButton = UIBarButtonItem(title: "Done", style: .Done, target: self, action: "onDoneButtonClick:")
+            self.navigationItem.rightBarButtonItem = doneButton
+        } //Otherwise categories from parse
+        else if let array = PFUser.currentUser()?.valueForKey("Category") as? NSArray
         {
             let categoryArray: [String] = array as! [String]
             categorySet = Set(categoryArray)
@@ -91,7 +96,6 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     
     
     
-    
 //    //??????
 //    func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
 //        var cell: CategoryTableViewCell = tableView.dequeueReusableCellWithIdentifier("Category") as CategoryTableViewCell
@@ -121,6 +125,13 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         let backView = UIImageView(frame: CGRectMake(0, 0, cell.frame.width, cell.frame.height))
         backView.backgroundColor = UIColor.clearColor()
         cell.backgroundView = backView
+    }
+    
+    func onDoneButtonClick(sender: AnyObject) {
+        if let user = PFUser.currentUser() {
+            saveCategories(forUser: user)
+        }
+        self.performSegueWithIdentifier("adSegue", sender: self)
     }
     
     func saveCategories(forUser user: PFUser) {

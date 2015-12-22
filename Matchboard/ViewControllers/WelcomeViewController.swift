@@ -57,7 +57,7 @@ class WelcomeViewController: UIViewController, UITextViewDelegate, UIAlertViewDe
             (success: Bool, error: NSError?) -> Void in
             if (success) {
                 print("Looking For has been saved!")
-                self.performSegueWithIdentifier("adSegue", sender: self)
+                self.performSegueWithIdentifier("welcomeToCategorySegue", sender: self)
             } else {
                 print("There was a problem saving")
                 self.displayAlert("Could not Save Looking For", error: "Please try again later")
@@ -74,6 +74,16 @@ class WelcomeViewController: UIViewController, UITextViewDelegate, UIAlertViewDe
 //        })
     }
    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!)
+    {
+        if segue.identifier == "welcomeToCategorySegue"
+        {
+            let targetVC = segue.destinationViewController as! CategoryViewController
+            targetVC.fromWelcomeVC = true
+        }
+    }
+
+    
     @IBAction func skipButtonTapped(sender: AnyObject) {
         print("Skip Button Tapped")
         ProgressHUD.showSuccess("We’ll fill in your profile to say you’re “Just Browsing” and classify it as such. Now have fun browsing!", interaction: true)

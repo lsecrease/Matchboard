@@ -134,6 +134,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         self.definesPresentationContext = false
         
+        
         //Set timer for location refresh
         
         
@@ -305,6 +306,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     @IBAction func mySegmentedControlAction(sender: AnyObject) {
+        searchController.dismissViewControllerAnimated(true, completion: {
+            
+            // Reset search bar position here?
+            //self.tableView.tableHeaderView = self.searchController.searchBar
+        })
         if shouldSaveCategories {
             if let vc = categoriesVC, let user = PFUser.currentUser() {
                 vc.saveCategories(forUser: user)

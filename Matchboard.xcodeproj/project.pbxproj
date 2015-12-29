@@ -597,7 +597,7 @@
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0610;
-				ORGANIZATIONNAME = ImagineME;
+				ORGANIZATIONNAME = "C. Moore Communications, LLC";
 				TargetAttributes = {
 					CE735D3B1AC7D1FD00CD18D8 = {
 						CreatedOnToolsVersion = 6.1.1;

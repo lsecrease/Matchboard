@@ -2631,25 +2631,15 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Category" id="PJr-sl-UYD" customClass="CategoryTableViewCell" customModule="Matchboard" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Category" rowHeight="44" id="PJr-sl-UYD" customClass="CategoryTableViewCell" customModule="Matchboard" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="22" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PJr-sl-UYD" id="Cob-7X-84s">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fGg-Y0-Omb">
-                                                    <rect key="frame" x="70" y="7" width="256" height="16"/>
-                                                    <animations/>
-                                                    <fontDescription key="fontDescription" name="AvenirNext-UltraLight" family="Avenir Next" pointSize="18"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="80" y="7" width="191" height="26"/>
-                                                    </variation>
-                                                </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SFz-pn-ZSx" customClass="Checkbox" customModule="Matchboard" customModuleProvider="target">
-                                                    <rect key="frame" x="30" y="5" width="20" height="20"/>
+                                                    <rect key="frame" x="30" y="11" width="20" height="20"/>
                                                     <animations/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20" id="VGP-OT-DCB"/>
@@ -2664,16 +2654,35 @@
                                                         <action selector="checkboxTapped:" destination="PJr-sl-UYD" eventType="touchUpInside" id="Fce-Q2-pA9"/>
                                                     </connections>
                                                 </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fGg-Y0-Omb">
+                                                    <rect key="frame" x="70" y="13" width="256" height="12"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="80" y="7" width="191" height="26"/>
+                                                    </variation>
+                                                </label>
                                             </subviews>
                                             <animations/>
                                             <constraints>
                                                 <constraint firstItem="fGg-Y0-Omb" firstAttribute="leading" secondItem="SFz-pn-ZSx" secondAttribute="trailing" constant="20" id="4pZ-Rn-91E"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="fGg-Y0-Omb" secondAttribute="bottom" constant="11" id="5sC-mI-kBK"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="fGg-Y0-Omb" secondAttribute="trailing" constant="41" id="A9l-xA-2Di"/>
                                                 <constraint firstItem="SFz-pn-ZSx" firstAttribute="leading" secondItem="Cob-7X-84s" secondAttribute="leadingMargin" constant="22" id="AEF-bp-yK9"/>
-                                                <constraint firstItem="SFz-pn-ZSx" firstAttribute="top" secondItem="Cob-7X-84s" secondAttribute="topMargin" constant="-3" id="OjU-Nq-utH"/>
+                                                <constraint firstItem="SFz-pn-ZSx" firstAttribute="top" secondItem="Cob-7X-84s" secondAttribute="topMargin" constant="3" id="OjU-Nq-utH"/>
+                                                <constraint firstItem="fGg-Y0-Omb" firstAttribute="top" secondItem="Cob-7X-84s" secondAttribute="topMargin" constant="5" id="Qxa-Np-ZPo"/>
                                                 <constraint firstItem="fGg-Y0-Omb" firstAttribute="centerY" secondItem="SFz-pn-ZSx" secondAttribute="centerY" id="dUF-rz-O5j"/>
-                                                <constraint firstItem="fGg-Y0-Omb" firstAttribute="top" secondItem="Cob-7X-84s" secondAttribute="topMargin" constant="-1" id="lQL-cM-hWS"/>
+                                                <constraint firstItem="fGg-Y0-Omb" firstAttribute="top" secondItem="Cob-7X-84s" secondAttribute="topMargin" constant="1" id="lQL-cM-hWS"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="5sC-mI-kBK"/>
+                                                    <exclude reference="dUF-rz-O5j"/>
+                                                    <exclude reference="lQL-cM-hWS"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

@@ -104,26 +104,6 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
                 if let editProfileVC = navVC.topViewController as? EditProfileViewController
                 {
                     editProfileVC.delegate = self
-                    
-                    if let displayName = currentAd?[AdColumns.firstName.rawValue] as? String {
-                        editProfileVC.displayName = displayName
-                    }
-                    
-                    // setup text
-                    if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
-                    {
-                        if let city = user[UserColumns.city.rawValue] as? String {
-                            editProfileVC.city = city
-                        }
-                        
-                        if let state = user[UserColumns.state.rawValue] as? String {
-                            editProfileVC.state = state
-                        }
-                        
-                        if let age = user[UserColumns.age.rawValue] as? Int {
-                            editProfileVC.age = age
-                        }
-                    }
                 }
             }
         } else if segue.identifier == "EditLookingForSegue" {
@@ -612,22 +592,17 @@ class AdProfileViewController: UIViewController, UITableViewDataSource, UITableV
     
     func profileSaved(sender: AnyObject, displayName: String, city: String, state: String, age: Int)
     {
-        currentAd?[AdColumns.firstName.rawValue] = displayName
         
-        if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
-        {
-            user[UserColumns.city.rawValue] = city
-            user[UserColumns.state.rawValue] = state
-            user[UserColumns.age.rawValue] = age
-            
-            let indexPath = NSIndexPath(forRow: ProfileTableSection.Bio.rawValue, inSection: 0)
-            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
-            user.saveInBackground()
-        }
+//        if let user = currentAd?[AdColumns.username.rawValue] as? PFObject
+//        {
+            currentAd?.fetchInBackgroundWithBlock({ (_, _) -> Void in
+                let indexPath = NSIndexPath(forRow: ProfileTableSection.Bio.rawValue, inSection: 0)
+                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                sender.dismissViewControllerAnimated(true, completion: nil)
+            })
+//        }
         
-        currentAd?.saveInBackground()
         
-        sender.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func profileCancelled(sender: AnyObject)

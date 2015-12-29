@@ -134,6 +134,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         self.definesPresentationContext = false
         
+        
         //Set timer for location refresh
         
         
@@ -305,6 +306,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     @IBAction func mySegmentedControlAction(sender: AnyObject) {
+        searchController.dismissViewControllerAnimated(true, completion: {
+            
+            // Reset search bar position here?
+            //self.tableView.tableHeaderView = self.searchController.searchBar
+        })
         if shouldSaveCategories {
             if let vc = categoriesVC, let user = PFUser.currentUser() {
                 vc.saveCategories(forUser: user)
@@ -412,7 +418,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 cell.questionLabel.text = "What are you looking for?"
                 cell.adLabel.text = "\(adClass[lookingForTitle]!)"
-                cell.nameLabel.text = "\(adClass[creatorTitle]!)"
+                //cell.nameLabel.text = "\(adClass[creatorTitle]!)"
 
                 
                 cell.distanceLabel.text = "10 miles"
@@ -421,6 +427,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 // Get image
                 if let user = adClass[AdColumns.username.rawValue] as? PFUser
                 {
+                    if let nameString = user[UserColumns.name.rawValue] as? String {
+                        cell.nameLabel.text = nameString
+                    }
                     
                     let imageFile = user[UserColumns.profileImage.rawValue] as? PFFile
                     imageFile?.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
@@ -453,7 +462,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
                 
                 //cell.profileImageView.image = thisAd.image
-                cell.nameLabel.text = adClass[creatorTitle] as? String ?? "n/a" // added to guard against users with no first_name
+                //cell.nameLabel.text = adClass[creatorTitle] as? String ?? "n/a" // added to guard against users with no first_name
                 //cell.categoryLabel.setTitle(thisAd.category, forState: UIControlState.Normal)
                 
                 //cell.profileImageView.image = UIImage(named: "profile1")
@@ -475,6 +484,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 // Get image
                 if let user = adClass[AdColumns.username.rawValue] as? PFUser
                 {
+                    if let nameString = user[UserColumns.name.rawValue] as? String {
+                        cell.nameLabel.text = nameString
+                    }
                     if let rowGeoPoint = user.objectForKey("currentLocation") as? PFGeoPoint {
                         let userLocation = CLLocation(latitude: rowGeoPoint.latitude, longitude: rowGeoPoint.longitude)
                         if let currentCLLocation = currentCLLocation {
@@ -601,15 +613,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     self.adArray.sortInPlace{(left, right) in
                         var leftDistance: Double = 0.0
                         var rightDistance: Double = 0.0
+                        guard let safeLocation = self.currentLocation else {
+                            return true
+                        }
+                        
                         if let leftUser = left["username"] as? PFUser {
                             if let leftLocation = leftUser["currentLocation"] as? PFGeoPoint {
-                                leftDistance = self.currentLocation!.distanceInMilesTo(leftLocation)
+                                leftDistance = safeLocation.distanceInMilesTo(leftLocation)
                             }
                         }
                         
+                        
                         if let rightUser = right["username"] as? PFUser {
                             if let rightLocation = rightUser["currentLocation"] as? PFGeoPoint {
-                                rightDistance = self.currentLocation!.distanceInMilesTo(rightLocation)
+                                rightDistance = safeLocation.distanceInMilesTo(rightLocation)
                             }
                         }
                         

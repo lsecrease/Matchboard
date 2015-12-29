@@ -70,8 +70,10 @@ class UserManager {
     func unCachedUserIDsFromParticipants(participants: NSArray) -> NSArray {
         var array = [String]()
         for userID: String in (participants as! [String]) {
-            if (userID == PFUser.currentUser()!.objectId!) {
-                continue
+            if let safeUser = PFUser.currentUser() {
+                if (userID == safeUser.objectId!) {
+                    continue
+                }
             }
             if self.userCache.objectForKey(userID) == nil {
                 array.append(userID)
@@ -84,8 +86,10 @@ class UserManager {
     func resolvedNamesFromParticipants(participants: NSArray) -> NSArray {
         var array = [String]()
         for userID: String in (participants as! [String]) {
-            if (userID == PFUser.currentUser()!.objectId!) {
-                continue
+            if let safeUser = PFUser.currentUser() {
+                if (userID == safeUser.objectId!) {
+                    continue
+                }
             }
             if self.userCache.objectForKey(userID) != nil {
                 let user: PFUser = self.userCache.objectForKey(userID) as! PFUser

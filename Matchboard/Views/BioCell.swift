@@ -74,13 +74,13 @@ class BioCell: UITableViewCell {
         avatarEditButton.hidden = (isMine == false)
         profileEditButton.hidden = (isMine == false)
         
-        if let name = currentAd[AdColumns.firstName.rawValue] as? String {
-            nameLabel.text = name
-        }
-        
         if let user = currentAd[AdColumns.username.rawValue] as? PFObject
         {
             var locationString = ""
+            
+            if let name = user[UserColumns.name.rawValue] as? String {
+                nameLabel.text = name
+            }
             
             if let city = user[UserColumns.city.rawValue] as? String {
                 if locationString.length > 0

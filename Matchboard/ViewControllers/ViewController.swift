@@ -570,13 +570,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
             
             let query = PFQuery(className: "Ad")
-            query.limit = 30
             query.whereKey("username", matchesQuery: userQuery)
             
-            query.includeKey("username")
-            if let user = PFUser.currentUser(), categories = user.valueForKey("Category") as? [AnyObject] {
-                query.whereKey("category", containedIn: categories)
-            }
             if let search = search {
                 if self.searchController.searchBar.selectedScopeButtonIndex == 0
                 {
@@ -589,7 +584,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             }
             
-            query.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
+            var newQuery: PFQuery?
+            if let user = PFUser.currentUser(), categories = user.valueForKey("Category") as? [AnyObject] {
+                query.whereKey("category", containedIn: categories)
+                let currentUserQuery = PFQuery(className: "_User")
+                currentUserQuery.whereKey("objectId", equalTo: user.objectId!)
+                
+                let otherQuery = PFQuery(className: "Ad")
+                otherQuery.whereKey("username", matchesQuery: currentUserQuery)
+                newQuery = PFQuery.orQueryWithSubqueries([otherQuery, query])
+                //query.whereKey("username", matchesQuery: currentUserQuery)
+            }
+            
+            // Guard in case the current user doesn't exist.
+            if newQuery == nil {
+                newQuery = query
+            }
+            newQuery!.includeKey("username")
+            newQuery!.limit = 30
+            newQuery!.findObjectsInBackgroundWithBlock { (objects, error)-> Void in
                 let myId = PFUser.currentUser()?.objectId
                 
                 if error == nil {

@@ -27,7 +27,14 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         let sectionHeaderNib: UINib = UINib(nibName: "SectionHeaderView", bundle: nil)
         self.tableView.registerNib(sectionHeaderNib, forHeaderFooterViewReuseIdentifier: SectionHeaderViewIdentifier)
 
-        // load
+        
+
+        tableView.backgroundColor = UIColor.clearColor()
+
+    }
+    
+    override func viewDidAppear(animated: Bool) {    
+        // load from other VC
         if fromWelcomeVC {
             let doneButton = UIBarButtonItem(title: "Done", style: .Done, target: self, action: "onDoneButtonClick:")
             self.navigationItem.rightBarButtonItem = doneButton
@@ -37,10 +44,9 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
             let categoryArray: [String] = array as! [String]
             categorySet = Set(categoryArray)
         }
-
-        tableView.backgroundColor = UIColor.clearColor()
-
+        self.tableView.reloadData()
     }
+    
     
     //Title of the Section Headers  DONE
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
